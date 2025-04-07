@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/member")
+@RequestMapping("/api")
 public class MemberController {
 	
 
@@ -28,6 +28,9 @@ public class MemberController {
 	
 	@PostMapping("/login")
 	public LoginInfo MemberLogin(@AuthenticationPrincipal MemberDto m) {
+		m.setMemId(m.getMemId());
+		m.setMemPwd(m.getMemPwd());
+		
 		
 		
 	    // 1. 유저 확인
@@ -35,7 +38,7 @@ public class MemberController {
 
 	    // 2. 토큰 생성
 	    String accessToken = jwtProvider.createToken(m.getMemId());
-	    String refreshToken = jwtProvider.createRefreshToken(); // 필요하면
+	    //String refreshToken = jwtProvider.createRefreshToken(); // 필요하면
 	    
 	    
 	    // 리프레시 토큰 db에저장(예정)
@@ -44,7 +47,7 @@ public class MemberController {
 	    JwtToken token = JwtToken.builder()
 	        .grantType("Bearer")
 	        .accessToken(accessToken)
-	        .refreshToken(refreshToken)
+	        //.refreshToken(refreshToken)
 	        .build();
 
 	    // 3. 토큰 + 사용자 정보 반환

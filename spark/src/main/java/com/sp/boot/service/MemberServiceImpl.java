@@ -15,7 +15,7 @@ public class MemberServiceImpl implements MemberService{
 	
 	@Override
 	public MemberDto login(MemberDto m) {
-		return null;
+		return m;
 	}
 
 	@Override
