@@ -35,23 +35,28 @@ public class MemberController {
 		
 	    // 1. 유저 확인
 	    MemberDto memberDto = memberService.login(m);
-
-	    // 2. 토큰 생성
-	    String accessToken = jwtProvider.createToken(m.getMemId());
-	    //String refreshToken = jwtProvider.createRefreshToken(); // 필요하면
 	    
-	    
-	    // 리프레시 토큰 db에저장(예정)
-	    
-
-	    JwtToken token = JwtToken.builder()
-	        .grantType("Bearer")
-	        .accessToken(accessToken)
-	        //.refreshToken(refreshToken)
-	        .build();
-
-	    // 3. 토큰 + 사용자 정보 반환
-	    return new LoginInfo(token, memberDto);
+	    if(memberDto == null) {
+	    	 throw new RuntimeException("아이디 또는 비밀번호가 틀렸습니다.");
+	    }else {
+	    	// 2. 토큰 생성
+	    	String accessToken = jwtProvider.createToken(m.getMemId());
+	    	//String refreshToken = jwtProvider.createRefreshToken(); // 필요하면
+	    	
+	    	
+	    	// 리프레시 토큰 db에저장(예정)
+	    	
+	    	
+	    	JwtToken token = JwtToken.builder()
+	    			.grantType("Bearer")
+	    			.accessToken(accessToken)
+	    			//.refreshToken(refreshToken)
+	    			.build();
+	    	
+	    	// 3. 토큰 + 사용자 정보 반환
+	    	return new LoginInfo(token, memberDto);
+	    	
+	    }
 	}
 	
     @PostMapping("/refresh")
