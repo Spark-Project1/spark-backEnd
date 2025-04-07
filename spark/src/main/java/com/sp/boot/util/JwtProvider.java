@@ -28,7 +28,6 @@ public class JwtProvider {
 			private final String secretKey = "sparkSuperSecureJwtKey!@#1234567890"; // HMAC 암호화를 위한 비밀 키 (최소 32바이트 필요)
 			private final long tokenValidTime = 1000 * 60 * 60; // 토큰 유효 시간 (1시간 = 3600000ms)
 			private final long refreshTokenValidTime = 1000 * 60 * 300; // 5시간
-			private final MemberDto memberDto;
 			private final MemberService memberService;
 			
 			

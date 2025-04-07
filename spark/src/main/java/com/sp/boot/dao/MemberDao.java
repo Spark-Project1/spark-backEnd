@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MemberDao {
 	
-	private final SqlSessionTemplate sqlSession;
+	//private final SqlSessionTemplate sqlSession;
 	
 	
 
