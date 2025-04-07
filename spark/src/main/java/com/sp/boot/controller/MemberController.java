@@ -28,10 +28,9 @@ public class MemberController {
 	// 로그인
 	
 	@PostMapping("/login")
-	public LoginInfo MemberLogin(MemberDto m) {
+	public LoginInfo MemberLogin(@RequestBody MemberDto m) {
 		m.setMemId(m.getMemId());
 		m.setMemPwd(m.getMemPwd());
-		
 		
 		
 	    // 1. 유저 확인
