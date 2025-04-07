@@ -26,11 +26,12 @@ public class SecurityConfig {
    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+        	.cors(cors -> {})
             .csrf(csrf -> csrf.disable()) // 세션을 사용하지않기때문에 csrf를 비활성화
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션을 사용하지 않겠다는 설정
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/login", "/signup").permitAll() // 로그인 없이 접근가능한 경로
-                .anyRequest().authenticated()
+                  .requestMatchers("/api/login", "/api/signUp").permitAll() // 로그인/회원가입 허용
+                  .anyRequest().authenticated()
             )
             .addFilterBefore(
                 new JwtAuthenticationFilter(jwtProvider), // 시큐라티 체인에 등록

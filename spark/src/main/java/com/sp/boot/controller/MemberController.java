@@ -1,10 +1,11 @@
 package com.sp.boot.controller;
 
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.sp.boot.dto.JwtToken;
 import com.sp.boot.dto.LoginInfo;
@@ -15,7 +16,7 @@ import com.sp.boot.util.JwtProvider;
 import lombok.RequiredArgsConstructor;
 
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
 public class MemberController {
@@ -27,7 +28,7 @@ public class MemberController {
 	// 로그인
 	
 	@PostMapping("/login")
-	public LoginInfo MemberLogin(@AuthenticationPrincipal MemberDto m) {
+	public LoginInfo MemberLogin(MemberDto m) {
 		m.setMemId(m.getMemId());
 		m.setMemPwd(m.getMemPwd());
 		
