@@ -28,10 +28,7 @@ public class MemberController {
 	// 로그인
 	
 	@PostMapping("/login")
-	public LoginInfo MemberLogin(@RequestBody MemberDto m) {
-		m.setMemId(m.getMemId());
-		m.setMemPwd(m.getMemPwd());
-		
+	public LoginInfo MemberLogin(@RequestBody MemberDto m) {		
 		
 	    // 1. 유저 확인
 	    MemberDto memberDto = memberService.login(m);
@@ -78,6 +75,27 @@ public class MemberController {
                 .refreshToken(newRefreshToken)
                 .build();
     }
+    
+    
+    @PostMapping("/validate")
+    public MemberDto validate(@RequestHeader("Authorization") String authHeader) {
+    	
+    	String validateToken = authHeader.replace("Bearer", ""); // 토큰만 뺴내어
+    	
+        if (!jwtProvider.validateToken(validateToken)) { // 유효성 검사 진행
+            throw new RuntimeException("토큰이 유효하지 않음");
+        }
+    	
+    	String token = jwtProvider.getUserId(validateToken);
+    	MemberDto memberDto = memberService.loginUserInfo(token);
+
+    	
+    	return memberDto;
+    }
+    
+    
+    
+    
 	
 	
 	

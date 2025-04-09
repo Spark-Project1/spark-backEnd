@@ -15,13 +15,13 @@ public class MemberServiceImpl implements MemberService{
 	
 	@Override
 	public MemberDto login(MemberDto m) {
-		return m;
+		return memberDao.login(m);
 	}
 
 	@Override
 	public MemberDto loginUserInfo(String userId) {
 		
-		return null;
+		return memberDao.loginUserInfo(userId);
 	}
 
 	@Override
