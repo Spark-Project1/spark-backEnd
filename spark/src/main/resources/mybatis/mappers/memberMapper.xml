@@ -25,6 +25,20 @@ select
 
 </select>
 
+<!-- 유효성 검사후 멤버값 리턴 -->
+<select id="loginMember" resultMap="memberResultMap">
+
+select
+				mem_id
+		 ,  mem_pwd
+  from
+  		  member
+ where
+ 				mem_id = #{memId}
+				
+
+
+</select>
 
 
 
