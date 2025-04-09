@@ -1,5 +1,9 @@
 package com.sp.boot.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -80,20 +84,28 @@ public class MemberController {
     }
     
     
-    @PostMapping("/validate")
-    public MemberDto validate(@RequestHeader("Authorization") String authHeader) {
+    @GetMapping("/validate")
+    public Map<String,Object> validate(@RequestHeader("Authorization") String authHeader) {
     	
-    	String validateToken = authHeader.replace("Bearer", ""); // 토큰만 뺴내어
+    	Map<String,Object> map = new HashMap<>();
     	
+    	System.out.println(authHeader.toString());
+    	
+    	String validateToken = authHeader.replace("Bearer ", ""); // 토큰만 뺴내어
+    	
+    	System.out.println(validateToken.toString());
         if (!jwtProvider.validateToken(validateToken)) { // 유효성 검사 진행
-            throw new RuntimeException("토큰이 유효하지 않음");
+            map.put("valid", false);
+            return map;
         }
     	
     	String token = jwtProvider.getUserId(validateToken);
     	MemberDto memberDto = memberService.loginUserInfo(token);
 
+    	map.put("valid", true);
+    	map.put("memberDto", memberDto);
     	
-    	return memberDto;
+    	return map;
     }
     
     
@@ -101,19 +113,24 @@ public class MemberController {
     @PostMapping
     public String sms(String phone) {
     	
+    	int num[] = new int[6];
+    	
+    	for(int i = 0;i< num.length;i++) {
+    		num[i] = (int)(Math.random() * 9) + 1;
+    	}
+    	
     	StringBuilder sb = new StringBuilder();
     	for (int i = 0; i < num.length; i++) {
     	    sb.append(num[i]);
     	}
     	String code = sb.toString();
 
-    	
     	DefaultMessageService messageService =  NurigoApp.INSTANCE.initialize("NCSERQEIBVBBZJKR", "NPEW4QVQX3KP5A5V7EQLJKJ8M7PHWOWO", "https://api.coolsms.co.kr");
     	// Message 패키지가 중복될 경우 net.nurigo.sdk.message.model.Message로 치환하여 주세요
     	Message message = new Message();
     	message.setFrom("01055106509");
     	message.setTo(phone);
-    	message.setText("spark 인증 번호는 : [ "+ num +" ] 입니다");
+    	message.setText("spark 인증 번호는 : [ "+ code +" ] 입니다");
 
     	try {
     	  // send 메소드로 ArrayList<Message> 객체를 넣어도 동작합니다!
@@ -124,10 +141,11 @@ public class MemberController {
     	  System.out.println(exception.getMessage());
     	} catch (Exception exception) {
     	  System.out.println(exception.getMessage());
-    	}
+    	}    	
+    	
+    	return code;
     	
     	
-    	return "발송 완료";
     	
     }
     

@@ -26,7 +26,7 @@ select
 </select>
 
 <!-- 유효성 검사후 멤버값 리턴 -->
-<select id="loginMember" resultMap="memberResultMap">
+<select id="loginUserInfo" resultMap="memberResultMap">
 
 select
 				mem_id

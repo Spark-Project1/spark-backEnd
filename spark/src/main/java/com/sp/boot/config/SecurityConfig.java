@@ -1,14 +1,11 @@
 package com.sp.boot.config;
 
-import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.sp.boot.filter.JwtAuthenticationFilter;
 import com.sp.boot.service.MemberService;
@@ -30,7 +27,7 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable()) // 세션을 사용하지않기때문에 csrf를 비활성화
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션을 사용하지 않겠다는 설정
             .authorizeHttpRequests(auth -> auth
-                  .requestMatchers("/api/login", "/api/signUp").permitAll() // 로그인/회원가입 허용
+                  .requestMatchers("/api/login", "/api/signUp","/api/validate").permitAll() // 로그인/회원가입 허용
                   .anyRequest().authenticated()
             )
             .addFilterBefore(
