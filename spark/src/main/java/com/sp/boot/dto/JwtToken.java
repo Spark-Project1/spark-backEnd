@@ -17,7 +17,6 @@ public class JwtToken {
 	
 	private String grantType; // JWT 인증 타입
 	private String accessToken;
-	private String refreshToken;
 	
 	// Bearer 인증방식을 사용
 

@@ -57,7 +57,6 @@ public class MemberController {
 	    	JwtToken token = JwtToken.builder()
 	    			.grantType("Bearer")
 	    			.accessToken(accessToken)
-	    			.refreshToken(refreshToken)
 	    			.build();
 	    	
 	    	Cookie refreshCookie = new Cookie("refreshToken", refreshToken);
@@ -76,7 +75,6 @@ public class MemberController {
     @PostMapping("/refresh")
     public JwtToken reissue(@CookieValue("refreshToken") String refreshTokenHeader,HttpServletResponse response) { // 헤더에있는 Authorization 값 받아옴
 
-    	System.out.println("리프레시 : " + refreshTokenHeader);
         String refreshToken = refreshTokenHeader.replace("Bearer ", ""); // Bearer를 제거해 token만 추출
 
         if (!jwtProvider.validateToken(refreshToken)) { // 유효성 검사
@@ -93,12 +91,14 @@ public class MemberController {
         int result = memberService.insertRefreshToken(map);
        
         if(result > 0 ) {
+        	
         	Cookie refreshCookie = new Cookie("refreshToken", newRefreshToken);
         	refreshCookie.setHttpOnly(true); // javascript에서 접근 차단
         	refreshCookie.setPath("/"); // 어디에 쿠키를 쓸지 경로 설정
         	refreshCookie.setSecure(false); // https 환경에서만 사용가능 현재는 false로 막아둔상태
-        	refreshCookie.setMaxAge(1000 * 60 * 300); // 7일 60 * 60 * 24 * 7
+        	refreshCookie.setMaxAge(60 * 60 * 24 * 7); // 7일
         	response.addCookie(refreshCookie);
+
         }
 
         return JwtToken.builder()

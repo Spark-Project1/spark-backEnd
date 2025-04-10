@@ -38,11 +38,12 @@ public class MemberServiceImpl implements MemberService{
 		
 		if(result > 0) {
 			int result2 = memberDao.updateRefreshToken(map);
+			return result2;
 
 		}else {
 			return memberDao.insertRefreshToken(map);
 		}
-		return 0;
+		
 	}
 
 
