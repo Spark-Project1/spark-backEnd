@@ -44,17 +44,14 @@ public class MemberController {
 	    	 throw new RuntimeException("아이디 또는 비밀번호가 틀렸습니다.");
 	    }else {
 	    	// 2. 토큰 생성
-	    	String accessToken = jwtProvider.createToken(m.getMemId());
-	    	//String refreshToken = jwtProvider.createRefreshToken(); // 필요하면
-	    	
-	    	
-	    	// 리프레시 토큰 db에저장(예정)
+	    	String accessToken = jwtProvider.createToken(m.getMemId()); // access 토큰 발급
+	    	String refreshToken = jwtProvider.createRefreshToken(m.getMemId());  // refresh 토큰 발급
 	    	
 	    	
 	    	JwtToken token = JwtToken.builder()
 	    			.grantType("Bearer")
 	    			.accessToken(accessToken)
-	    			//.refreshToken(refreshToken)
+	    			.refreshToken(refreshToken)
 	    			.build();
 	    	
 	    	// 3. 토큰 + 사용자 정보 반환
@@ -74,7 +71,7 @@ public class MemberController {
 
         String userId = jwtProvider.getUserId(refreshToken);
         String AccessToken = jwtProvider.createToken(userId);
-        String newRefreshToken = jwtProvider.createRefreshToken(); // 새 refresh 발급
+        String newRefreshToken = jwtProvider.createRefreshToken(userId); // 새 refresh 발급
 
         return JwtToken.builder()
                 .grantType("Bearer")

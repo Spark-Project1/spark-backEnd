@@ -10,5 +10,7 @@ public interface MemberMapper {
 	 MemberDto loginMember(MemberDto m);
 	 
 	 MemberDto loginUserInfo(String userId);
+	 
+	 MemberDto findById(String userId);
 
 }

@@ -35,7 +35,9 @@ public class MemberDto {
 	private String status;
 	private Date registDate;
 	private int cookie;
-	
+	private String interest; // 관심사
+	private String tendencies; // 연애성향
+	private String character; // 특징
 	
 	
 	

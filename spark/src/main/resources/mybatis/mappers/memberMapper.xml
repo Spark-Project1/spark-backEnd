@@ -5,6 +5,25 @@
 	<resultMap id="memberResultMap" type="MemberDto">
 		<result column="mem_Id" property="memId" />
 		<result column="mem_pwd" property="memPwd" />
+		<result column="mem_name" property="memName" />
+		<result column="mem_gender" property="gender" />
+		<result column="mem_nickName" property="nickName" />
+		<result column="mem_birth" property="birthDate" />
+		<result column="mem_location" property="location" />
+		<result column="mem_Info" property="memInfo" />
+		<result column="mem_occupation" property="occupation" />
+		<result column="mem_education" property="education" />
+		<result column="mem_mbti" property="mbti" />
+		<result column="mem_tall" property="tall" />
+		<result column="mem_religion" property="religion" />
+		<result column="mem_smock" property="smock" />
+		<result column="mem_status" property="status" />
+		<result column="mem_regist_date" property="registDate" />
+		<result column="mem_cookie" property="cookie" />
+		<result column="mem_interest" property="interest" />
+		<result column="mem_tendencies" property="tendencies" />
+		<result column="mem_character" property="character" />
+
 	</resultMap>
 
 
@@ -40,6 +59,33 @@ select
 
 </select>
 
+<!-- 필터에서 유효형검사 -->
+<select id="findById" resultMap="memberResultMap">
+SELECT MEM_ID
+	   , MEM_PWD
+     , MEM_NAME
+     , MEM_GENDER
+     , MEM_NICKNAME
+     , MEM_BIRTH
+     , MEM_LOCATION
+     , MEM_INFO
+     , MEM_OCCUPATION
+     , MEM_EDUCATION
+     , MEM_MBTI
+     , MEM_TALL
+     , MEM_RELIGION
+     , MEM_SMOCK
+     , MEM_STATUS
+     , MEM_REGIST_DATE
+     , MEM_COOKIE
+     , MEM_INTEREST
+     , MEM_TENDENCIES
+     , MEM_CHARACTER
+  FROM
+	     MEMBER
+ WHERE
+		   MEM_ID = #{memId};
+</select>
 
 
 </mapper>

@@ -14,14 +14,6 @@ public class MemberDao {
 	//private final SqlSessionTemplate sqlSession;
 	private final MemberMapper memberMapper;
 
-	/*
-	 * public MemberDto login(MemberDto m) { return
-	 * sqlSession.selectOne("memberMapper.loginMember",m); }
-	 * 
-	 * public MemberDto loginUserInfo(String userId) { return
-	 * sqlSession.selectOne("memberMapper.loginUserInfo",userId); }
-	 */
-	
 
     public MemberDto login(MemberDto m) {
         return memberMapper.loginMember(m);
@@ -30,6 +22,11 @@ public class MemberDao {
     public MemberDto loginUserInfo(String memId) {
         return memberMapper.loginUserInfo(memId);
     }
+
+	public MemberDto findById(String userId) {
+		return memberMapper.findById(userId);
+	}
+	
 	
 	
 	
