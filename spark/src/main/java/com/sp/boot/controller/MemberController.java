@@ -67,7 +67,7 @@ public class MemberController {
 	    	refreshCookie.setMaxAge(60 * 60 * 24 * 7); // 7일
 	    	response.addCookie(refreshCookie);
 	    	
-	    	// 3. 토큰 + 사용자 정보 반환
+	    	// 3. 토큰 + 사용자 정보 반환2
 	    	return new LoginInfo(token, memberDto);
 	    	
 	    }
