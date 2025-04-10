@@ -1,5 +1,7 @@
 package com.sp.boot.service;
 
+import java.util.Map;
+
 import org.springframework.stereotype.Service;
 
 import com.sp.boot.dto.MemberDto;
@@ -15,6 +17,8 @@ public interface MemberService {
 
 	// 아이디로 유저 정보 찾기
 	MemberDto findById(String userId);
+
+	int insertRefreshToken(Map<String, Object> map);
 	
 	
 

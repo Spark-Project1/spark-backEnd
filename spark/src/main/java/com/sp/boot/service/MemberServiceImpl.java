@@ -1,5 +1,7 @@
 package com.sp.boot.service;
 
+import java.util.Map;
+
 import org.springframework.stereotype.Service;
 
 import com.sp.boot.dao.MemberDao;
@@ -27,6 +29,22 @@ public class MemberServiceImpl implements MemberService{
 	@Override
 	public MemberDto findById(String userId) {
 		return memberDao.findById(userId);
+	}
+
+	@Override
+	public int insertRefreshToken(Map<String, Object> map) {
+		
+		String result = memberDao.checkRefreshToken(map);
+		
+		if(result != null) {
+			int result2 = memberDao.deleteRefreshToken(map);
+			if(result2 > 0) {
+				return memberDao.insertRefreshToken(map);
+			}
+		}else {
+			return memberDao.insertRefreshToken(map);
+		}
+		return 0;
 	}
 
 

@@ -88,4 +88,46 @@ SELECT MEM_ID
 </select>
 
 
+<!-- 리프레시 토큰 db저장 -->
+<insert id="insertRefreshToken">
+INSERT
+  INTO
+  		refresh_token
+      (
+       MEM_ID
+     , rt_info
+      )
+   		VALUES
+   		(
+   			#{memId}
+   		, #{refreshToken}
+   		)
+</insert>
+
+
+<!-- 리프레시 토큰 db에 있는지 확인 -->
+<select id="checkRefreshToken">
+select
+       rt_info
+  from
+  		 refresh_token
+ where
+ 			 mem_id = #{memId}
+</select>			 
+
+<!-- 리프레시 토큰 db에서 삭제 -->
+<delete id="deleteRefreshToken">
+delete
+  from
+       refresh_token
+ where
+ 			 mem_id = #{memId}
+</delete>
+
+
+
+
+      
+
+
 </mapper>

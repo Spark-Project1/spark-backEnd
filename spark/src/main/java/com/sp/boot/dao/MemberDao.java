@@ -1,5 +1,7 @@
 package com.sp.boot.dao;
 
+import java.util.Map;
+
 import org.springframework.stereotype.Repository;
 
 import com.sp.boot.dto.MemberDto;
@@ -16,7 +18,7 @@ public class MemberDao {
 
 
     public MemberDto login(MemberDto m) {
-        return memberMapper.loginMember(m);
+        return memberMapper.loginMember(m);   
     }
 
     public MemberDto loginUserInfo(String memId) {
@@ -25,6 +27,18 @@ public class MemberDao {
 
 	public MemberDto findById(String userId) {
 		return memberMapper.findById(userId);
+	}
+
+	public int insertRefreshToken(Map<String, Object> map) {
+		return memberMapper.insertRefreshToken(map);
+	}
+
+	public String checkRefreshToken(Map<String, Object> map) {
+		return memberMapper.checkRefreshToken(map);
+	}
+
+	public int deleteRefreshToken(Map<String, Object> map) {
+		return memberMapper.deleteRefreshToken(map);
 	}
 	
 	

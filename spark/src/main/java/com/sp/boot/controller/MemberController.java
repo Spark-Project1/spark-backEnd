@@ -16,6 +16,8 @@ import com.sp.boot.dto.MemberDto;
 import com.sp.boot.service.MemberService;
 import com.sp.boot.util.JwtProvider;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import net.nurigo.sdk.NurigoApp;
 import net.nurigo.sdk.message.exception.NurigoMessageNotReceivedException;
@@ -35,7 +37,7 @@ public class MemberController {
 	// 로그인
 	
 	@PostMapping("/login")
-	public LoginInfo MemberLogin(@RequestBody MemberDto m) {		
+	public LoginInfo MemberLogin(@RequestBody MemberDto m,HttpServletResponse response) {		
 		
 	    // 1. 유저 확인
 	    MemberDto memberDto = memberService.login(m);
@@ -46,13 +48,23 @@ public class MemberController {
 	    	// 2. 토큰 생성
 	    	String accessToken = jwtProvider.createToken(m.getMemId()); // access 토큰 발급
 	    	String refreshToken = jwtProvider.createRefreshToken(m.getMemId());  // refresh 토큰 발급
-	    	
+	    	Map<String,Object> map = new HashMap<>();
+	    	map.put("memId", m.getMemId());
+	    	map.put("refreshToken", refreshToken);
+	    	int result = memberService.insertRefreshToken(map); // db에 refreshtoken 저장
 	    	
 	    	JwtToken token = JwtToken.builder()
 	    			.grantType("Bearer")
 	    			.accessToken(accessToken)
 	    			.refreshToken(refreshToken)
 	    			.build();
+	    	
+	    	Cookie refreshCookie = new Cookie("refreshToken", refreshToken);
+	    	refreshCookie.setHttpOnly(true); // javascript에서 접근 차단
+	    	refreshCookie.setPath("/"); // 어디에 쿠키를 쓸지 경로 설정
+	    	refreshCookie.setSecure(false); // https 환경에서만 사용가능 현재는 false로 막아둔상태
+	    	refreshCookie.setMaxAge(60 * 60 * 24 * 7); // 7일
+	    	response.addCookie(refreshCookie);
 	    	
 	    	// 3. 토큰 + 사용자 정보 반환
 	    	return new LoginInfo(token, memberDto);
@@ -61,7 +73,7 @@ public class MemberController {
 	}
 	
     @PostMapping("/refresh")
-    public JwtToken reissue(@RequestHeader("Authorization") String refreshTokenHeader) { // 헤더에있는 Authorization 값 받아옴
+    public JwtToken reissue(@RequestHeader("Authorization") String refreshTokenHeader,HttpServletResponse response) { // 헤더에있는 Authorization 값 받아옴
 
         String refreshToken = refreshTokenHeader.replace("Bearer ", ""); // Bearer를 제거해 token만 추출
 
@@ -72,11 +84,24 @@ public class MemberController {
         String userId = jwtProvider.getUserId(refreshToken);
         String AccessToken = jwtProvider.createToken(userId);
         String newRefreshToken = jwtProvider.createRefreshToken(userId); // 새 refresh 발급
+        
+    	Map<String,Object> map = new HashMap<>();
+    	map.put("memId", userId);
+    	map.put("refreshToken", refreshToken);
+        int result = memberService.insertRefreshToken(map);
+       
+        if(result > 0 ) {
+        	Cookie refreshCookie = new Cookie("refreshToken", newRefreshToken);
+        	refreshCookie.setHttpOnly(true); // javascript에서 접근 차단
+        	refreshCookie.setPath("/"); // 어디에 쿠키를 쓸지 경로 설정
+        	refreshCookie.setSecure(false); // https 환경에서만 사용가능 현재는 false로 막아둔상태
+        	refreshCookie.setMaxAge(1000 * 60 * 300); // 7일 60 * 60 * 24 * 7
+        	response.addCookie(refreshCookie);
+        }
 
         return JwtToken.builder()
                 .grantType("Bearer")
                 .accessToken(AccessToken)
-                .refreshToken(newRefreshToken)
                 .build();
     }
     
