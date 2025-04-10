@@ -108,18 +108,19 @@ INSERT
 <!-- 리프레시 토큰 db에 있는지 확인 -->
 <select id="checkRefreshToken">
 select
-       rt_info
+       count(rt_info)
   from
   		 refresh_token
  where
  			 mem_id = #{memId}
 </select>			 
 
-<!-- 리프레시 토큰 db에서 삭제 -->
-<delete id="deleteRefreshToken">
-delete
-  from
-       refresh_token
+<!-- 리프레시토큰 보유시 수정 -->
+<delete id="updateRefreshToken">
+update
+			 refresh_token
+   set
+       rt_info = #{refreshToken}
  where
  			 mem_id = #{memId}
 </delete>

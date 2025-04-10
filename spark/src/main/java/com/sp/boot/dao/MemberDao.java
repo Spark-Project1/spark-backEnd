@@ -33,12 +33,12 @@ public class MemberDao {
 		return memberMapper.insertRefreshToken(map);
 	}
 
-	public String checkRefreshToken(Map<String, Object> map) {
+	public int checkRefreshToken(Map<String, Object> map) {
 		return memberMapper.checkRefreshToken(map);
 	}
 
-	public int deleteRefreshToken(Map<String, Object> map) {
-		return memberMapper.deleteRefreshToken(map);
+	public int updateRefreshToken(Map<String, Object> map) {
+		return memberMapper.updateRefreshToken(map);
 	}
 	
 	

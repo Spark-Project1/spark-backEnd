@@ -34,13 +34,11 @@ public class MemberServiceImpl implements MemberService{
 	@Override
 	public int insertRefreshToken(Map<String, Object> map) {
 		
-		String result = memberDao.checkRefreshToken(map);
+		int result = memberDao.checkRefreshToken(map);
 		
-		if(result != null) {
-			int result2 = memberDao.deleteRefreshToken(map);
-			if(result2 > 0) {
-				return memberDao.insertRefreshToken(map);
-			}
+		if(result > 0) {
+			int result2 = memberDao.updateRefreshToken(map);
+
 		}else {
 			return memberDao.insertRefreshToken(map);
 		}

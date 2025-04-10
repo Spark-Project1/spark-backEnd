@@ -76,6 +76,7 @@ public class MemberController {
     @PostMapping("/refresh")
     public JwtToken reissue(@CookieValue("refreshToken") String refreshTokenHeader,HttpServletResponse response) { // 헤더에있는 Authorization 값 받아옴
 
+    	System.out.println("리프레시 : " + refreshTokenHeader);
         String refreshToken = refreshTokenHeader.replace("Bearer ", ""); // Bearer를 제거해 token만 추출
 
         if (!jwtProvider.validateToken(refreshToken)) { // 유효성 검사
@@ -88,7 +89,7 @@ public class MemberController {
         
     	Map<String,Object> map = new HashMap<>();
     	map.put("memId", userId);
-    	map.put("refreshToken", refreshToken);
+    	map.put("refreshToken", newRefreshToken);
         int result = memberService.insertRefreshToken(map);
        
         if(result > 0 ) {
@@ -112,11 +113,8 @@ public class MemberController {
     	
     	Map<String,Object> map = new HashMap<>();
     	
-    	System.out.println(authHeader.toString());
-    	
     	String validateToken = authHeader.replace("Bearer ", ""); // 토큰만 뺴내어
     	
-    	System.out.println(validateToken.toString());
         if (!jwtProvider.validateToken(validateToken)) { // 유효성 검사 진행
             map.put("valid", false);
             return map;
