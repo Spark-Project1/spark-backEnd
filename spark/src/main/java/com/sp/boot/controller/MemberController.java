@@ -3,6 +3,7 @@ package com.sp.boot.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -73,7 +74,7 @@ public class MemberController {
 	}
 	
     @PostMapping("/refresh")
-    public JwtToken reissue(@RequestHeader("Authorization") String refreshTokenHeader,HttpServletResponse response) { // 헤더에있는 Authorization 값 받아옴
+    public JwtToken reissue(@CookieValue("refreshToken") String refreshTokenHeader,HttpServletResponse response) { // 헤더에있는 Authorization 값 받아옴
 
         String refreshToken = refreshTokenHeader.replace("Bearer ", ""); // Bearer를 제거해 token만 추출
 
