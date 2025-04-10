@@ -21,6 +21,10 @@ public class MemberDao {
 	public MemberDto loginUserInfo(String userId) {
 		return sqlSession.selectOne("memberMapper.loginUserInfo",userId);
 	}
+
+	public MemberDto findById(String userId) {
+		return sqlSession.selectOne("memberMapper.findById",userId);
+	}
 	
 	
 	

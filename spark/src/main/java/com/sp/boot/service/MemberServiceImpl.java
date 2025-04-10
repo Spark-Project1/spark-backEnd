@@ -26,7 +26,7 @@ public class MemberServiceImpl implements MemberService{
 
 	@Override
 	public MemberDto findById(String userId) {
-		return null;
+		return memberDao.findById(userId);
 	}
 
 
