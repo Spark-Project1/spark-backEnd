@@ -20,5 +20,7 @@ public interface MemberMapper {
 	 int checkRefreshToken(Map<String, Object> map);
 	 
 	 int updateRefreshToken(Map<String, Object> map);
+	 
+	 int deleteToken(String userId);
 
 }

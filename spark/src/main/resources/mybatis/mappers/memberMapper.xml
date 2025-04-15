@@ -126,9 +126,11 @@ update
 </delete>
 
 
-
-
-      
-
+<!-- 토큰 제거 -->
+<delete id="deleteToken">
+DELETE 
+  FROM refresh_token
+ WHERE mem_id = #{userId};
+</delete>
 
 </mapper>

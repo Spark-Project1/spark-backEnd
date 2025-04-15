@@ -46,6 +46,11 @@ public class MemberServiceImpl implements MemberService{
 		
 	}
 
+	@Override
+	public int deleteToken(String userId) {
+		return memberDao.deleteToken(userId);
+	}
+
 
 	
 	

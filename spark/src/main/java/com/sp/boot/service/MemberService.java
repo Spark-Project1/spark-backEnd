@@ -19,6 +19,8 @@ public interface MemberService {
 	MemberDto findById(String userId);
 
 	int insertRefreshToken(Map<String, Object> map);
+
+	int deleteToken(String userId);
 	
 	
 

@@ -40,6 +40,10 @@ public class MemberDao {
 	public int updateRefreshToken(Map<String, Object> map) {
 		return memberMapper.updateRefreshToken(map);
 	}
+
+	public int deleteToken(String userId) {
+		return memberMapper.deleteToken(userId);
+	}
 	
 	
 	

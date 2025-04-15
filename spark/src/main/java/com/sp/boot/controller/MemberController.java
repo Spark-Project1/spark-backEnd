@@ -171,6 +171,35 @@ public class MemberController {
     }
     
     
+    @PostMapping("/logout")
+    public boolean logout(@CookieValue("refreshToken") String refreshTokenHeader, HttpServletResponse response) {
+    	
+        String refreshToken = refreshTokenHeader.replace("Bearer ", ""); // Bearer를 제거해 token만 추출
+
+        if (!jwtProvider.validateToken(refreshToken)) { // 유효성 검사
+            return false;
+        }
+
+        String userId = jwtProvider.getUserId(refreshToken); // 토큰 안에있는 userId 가져오기
+        int result = memberService.deleteToken(userId); // 토큰 db에서 제거
+    	
+        if(result > 0) {
+            Cookie deleteCookie = new Cookie("refreshToken", null);
+            deleteCookie.setPath("/");
+            deleteCookie.setHttpOnly(true);
+            deleteCookie.setSecure(false);
+            deleteCookie.setMaxAge(0); // 0초 즉시 만료
+            response.addCookie(deleteCookie);
+            
+        	return true;
+        }else {
+        	return false;
+        }
+        
+    	
+    }
+    
+    
     
     
     
