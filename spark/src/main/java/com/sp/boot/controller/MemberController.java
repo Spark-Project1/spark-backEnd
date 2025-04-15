@@ -62,7 +62,7 @@ public class MemberController {
 	    	Cookie refreshCookie = new Cookie("refreshToken", refreshToken);
 	    	refreshCookie.setHttpOnly(true); // javascript에서 접근 차단
 	    	refreshCookie.setPath("/"); // 어디에 쿠키를 쓸지 경로 설정
-	    	refreshCookie.setSecure(false); // https 환경에서만 사용가능 현재는 false로 막아둔상태
+	    	refreshCookie.setSecure(false); // https 환경에서만 사용가능 현재는 false로 막아둔상태 ssl적용x 
 	    	refreshCookie.setMaxAge(60 * 60 * 24 * 7); // 7일
 	    	response.addCookie(refreshCookie);
 	    	
@@ -131,7 +131,7 @@ public class MemberController {
     
     
     
-    @PostMapping
+    @PostMapping("/sms")
     public String sms(String phone) {
     	
     	int num[] = new int[6];
