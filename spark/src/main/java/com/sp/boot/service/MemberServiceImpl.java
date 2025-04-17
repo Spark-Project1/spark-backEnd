@@ -11,6 +11,7 @@ import com.sp.boot.dto.LoginResult;
 import com.sp.boot.dto.LogoutResult;
 import com.sp.boot.dto.MemberDto;
 import com.sp.boot.dto.TokenResult;
+import com.sp.boot.exception.LoginFailException;
 import com.sp.boot.util.JwtProvider;
 
 import jakarta.servlet.http.Cookie;
@@ -94,7 +95,7 @@ public class MemberServiceImpl implements MemberService{
 		String refreshToken = refreshTokenHeader.replace("Bearer ", "");
 
         if (!jwtProvider.validateToken(refreshToken)) {
-            throw new RuntimeException("Refresh Token이 유효하지 않습니다.");
+            throw new LoginFailException("Refresh Token이 유효하지 않습니다.");
         }
 		
 	
