@@ -28,7 +28,7 @@ public class JwtProvider {
 			private final String secretKey = "sparkSuperSecureJwtKey!@#1234567890"; // HMAC 암호화를 위한 비밀 키
 			private final long tokenValidTime = 1000 * 60 * 30; // 토큰 유효 시간  1000 * 60 * 60; (1시간 = 3600000ms)
 			private final long refreshTokenValidTime = 1000L * 60 * 60 * 24 * 7; // 5시간
-			private final MemberService memberService;
+			
 			
 			
 			// access 토큰 생성
@@ -73,13 +73,7 @@ public class JwtProvider {
 		        }
 		    }
 
-		    // 토큰에서 인증 객체 반환
-		    // 필터에서 유효하다 판단하면 실행
-		    public Authentication getAuthentication(String token) {
-		        String userId = getUserId(token); // 사용자의 id가 담김
-		        MemberDto memberDto = memberService.findById(userId); // memberDto안에는 사용자 정보가 전부 담김
-		        return new UsernamePasswordAuthenticationToken(memberDto, null, null); // 로그인사용자 객체 생성
-		    }
+
 
 		    // 토큰에서 사용자 ID 추출
 		    public String getUserId(String token) {

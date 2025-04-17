@@ -31,7 +31,7 @@ public class SecurityConfig {
                   .anyRequest().authenticated()
             )
             .addFilterBefore(
-                new JwtAuthenticationFilter(jwtProvider), // 시큐라티 체인에 등록
+                new JwtAuthenticationFilter(jwtProvider, memberService), // 시큐라티 체인에 등록
                 UsernamePasswordAuthenticationFilter.class // 기본 로그인 필터보다 앞에서 실행되도록 설정
             );
 

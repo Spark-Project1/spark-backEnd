@@ -1,5 +1,7 @@
 package com.sp.boot.dto;
 
+import java.sql.Date;
+
 import jakarta.servlet.http.Cookie;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,15 +10,16 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @Builder
 @ToString
-public class LoginInfo {
+public class TokenResult {
 	
-	private JwtToken token;
-	private MemberDto memberDto;
+	private JwtToken jwtToken;
+    private Cookie refreshCookie;
 
 }
