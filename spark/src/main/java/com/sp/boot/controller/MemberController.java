@@ -85,7 +85,7 @@ public class MemberController {
     
     
     @PostMapping("signup")
-    public MemberDto signup(MemberDto m) {
+    public int signup(@RequestBody MemberDto m) {
     	
     	return memberService.signUp(m);
     	

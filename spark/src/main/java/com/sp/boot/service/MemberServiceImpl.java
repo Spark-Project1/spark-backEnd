@@ -232,13 +232,12 @@ public class MemberServiceImpl implements MemberService{
 	}
 
 	@Override
-	public MemberDto signUp(MemberDto m) {
+	public int signUp(MemberDto m) {
 		
 		// 비밀번호 암호화
 		m.setMemPwd(bcryptPwdEncoder.encode(m.getMemPwd()));
 		
-		MemberDto memberDto = memberDao.signUp(m);
-		
+		int memberDto = memberDao.signUp(m);
 		
 		
 		return memberDto;

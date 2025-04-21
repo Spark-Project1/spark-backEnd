@@ -50,7 +50,7 @@ public class MemberDao {
 		return memberMapper.recommendList(m);
 	}
 
-	public MemberDto signUp(MemberDto m) {
+	public int signUp(MemberDto m) {
 		return memberMapper.signUp(m);
 	}
 	

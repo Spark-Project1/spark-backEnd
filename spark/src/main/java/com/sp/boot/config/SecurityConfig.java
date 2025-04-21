@@ -27,7 +27,7 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable()) // 세션을 사용하지않기때문에 csrf를 비활성화
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션을 사용하지 않겠다는 설정
             .authorizeHttpRequests(auth -> auth
-                  .requestMatchers("/api/login", "/api/signUp","/api/validate","/api/refresh","/api/logout","/api/sms").permitAll() // 로그인/회원가입 허용
+                  .requestMatchers("/api/login", "/api/signUp","/api/validate","/api/refresh","/api/logout","/api/sms","/api/signup").permitAll() // 로그인/회원가입 허용
                   .anyRequest().authenticated()
             )
             .addFilterBefore(

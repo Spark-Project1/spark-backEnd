@@ -29,7 +29,7 @@ public interface MemberService {
 
 	List<MemberDto> recommendList(MemberDto m);
 
-	MemberDto signUp(MemberDto m);
+	int signUp(MemberDto m);
 
 	
 	
