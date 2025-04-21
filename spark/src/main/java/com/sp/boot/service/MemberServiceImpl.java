@@ -38,7 +38,6 @@ public class MemberServiceImpl implements MemberService{
 		// 1. 유저 확인
 	    MemberDto memberDto = memberDao.login(m);
 	    
-	    
 	    if(memberDto != null && bcryptPwdEncoder.matches(m.getMemPwd(), memberDto.getMemPwd())){
 	    	// 2. 토큰 생성
 	    	String accessToken = jwtProvider.createToken(m.getMemId()); // access 토큰 발급
