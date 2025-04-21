@@ -133,4 +133,31 @@ DELETE
  WHERE mem_id = #{userId};
 </delete>
 
+
+<!-- 회원가입 -->
+<insert id="signUp">
+insert
+  into
+				member
+				(
+					mem_id
+				, mem_pwd	
+				)
+				values
+				(
+					#{memId}
+				, #{memPwd}
+				)
+
+</insert>
+
+
+
+
+
+
+
+
+
+
 </mapper>

@@ -1,5 +1,6 @@
 package com.sp.boot.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.web.bind.annotation.CookieValue;
@@ -75,6 +76,22 @@ public class MemberController {
     	    return result.isStatus();
 
     }
+    
+    
+    @GetMapping("/recommend")
+    public List<MemberDto> recommendList(MemberDto m) {
+    	return memberService.recommendList(m);
+    }
+    
+    
+    @PostMapping("signup")
+    public MemberDto signup(MemberDto m) {
+    	
+    	return memberService.signUp(m);
+    	
+    }
+    
+    
     
 
 	

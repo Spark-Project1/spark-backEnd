@@ -1,17 +1,12 @@
 package com.sp.boot.service;
 
+import java.util.List;
 import java.util.Map;
 
-import org.springframework.stereotype.Service;
-
-import com.sp.boot.dto.JwtToken;
-import com.sp.boot.dto.LoginInfo;
 import com.sp.boot.dto.LoginResult;
 import com.sp.boot.dto.LogoutResult;
 import com.sp.boot.dto.MemberDto;
 import com.sp.boot.dto.TokenResult;
-
-import jakarta.servlet.http.HttpServletResponse;
 
 
 public interface MemberService {
@@ -31,6 +26,10 @@ public interface MemberService {
 
 	// 문자로 인증번호 발송
 	String smsCode(String phone);
+
+	List<MemberDto> recommendList(MemberDto m);
+
+	MemberDto signUp(MemberDto m);
 
 	
 	

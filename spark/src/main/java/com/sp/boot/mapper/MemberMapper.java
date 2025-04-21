@@ -1,5 +1,6 @@
 package com.sp.boot.mapper;
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -22,5 +23,9 @@ public interface MemberMapper {
 	 int updateRefreshToken(Map<String, Object> map);
 	 
 	 int deleteToken(String userId);
+	 
+	 List<MemberDto> recommendList(MemberDto m);
 
+	 MemberDto signUp(MemberDto m);
+	 
 }

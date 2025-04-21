@@ -1,5 +1,6 @@
 package com.sp.boot.dao;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Repository;
@@ -43,6 +44,14 @@ public class MemberDao {
 
 	public int deleteToken(String userId) {
 		return memberMapper.deleteToken(userId);
+	}
+
+	public List<MemberDto> recommendList(MemberDto m) {
+		return memberMapper.recommendList(m);
+	}
+
+	public MemberDto signUp(MemberDto m) {
+		return memberMapper.signUp(m);
 	}
 	
 	

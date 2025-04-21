@@ -1,8 +1,11 @@
 package com.sp.boot.service;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.sp.boot.dao.MemberDao;
@@ -27,6 +30,7 @@ public class MemberServiceImpl implements MemberService{
 	
 	private final MemberDao memberDao;
 	private final JwtProvider jwtProvider;
+	private final BCryptPasswordEncoder bcryptPwdEncoder;
 	
 	@Override
 	public LoginResult login(MemberDto m) {
@@ -172,6 +176,15 @@ public class MemberServiceImpl implements MemberService{
 	@Override
 	public String smsCode(String phone) {
 		
+		// 가입된 사용자인지 먼저 검사
+		
+		MemberDto result = memberDao.findById(phone);
+		
+		if(result != null) {
+			throw new LoginFailException("이미 가입된 회원입니다.");
+		}
+		
+		
     	int num[] = new int[6];
     	
     	for(int i = 0;i< num.length;i++) {
@@ -204,6 +217,31 @@ public class MemberServiceImpl implements MemberService{
     	
     	return code;
 		
+	}
+
+	@Override
+	public List<MemberDto> recommendList(MemberDto m) {
+		
+		List<MemberDto> list = memberDao.recommendList(m);
+		
+		Collections.shuffle(list);
+		
+		List<MemberDto> result = list.subList(0, 10);
+		
+		return result;
+	}
+
+	@Override
+	public MemberDto signUp(MemberDto m) {
+		
+		// 비밀번호 암호화
+		m.setMemPwd(bcryptPwdEncoder.encode(m.getMemPwd()));
+		
+		MemberDto memberDto = memberDao.signUp(m);
+		
+		
+		
+		return memberDto;
 	}
 	
 	
