@@ -34,6 +34,24 @@
 select
 				mem_id
 		 ,  mem_pwd
+		 , MEM_NAME
+     , MEM_GENDER
+     , MEM_NICKNAME
+     , MEM_BIRTH
+     , MEM_LOCATION
+     , MEM_INFO
+     , MEM_OCCUPATION
+     , MEM_EDUCATION
+     , MEM_MBTI
+     , MEM_TALL
+     , MEM_RELIGION
+     , MEM_SMOCK
+     , MEM_STATUS
+     , MEM_REGIST_DATE
+     , MEM_COOKIE
+     , MEM_INTEREST
+     , MEM_TENDENCIES
+     , MEM_CHARACTER
   from
   		  member
  where

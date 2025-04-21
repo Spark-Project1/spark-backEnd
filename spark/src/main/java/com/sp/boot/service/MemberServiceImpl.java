@@ -38,9 +38,8 @@ public class MemberServiceImpl implements MemberService{
 		// 1. 유저 확인
 	    MemberDto memberDto = memberDao.login(m);
 	    
-	    if(memberDto == null) {
-	    	 throw new RuntimeException("아이디 또는 비밀번호가 틀렸습니다.");
-	    }else {
+	    
+	    if(memberDto != null && bcryptPwdEncoder.matches(m.getMemPwd(), memberDto.getMemPwd())){
 	    	// 2. 토큰 생성
 	    	String accessToken = jwtProvider.createToken(m.getMemId()); // access 토큰 발급
 	    	String refreshToken = jwtProvider.createRefreshToken(m.getMemId());  // refresh 토큰 발급
@@ -60,12 +59,11 @@ public class MemberServiceImpl implements MemberService{
 	    	refreshCookie.setSecure(false); // https 환경에서만 사용가능 현재는 false로 막아둔상태 ssl적용x 
 	    	refreshCookie.setMaxAge(60 * 60 * 24 * 7); // 7일
 
-		
-		
-		
-		
 		    return new LoginResult(token, memberDto,refreshCookie);
+	    }else {
+	    	throw new RuntimeException("아이디 또는 비밀번호가 틀렸습니다.");
 	    }
+
 	}
 
 	@Override
