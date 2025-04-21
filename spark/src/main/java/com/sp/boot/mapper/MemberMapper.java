@@ -30,4 +30,10 @@ public interface MemberMapper {
 	 
 	 int insertInfo(MemberDto m);
 	 
+	 int recommendDelete(Map<String, String> map);
+	 
+	 int likeMemberCheck(Map<String, String> map);
+	 
+	 int likeMember(Map<String, String> map);
+	 
 }

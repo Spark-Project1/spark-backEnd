@@ -35,6 +35,10 @@ public interface MemberService {
 
 	int insertInfo(MemberDto m, MultipartFile uploadFile);
 
+	int recommendDelete(String hiddenId, String hiddenTarget);
+
+	int likeMember(String requestId, String responseId);
+
 	
 	
 

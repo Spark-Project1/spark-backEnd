@@ -262,11 +262,65 @@ insert
 	          mem_interest LIKE CONCAT('%', #{item}, '%')
 	        </foreach>
 		      OR
-		      <foreach collection="tendencies" item="item" separator=" OR ">
-	          mem_tendencies LIKE CONCAT('%', #{item}, '%')
+	          mem_tendencies = #{tendencies}
+	        OR
+	        <foreach collection="character" item="item" separator=" OR ">
+	          mem_character LIKE CONCAT('%', #{item}, '%')
 	        </foreach>
    			)
 </select>
+
+
+<!-- 추천삭제목록 -->
+<insert id="recommendDelete">
+insert
+  into
+  		 hidden_profile
+  		 (
+  		 	 hidden_id
+  		 , hidden_target
+  		 )
+  		 values
+  		 (
+  		 	 #{hiddenId}
+  		 , #{hiddenTarget}
+  		 )
+  		 
+</insert>
+
+
+<!-- 좋아요 테이블 db확인 -->
+<select id="likeMemberCheck" resultMap="memberResultMap">
+select
+			 *
+	from
+			 `like`
+ where
+ 			(
+ 			 (request_id = #{requestId} and response_id = #{responseId})
+ 		or
+ 			 (request_id = #{responseId} and response_id = #{requestId})
+ 			 )
+
+</select>
+
+<!-- 좋아요 테이블에 db삽입 -->
+<insert id="likeMember">
+insert
+	into
+			 `like`
+			 (
+			 	 request_id
+			 , response_id
+			 )
+			 values
+			 (
+			 	#{requestId}
+			 ,#{responseId}	
+			 )
+			 
+			 
+</insert>
 
 
 </mapper>

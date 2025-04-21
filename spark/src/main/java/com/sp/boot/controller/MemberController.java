@@ -80,8 +80,8 @@ public class MemberController {
     }
     
     
-    @GetMapping("/recommend")
-    public List<MemberDto> recommendList(MemberDto m) {
+    @PostMapping("/recommend")
+    public List<MemberDto> recommendList(@RequestBody MemberDto m) {
     	return memberService.recommendList(m);
     }
     
@@ -98,7 +98,18 @@ public class MemberController {
     public int insertInfo(MemberDto m, @RequestParam MultipartFile uploadFile) {
     	return memberService.insertInfo(m,uploadFile);
     }
+    
+    @GetMapping("recommendDelete")
+    public int recommendDelete(String hiddenId,String hiddenTarget) {
+    	return memberService.recommendDelete(hiddenId, hiddenTarget);
+    }
 
-	
+	@GetMapping("like")
+	public int likeMember(String requestId,String responseId) {
+		return memberService.likeMember(requestId,responseId);
+	}
+    
+    
+    
 
 }

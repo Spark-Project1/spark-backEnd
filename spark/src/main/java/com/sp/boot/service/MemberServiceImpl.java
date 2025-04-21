@@ -222,11 +222,13 @@ public class MemberServiceImpl implements MemberService{
 	@Override
 	public List<MemberDto> recommendList(MemberDto m) {
 		
+		
 	    String[] interestArr = m.getInterest().split(",");
-	    String[] tendencies = m.getTendencies().split(",");
+	    String[] character = m.getCharacter().split(",");
 	    Map<String, Object> map = new HashMap<>();
 	    map.put("interest", interestArr);
-	    map.put("tendencies", tendencies);
+	    map.put("character", character);
+	    map.put("tendencies", m.getTendencies());
 	    map.put("memId", m.getMemId());
 		
 		List<MemberDto> list = memberDao.recommendList(map);
@@ -263,6 +265,33 @@ public class MemberServiceImpl implements MemberService{
 	    }
 		
 		return memberDao.insertInfo(m);
+	}
+
+	@Override
+	public int recommendDelete(String hiddenId, String hiddenTarget) {
+		
+		Map<String,String> map = new HashMap<>();
+		map.put("hiddenId", hiddenId);
+		map.put("hiddenTarget", hiddenTarget);
+		
+		return memberDao.recommendDelete(map);
+	}
+
+	@Override
+	public int likeMember(String requestId, String responseId) {
+		Map<String,String> map = new HashMap<>();
+		map.put("requestId", requestId);
+		map.put("responseId", responseId);
+		
+		// 좋아요 테이블에 이미 저장되어있는지 확인
+		int result = memberDao.likeMemberCheck(map);
+		
+		if(result > 0) {
+			throw new LoginFailException("이미 좋아요를 누른상태입니다.");
+		}else {			
+			return memberDao.likeMember(map);
+		}
+		
 	}
 	
 	

@@ -57,6 +57,18 @@ public class MemberDao {
 	public int insertInfo(MemberDto m) {
 		return memberMapper.insertInfo(m);
 	}
+
+	public int recommendDelete(Map<String, String> map) {
+		return memberMapper.recommendDelete(map);
+	}
+
+	public int likeMemberCheck(Map<String, String> map) {
+		return memberMapper.likeMemberCheck(map);
+	}
+
+	public int likeMember(Map<String, String> map) {
+		return memberMapper.likeMember(map);
+	}
 	
 	
 	
