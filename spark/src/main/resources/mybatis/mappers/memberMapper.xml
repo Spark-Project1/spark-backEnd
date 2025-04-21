@@ -56,7 +56,6 @@ select
   		  member
  where
  				mem_id = #{memId}
- 	 and	mem_pwd = #{memPwd}
 				
 
 
