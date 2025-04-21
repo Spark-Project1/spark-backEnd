@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.sp.boot.dao.MemberDao;
 import com.sp.boot.dto.JwtToken;
@@ -15,6 +16,7 @@ import com.sp.boot.dto.LogoutResult;
 import com.sp.boot.dto.MemberDto;
 import com.sp.boot.dto.TokenResult;
 import com.sp.boot.exception.LoginFailException;
+import com.sp.boot.util.FileUtil;
 import com.sp.boot.util.JwtProvider;
 
 import jakarta.servlet.http.Cookie;
@@ -31,6 +33,7 @@ public class MemberServiceImpl implements MemberService{
 	private final MemberDao memberDao;
 	private final JwtProvider jwtProvider;
 	private final BCryptPasswordEncoder bcryptPwdEncoder;
+	private final FileUtil fileUtil;
 	
 	@Override
 	public LoginResult login(MemberDto m) {
@@ -238,6 +241,25 @@ public class MemberServiceImpl implements MemberService{
 		
 		
 		return memberDto;
+	}
+
+	@Override
+	public int insertInfo(MemberDto m, MultipartFile uploadFile) {
+		
+		
+	    if (!uploadFile.isEmpty()) {
+	        Map<String, String> map = fileUtil.fileupload(uploadFile, "profile");
+	        String filePath = map.get("filePath") + "/" + map.get("filesystemName");
+	        m.setProFile(filePath);
+	    } else {
+	        m.setProFile(null);
+	    }
+		
+		
+		
+		
+		
+		return 0;
 	}
 	
 	

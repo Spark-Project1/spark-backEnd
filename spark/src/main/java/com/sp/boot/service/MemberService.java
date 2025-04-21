@@ -3,6 +3,8 @@ package com.sp.boot.service;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.sp.boot.dto.LoginResult;
 import com.sp.boot.dto.LogoutResult;
 import com.sp.boot.dto.MemberDto;
@@ -30,6 +32,8 @@ public interface MemberService {
 	List<MemberDto> recommendList(MemberDto m);
 
 	int signUp(MemberDto m);
+
+	int insertInfo(MemberDto m, MultipartFile uploadFile);
 
 	
 	

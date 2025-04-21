@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.sp.boot.dto.JwtToken;
 import com.sp.boot.dto.LoginInfo;
@@ -92,7 +94,10 @@ public class MemberController {
     }
     
     
-    
+    @PostMapping("insertInfo")
+    public int insertInfo(MemberDto m, @RequestParam MultipartFile uploadFile) {
+    	return memberService.insertInfo(m,uploadFile);
+    }
 
 	
 

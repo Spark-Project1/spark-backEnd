@@ -23,6 +23,7 @@
 		<result column="mem_interest" property="interest" />
 		<result column="mem_tendencies" property="tendencies" />
 		<result column="mem_character" property="character" />
+		<result column="MEM_PROFILE" property="proFile" />
 
 	</resultMap>
 
@@ -52,6 +53,7 @@ select
      , MEM_INTEREST
      , MEM_TENDENCIES
      , MEM_CHARACTER
+     , MEM_PROFILE
   from
   		  member
  where
@@ -67,6 +69,25 @@ select
 select
 				mem_id
 		 ,  mem_pwd
+		 , MEM_NAME
+     , MEM_GENDER
+     , MEM_NICKNAME
+     , MEM_BIRTH
+     , MEM_LOCATION
+     , MEM_INFO
+     , MEM_OCCUPATION
+     , MEM_EDUCATION
+     , MEM_MBTI
+     , MEM_TALL
+     , MEM_RELIGION
+     , MEM_SMOCK
+     , MEM_STATUS
+     , MEM_REGIST_DATE
+     , MEM_COOKIE
+     , MEM_INTEREST
+     , MEM_TENDENCIES
+     , MEM_CHARACTER
+     , MEM_PROFILE
   from
   		  member
  where
@@ -98,6 +119,7 @@ SELECT MEM_ID
      , MEM_INTEREST
      , MEM_TENDENCIES
      , MEM_CHARACTER
+     , MEM_PROFILE
   FROM
 	     MEMBER
  WHERE
@@ -159,11 +181,13 @@ insert
 				(
 					mem_id
 				, mem_pwd	
+				, mem_status
 				)
 				values
 				(
 					#{memId}
 				, #{memPwd}
+				, 'A'
 				)
 
 </insert>
