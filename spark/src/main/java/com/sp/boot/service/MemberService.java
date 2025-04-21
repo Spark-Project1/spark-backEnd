@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.sp.boot.dto.FeedDto;
 import com.sp.boot.dto.LoginResult;
 import com.sp.boot.dto.LogoutResult;
 import com.sp.boot.dto.MemberDto;

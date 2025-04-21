@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.sp.boot.dao.MemberDao;
+import com.sp.boot.dto.FeedDto;
 import com.sp.boot.dto.JwtToken;
 import com.sp.boot.dto.LoginResult;
 import com.sp.boot.dto.LogoutResult;
@@ -293,7 +294,7 @@ public class MemberServiceImpl implements MemberService{
 		}
 		
 	}
-	
+
 	
 
 }

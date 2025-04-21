@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.sp.boot.dto.FeedDto;
 import com.sp.boot.dto.JwtToken;
 import com.sp.boot.dto.LoginInfo;
 import com.sp.boot.dto.LoginResult;

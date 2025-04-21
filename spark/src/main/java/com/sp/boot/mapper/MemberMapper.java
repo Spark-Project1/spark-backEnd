@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.sp.boot.dto.FeedDto;
 import com.sp.boot.dto.MemberDto;
 
 @Mapper
@@ -35,5 +36,6 @@ public interface MemberMapper {
 	 int likeMemberCheck(Map<String, String> map);
 	 
 	 int likeMember(Map<String, String> map);
+
 	 
 }

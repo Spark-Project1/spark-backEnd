@@ -28,7 +28,7 @@ public class SecurityConfig {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션을 사용하지 않겠다는 설정
             .authorizeHttpRequests(auth -> auth
                   .requestMatchers("/api/login","/api/validate","/api/refresh","/api/logout","/api/sms","/api/signup").permitAll() // 로그인/회원가입 허용
-                  .anyRequest().authenticated()
+                  .anyRequest().authenticated() // 그 외의 api는 인증이 필요
             )
             .addFilterBefore(
                 new JwtAuthenticationFilter(jwtProvider), // 시큐라티 체인에 등록

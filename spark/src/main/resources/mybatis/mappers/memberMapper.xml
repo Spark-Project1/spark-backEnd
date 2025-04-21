@@ -29,6 +29,7 @@
 
 
 
+
 <!-- 로그인 -->
 <select id="loginMember" resultMap="memberResultMap">
 
@@ -318,9 +319,19 @@ insert
 			 	#{requestId}
 			 ,#{responseId}	
 			 )
-			 
-			 
 </insert>
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 </mapper>
