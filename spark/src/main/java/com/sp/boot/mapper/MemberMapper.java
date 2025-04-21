@@ -24,8 +24,10 @@ public interface MemberMapper {
 	 
 	 int deleteToken(String userId);
 	 
-	 List<MemberDto> recommendList(MemberDto m);
+	 List<MemberDto> recommendList(Map<String, Object> map);
 
 	 int signUp(MemberDto m);
+	 
+	 int insertInfo(MemberDto m);
 	 
 }

@@ -222,11 +222,18 @@ public class MemberServiceImpl implements MemberService{
 	@Override
 	public List<MemberDto> recommendList(MemberDto m) {
 		
-		List<MemberDto> list = memberDao.recommendList(m);
+	    String[] interestArr = m.getInterest().split(",");
+	    String[] tendencies = m.getTendencies().split(",");
+	    Map<String, Object> map = new HashMap<>();
+	    map.put("interest", interestArr);
+	    map.put("tendencies", tendencies);
+	    map.put("memId", m.getMemId());
+		
+		List<MemberDto> list = memberDao.recommendList(map);
 		
 		Collections.shuffle(list);
 		
-		List<MemberDto> result = list.subList(0, 10);
+		List<MemberDto> result = list.subList(0, Math.min(50, list.size()));
 		
 		return result;
 	}
@@ -255,11 +262,7 @@ public class MemberServiceImpl implements MemberService{
 	        m.setProFile(null);
 	    }
 		
-		
-		
-		
-		
-		return 0;
+		return memberDao.insertInfo(m);
 	}
 	
 	

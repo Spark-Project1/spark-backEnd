@@ -18,6 +18,7 @@ import lombok.ToString;
 @ToString
 public class MemberDto {
 	
+	
 	private String memId;
 	private String memPwd;
 	private String memName;

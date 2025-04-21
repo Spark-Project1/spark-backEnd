@@ -46,12 +46,16 @@ public class MemberDao {
 		return memberMapper.deleteToken(userId);
 	}
 
-	public List<MemberDto> recommendList(MemberDto m) {
-		return memberMapper.recommendList(m);
+	public List<MemberDto> recommendList(Map<String, Object> map) {
+		return memberMapper.recommendList(map);
 	}
 
 	public int signUp(MemberDto m) {
 		return memberMapper.signUp(m);
+	}
+
+	public int insertInfo(MemberDto m) {
+		return memberMapper.insertInfo(m);
 	}
 	
 	

@@ -86,7 +86,7 @@ public class MemberController {
     }
     
     
-    @PostMapping("signup")
+    @PostMapping("/signup")
     public int signup(@RequestBody MemberDto m) {
     	
     	return memberService.signUp(m);
@@ -94,7 +94,7 @@ public class MemberController {
     }
     
     
-    @PostMapping("insertInfo")
+    @PostMapping("/insertInfo")
     public int insertInfo(MemberDto m, @RequestParam MultipartFile uploadFile) {
     	return memberService.insertInfo(m,uploadFile);
     }
