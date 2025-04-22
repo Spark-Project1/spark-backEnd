@@ -16,8 +16,7 @@ public class FeedDao {
 	private final FeedMapper feedMapper;
 
 	public List<FeedDto> feedList() {
-		//return feedMapper.feedList();
-		return null;
+		return feedMapper.feedList();
 	}
 	
 	

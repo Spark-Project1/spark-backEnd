@@ -18,7 +18,12 @@
 
 <!-- 피드 목록 불러오기 -->
 
-
+<select id="feedList" resultMap="feedResultMap">
+select
+			 *
+  from
+  		 feed
+</select>
 
 
 
