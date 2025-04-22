@@ -1,8 +1,10 @@
 package com.sp.boot.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,11 +18,17 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api")
 public class FeedController {
 	
-	private FeedService feedService;
+	private final FeedService feedService;
 	
-    @GetMapping("feedList")
+    @GetMapping("/feedList")
     public List<FeedDto> feedList(){
     	return feedService.feedList();
     }
+    
+    @GetMapping("/feedList/{feedNo}")
+    public Map<String, Object> feedDetail(@PathVariable int feedNo) {
+    	return feedService.feedDetail(feedNo);
+    }
+    
 
 }

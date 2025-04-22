@@ -1,6 +1,5 @@
 package com.sp.boot.service;
 
-import java.sql.Date;
 import java.time.Year;
 import java.util.Collections;
 import java.util.HashMap;
@@ -38,7 +37,7 @@ public class MemberServiceImpl implements MemberService{
 	private final JwtProvider jwtProvider;
 	private final BCryptPasswordEncoder bcryptPwdEncoder;
 	private final FileUtil fileUtil;
-	
+
 	@Override
 	public LoginResult login(MemberDto m) {
 		
@@ -243,8 +242,7 @@ public class MemberServiceImpl implements MemberService{
 		
 		// 현재 년도
 		int currentYear = Year.now().getValue();
-		
-		
+	
 		
 		for(int i = 0; i < result.size(); i++) {
 			int birthYear = result.get(i).getBirthDate().toLocalDate().getYear();
@@ -286,12 +284,7 @@ public class MemberServiceImpl implements MemberService{
 	}
 
 	@Override
-	public int recommendDelete(String hiddenId, String hiddenTarget) {
-		
-		Map<String,String> map = new HashMap<>();
-		map.put("hiddenId", hiddenId);
-		map.put("hiddenTarget", hiddenTarget);
-		
+	public int recommendDelete(Map<String,String> map) {		
 		return memberDao.recommendDelete(map);
 	}
 
@@ -303,11 +296,15 @@ public class MemberServiceImpl implements MemberService{
 		
 		if(result != null) {
 			throw new LoginFailException("이미 좋아요를 누른상태입니다.");
-		}else {			
+		}else {
 			return memberDao.likeMember(map);
 		}
 		
 	}
+
+	
+	
+	
 
 	
 

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import com.sp.boot.dto.CommentDto;
 import com.sp.boot.dto.FeedDto;
 import com.sp.boot.mapper.FeedMapper;
 
@@ -17,6 +18,14 @@ public class FeedDao {
 
 	public List<FeedDto> feedList() {
 		return feedMapper.feedList();
+	}
+
+	public FeedDto feedDetail(int feedNo) {
+		return feedMapper.feedDetail(feedNo);
+	}
+
+	public List<String> feedComment(int feedNo) {
+		return feedMapper.feedComment(feedNo);
 	}
 	
 	

@@ -101,8 +101,8 @@ public class MemberController {
     }
     
     @PostMapping("/recommendDelete")
-    public int recommendDelete(@RequestBody String hiddenId,@RequestBody String hiddenTarget) {
-    	return memberService.recommendDelete(hiddenId, hiddenTarget);
+    public int recommendDelete(@RequestBody Map<String,String> map) {
+    	return memberService.recommendDelete(map);
     }
 
 	@PostMapping("/like")
@@ -111,7 +111,7 @@ public class MemberController {
 		return memberService.likeMember(map);
 	}
     
-    
+
     
 
 }

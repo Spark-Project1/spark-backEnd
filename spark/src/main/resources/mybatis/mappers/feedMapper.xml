@@ -13,6 +13,15 @@
 		<result column="feed_like" property="likeCount" />
 	</resultMap>
 
+	<resultMap id="commentResultMap" type="CommentDto">
+		<result column="com_no" property="comNo"/>
+		<result column="feed_no" property="feedNo"/>
+		<result column="com_comtent" property="comContent"/>
+		<result column="com_type" property="comType"/>
+		<result column="com_ref" property="comRef"/>
+		<result column="com_regist_date" property="registDate"/>
+	
+	</resultMap>
 
 
 
@@ -25,10 +34,25 @@ select
   		 feed
 </select>
 
+<!-- 피드 상세보기 -->
+<select id="feedDetail" resultMap="feedResultMap">
+select
+			 *
+  from
+  		 feed
+ where
+ 			 feed_no = #{feedNo}
+</select>
 
-
-
-
+<!-- 피드 댓글 불러오기 -->
+<select id="feedComment" resultMap="commentResultMap">
+select
+			 *
+  from
+  		 comment
+ where
+ 			 feed_no = #{feedNo}
+</select>
 
 
 
