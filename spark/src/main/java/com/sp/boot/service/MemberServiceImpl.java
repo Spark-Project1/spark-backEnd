@@ -1,17 +1,20 @@
 package com.sp.boot.service;
 
+import java.sql.Date;
+import java.time.Year;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.sp.boot.dao.MemberDao;
-import com.sp.boot.dto.FeedDto;
 import com.sp.boot.dto.JwtToken;
+import com.sp.boot.dto.LikeDto;
 import com.sp.boot.dto.LoginResult;
 import com.sp.boot.dto.LogoutResult;
 import com.sp.boot.dto.MemberDto;
@@ -238,6 +241,17 @@ public class MemberServiceImpl implements MemberService{
 		
 		List<MemberDto> result = list.subList(0, Math.min(50, list.size()));
 		
+		// 현재 년도
+		int currentYear = Year.now().getValue();
+		
+		
+		
+		for(int i = 0; i < result.size(); i++) {
+			int birthYear = result.get(i).getBirthDate().toLocalDate().getYear();
+			result.get(i).setAge(currentYear - birthYear);
+		}
+		
+		
 		return result;
 	}
 
@@ -256,6 +270,9 @@ public class MemberServiceImpl implements MemberService{
 	@Override
 	public int insertInfo(MemberDto m, MultipartFile uploadFile) {
 		
+		String userId = SecurityContextHolder.getContext().getAuthentication().getName(); // 현재 로그인 중인 회원의 아이디값 불러오기
+		
+		m.setMemId(userId);
 		
 	    if (!uploadFile.isEmpty()) {
 	        Map<String, String> map = fileUtil.fileupload(uploadFile, "profile");
@@ -279,15 +296,12 @@ public class MemberServiceImpl implements MemberService{
 	}
 
 	@Override
-	public int likeMember(String requestId, String responseId) {
-		Map<String,String> map = new HashMap<>();
-		map.put("requestId", requestId);
-		map.put("responseId", responseId);
+	public int likeMember(Map<String,String> map) {
 		
 		// 좋아요 테이블에 이미 저장되어있는지 확인
-		int result = memberDao.likeMemberCheck(map);
+		LikeDto result = memberDao.likeMemberCheck(map);
 		
-		if(result > 0) {
+		if(result != null) {
 			throw new LoginFailException("이미 좋아요를 누른상태입니다.");
 		}else {			
 			return memberDao.likeMember(map);

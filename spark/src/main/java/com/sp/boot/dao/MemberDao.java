@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.stereotype.Repository;
 
 import com.sp.boot.dto.FeedDto;
+import com.sp.boot.dto.LikeDto;
 import com.sp.boot.dto.MemberDto;
 import com.sp.boot.mapper.MemberMapper;
 
@@ -63,7 +64,7 @@ public class MemberDao {
 		return memberMapper.recommendDelete(map);
 	}
 
-	public int likeMemberCheck(Map<String, String> map) {
+	public LikeDto likeMemberCheck(Map<String, String> map) {
 		return memberMapper.likeMemberCheck(map);
 	}
 

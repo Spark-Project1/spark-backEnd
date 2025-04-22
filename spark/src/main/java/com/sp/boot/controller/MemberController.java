@@ -96,18 +96,19 @@ public class MemberController {
     
     
     @PostMapping("/insertInfo")
-    public int insertInfo(MemberDto m, @RequestParam MultipartFile uploadFile) {
+    public int insertInfo(@RequestBody MemberDto m, @RequestParam MultipartFile uploadFile) {
     	return memberService.insertInfo(m,uploadFile);
     }
     
-    @GetMapping("recommendDelete")
-    public int recommendDelete(String hiddenId,String hiddenTarget) {
+    @PostMapping("/recommendDelete")
+    public int recommendDelete(@RequestBody String hiddenId,@RequestBody String hiddenTarget) {
     	return memberService.recommendDelete(hiddenId, hiddenTarget);
     }
 
-	@GetMapping("like")
-	public int likeMember(String requestId,String responseId) {
-		return memberService.likeMember(requestId,responseId);
+	@PostMapping("/like")
+	public int likeMember(@RequestBody Map<String,String> map) {		
+		System.out.println(map);
+		return memberService.likeMember(map);
 	}
     
     

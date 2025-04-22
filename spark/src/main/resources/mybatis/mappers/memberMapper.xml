@@ -194,51 +194,31 @@ insert
 </insert>
 
 <!-- 회원 정보 입력 -->
-<insert id="insertInfo">
-insert
-  into
-  		 member
-  		 (
-  		 	 MEM_NAME
-  		 , MEM_GENDER
-  		 , MEM_NICKNAME
-  		 , MEM_BIRTH
-  		 , MEM_LOCATION
-  		 , MEM_INFO
-  		 , MEM_OCCUPATION
-  		 , MEM_EDUCATION
-  		 , MEM_MBTI
-  		 , MEM_TALL
-  		 , MEM_RELIGION
-  		 , MEM_SMOCK
-  		 , MEM_STATUS
-  		 , MEM_INTEREST
-  		 , MEM_TENDENCIES
-  		 , MEM_CHARACTER
-  		 , MEM_PROFILE
-  		 )
-  		 VALUES
-  		 (
-  		 	 #{memName}
-  		 , #{gender}
-  		 , #{nickName}
-  		 , #{birthDate}
-  		 , #{location}
-  		 , #{memInfo}
-  		 , #{occupation}
-  		 , #{education}
-  		 , #{mbti}
-  		 , #{tall}
-  		 , #{religion}
-  		 , #{smock}
-  		 , 'Y'
-  		 , #{interest}
-  		 , #{tendencies}
-  		 , #{character}
-  		 , #{profile}
-  		 )
+<update id="insertInfo">
 
-</insert>
+update
+				member
+   set 
+				MEM_NAME = #{memName}
+		 ,	MEM_GENDER = #{gender}
+		 ,	MEM_NICKNAME = #{nickName}
+		 ,	MEM_BIRTH = #{birthDate}
+		 ,	MEM_LOCATION = #{location}
+		 ,	MEM_INFO = #{memInfo}
+		 ,	MEM_OCCUPATION = #{occupation}
+		 ,	MEM_EDUCATION = #{education}
+		 ,	MEM_MBTI = #{mbti}
+		 ,	MEM_TALL = #{tall}
+		 ,	MEM_RELIGION = #{religion}
+		 ,	MEM_SMOCK = #{smock}
+		 ,	MEM_STATUS = 'Y'
+		 ,	MEM_INTEREST = #{interest}
+		 ,	MEM_TENDENCIES = #{tendencies}
+		 ,	MEM_CHARACTER = #{character}
+		 ,	MEM_PROFILE = #{profile}
+ where
+ 				mem_id = #{memId}
+</update>
 
 
 <!-- 추천 리스트 -->

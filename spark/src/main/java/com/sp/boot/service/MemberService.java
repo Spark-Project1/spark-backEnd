@@ -1,11 +1,11 @@
 package com.sp.boot.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.sp.boot.dto.FeedDto;
 import com.sp.boot.dto.LoginResult;
 import com.sp.boot.dto.LogoutResult;
 import com.sp.boot.dto.MemberDto;
@@ -38,7 +38,7 @@ public interface MemberService {
 
 	int recommendDelete(String hiddenId, String hiddenTarget);
 
-	int likeMember(String requestId, String responseId);
+	int likeMember(Map<String,String> map);
 
 	
 	
