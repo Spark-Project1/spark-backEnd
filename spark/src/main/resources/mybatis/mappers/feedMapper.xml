@@ -20,9 +20,8 @@
 		<result column="com_type" property="comType"/>
 		<result column="com_ref" property="comRef"/>
 		<result column="com_regist_date" property="registDate"/>
-	
 	</resultMap>
-
+	
 
 
 <!-- 피드 목록 불러오기 -->
@@ -54,10 +53,42 @@ select
  			 feed_no = #{feedNo}
 </select>
 
+<!-- 피드 생성 -->
+<insert id="createFeed">
+insert
+  into
+			 feed
+			 (
+			 	 feed_content
+			 , feed_url
+			 , feed_id
+			 )
+  		 values
+  		 (
+  		 	 #{feedContent}
+  		 , #{feedURL}
+  		 , #{feedId}
+  		 )
+  		 
+</insert>
 
+<!-- 피드 첨부파일 확인 -->
+<select id="searchURL" resultType="string">
+select
+			 feed_url
+  from
+  		 feed
+ where
+ 			 feed_no = #{feedNo}
 
+</select>
 
-
+<!-- 피드 삭제 -->
+<delete id="deleteFeed">
+delete
+  from feed
+ where feed_no = #{feedNo}
+</delete>
 
 
 
