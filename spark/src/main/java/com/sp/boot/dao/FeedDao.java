@@ -40,6 +40,22 @@ public class FeedDao {
 	public int deleteFeed(int feedNo) {
 		return feedMapper.deleteFeed(feedNo);
 	}
+
+	public int updateFeed(FeedDto feed) {
+		return feedMapper.updateFeed(feed);
+	}
+
+	public String feedUrlCheck(FeedDto feed) {
+		return feedMapper.feedUrlCheck(feed);
+	}
+
+	public int comment(CommentDto comment) {
+		return feedMapper.comment(comment);
+	}
+
+	public int replyComment(CommentDto comment) {
+		return feedMapper.replyComment(comment);
+	}
 	
 	
 	

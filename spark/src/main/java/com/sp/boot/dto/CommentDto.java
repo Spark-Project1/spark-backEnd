@@ -20,8 +20,10 @@ public class CommentDto {
 	private int comNo;
 	private int feedNo;
 	private String comContent;
-	private String comType; // 1. 댓글 2. 대댓글
+	private String comType; // 0. 댓글 1. 대댓글
 	private String comRef;  
 	private String registDate;
+	private String memId;
+	private String proFile;
 
 }

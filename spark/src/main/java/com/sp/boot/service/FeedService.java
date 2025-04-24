@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.sp.boot.dto.CommentDto;
 import com.sp.boot.dto.FeedDto;
 
 public interface FeedService {
@@ -16,5 +17,11 @@ public interface FeedService {
 	int createFeed(FeedDto feed, MultipartFile uploadFile);
 
 	int deleteFeed(int feedNo);
+
+	int updateFeed(FeedDto feed, MultipartFile uploadFile);
+
+	int comment(CommentDto comment);
+
+	int replyComment(CommentDto comment);
 
 }

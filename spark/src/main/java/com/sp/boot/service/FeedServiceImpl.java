@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.sp.boot.dao.FeedDao;
+import com.sp.boot.dto.CommentDto;
 import com.sp.boot.dto.FeedDto;
 import com.sp.boot.util.FileUtil;
 
@@ -85,6 +86,58 @@ public class FeedServiceImpl implements FeedService{
 			return feedDao.deleteFeed(feedNo);
 		}
 		
+	}
+
+
+	@Override
+	public int updateFeed(FeedDto feed, MultipartFile uploadFile) {
+		
+		// 보류
+		
+		String userId = SecurityContextHolder.getContext().getAuthentication().getName();
+		feed.setFeedId(userId);
+		
+	    if (!uploadFile.isEmpty()) {
+	        Map<String, String> map = fileUtil.fileupload(uploadFile, "feed");
+	        String filePath = map.get("filePath") + "/" + map.get("filesystemName");
+	        feed.setFeedURL(filePath);
+	        
+        	int result = feedDao.updateFeed(feed);
+	        
+	        if(result > 0) {
+	        	return 1;	        	
+	        }else {
+	            File file = new File("C:" + filePath);
+	            if (file.exists()) file.delete();
+	        	return 0;
+	        }
+	    }else {
+	    	String result = feedDao.feedUrlCheck(feed); // 수정하려는 피드에 이미지가 저장됬는지 확인
+	    	
+	    	if(result != null) { // 이미지가 존재하면 삭제 처리후 수정
+	            File file = new File("C:" + result);
+	            if (file.exists()) file.delete();
+	            return feedDao.updateFeed(feed);
+	    	}else {
+	    		return feedDao.updateFeed(feed); 		
+	    	}
+	    }
+
+	}
+
+
+	@Override
+	public int comment(CommentDto comment) {
+		SecurityContextHolder.getContext().getAuthentication().getName();
+		comment.setMemId(SecurityContextHolder.getContext().getAuthentication().getName());
+		return feedDao.comment(comment);
+	}
+
+
+	@Override
+	public int replyComment(CommentDto comment) {
+		comment.setMemId(SecurityContextHolder.getContext().getAuthentication().getName());
+		return feedDao.replyComment(comment);
 	}
 	
 	

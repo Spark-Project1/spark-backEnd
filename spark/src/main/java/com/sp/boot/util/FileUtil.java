@@ -23,7 +23,7 @@ public class FileUtil {
 		if(!filePathDir.exists()) { // 해당 경로의 폴더가 존재하지 않을 경우
 			filePathDir.mkdirs();
 		}
-		
+
 		// 2) 파일명 수정
 		String originalFilename = uploadFile.getOriginalFilename();
 		String originalExt = originalFilename.endsWith(".tar.gz") ? ".tar.gz" 

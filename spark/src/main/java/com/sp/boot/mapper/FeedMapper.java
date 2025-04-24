@@ -22,4 +22,14 @@ public interface FeedMapper {
 	String searchURL(int feedNo);
 	
 	int deleteFeed(int feedNo);
+	
+	int updateFeed(FeedDto feed);
+	
+	int comment(CommentDto comment);
+	
+	String feedUrlCheck(FeedDto feed);
+	
+	int replyComment(CommentDto comment);
+	
+	
 }

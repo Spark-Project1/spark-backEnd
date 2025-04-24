@@ -20,6 +20,8 @@
 		<result column="com_type" property="comType"/>
 		<result column="com_ref" property="comRef"/>
 		<result column="com_regist_date" property="registDate"/>
+		<result column="mem_Id" property="memId" />
+		<result column="MEM_PROFILE" property="proFile" />
 	</resultMap>
 	
 
@@ -46,11 +48,18 @@ select
 <!-- 피드 댓글 불러오기 -->
 <select id="feedComment" resultMap="commentResultMap">
 select
-			 *
+		   com_no
+		 , feed_no
+		 , com_content
+		 , com_type
+		 , com_ref
+		 , com_regist_date
+		 , com_id
+		 , mem_profile
   from
-  		 comment
- where
- 			 feed_no = #{feedNo}
+  		 comment c
+  join member m on m.mem_Id = c.com_id
+ where feed_no = #{feedNo}
 </select>
 
 <!-- 피드 생성 -->
@@ -89,6 +98,74 @@ delete
   from feed
  where feed_no = #{feedNo}
 </delete>
+
+
+<!-- 피드 url 체크 -->
+<select id="feedUrlCheck" resultType="string">
+select
+			 feed_url
+  from
+  		 feed
+ where
+ 			 feed_no = #{feedNo}
+</select>
+
+<!-- 피드 수정 -->
+<update id="updateFeed">
+update
+			 feed
+   set
+       feed_content = #{feedContent}
+     , feed_modify_date = CURRENT_TIMESTAMP
+     , feed_url = #{feedURL}
+ where
+ 			 feed_no = #{feedNo}
+   		 
+</update>
+
+<!-- 댓글 등록 -->
+<insert id="comment">
+insert
+  into
+  		 comment
+			 (
+			   feed_no
+			 , com_content
+			 , com_id
+			 )
+			 values
+			 (
+ 			 	 #{feedNo}
+			 , #{com_content}
+			 , #{memId}
+			 )
+</insert>			 
+
+<!-- 대댓글 작성 -->
+<insert id="replycomment">
+insert
+  into
+  		 comment
+  		 (
+  		 	 feed_no
+  		 , com_content
+  		 , com_type
+  		 , com_ref
+  		 , com_id
+  		 )
+  		 values
+  		 (
+  		 	 #{feedNo}
+  		 , #{comContent}
+  		 , 1
+  		 , #{comNo}
+  		 , #{memId}
+  		 )
+
+</insert>
+
+
+
 
 
 
