@@ -281,6 +281,10 @@ public class MemberServiceImpl implements MemberService{
         LocalDate localDate = LocalDate.parse(m.getBirthDate(), formatter); // localdate 날짜전용 객체에 formatter에 정의한 형식으로 담기
         m.setBirthDate2(Date.valueOf(localDate)); // sql.date 타입으로 변경
 		m.setMemId(userId);
+		m.setInterest(String.join(",", m.getInterest2()));
+		m.setTendencies(String.join(",", m.getTendencies2()));
+		m.setCharacter(String.join(",", m.getCharacter2()));
+		
 		
 	    if (!uploadFile.isEmpty()) {
 	        Map<String, String> map = fileUtil.fileupload(uploadFile, "profile");
@@ -313,14 +317,14 @@ public class MemberServiceImpl implements MemberService{
 	}
 
 	@Override
-	public String duplicateCheck(String nickName) {
+	public boolean duplicateCheck(String nickName) {
 		
 		int result = memberDao.duplicateCheck(nickName);
 		
 		if(result>0) {
-			return "이미 사용중인 닉네임입니다.";
+			return false;
 		}else {
-			return "사용 가능한 닉네임입니다.";
+			return true;
 		}
 
 	}

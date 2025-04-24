@@ -45,23 +45,9 @@ public class MemberDto {
 	private String character; // 특징
 	private String proFile; // 사진 경로
 	private int age;
-	
-	
-	
-    @JsonSetter("interest") // json에서 java 객체로 바꿀때 어떤 메서드를 호출할지 정의
-    public void setInterest(List<String> interests) {
-        this.interest = String.join(",", interests);
-    }
-    
-    @JsonSetter("tendencies")
-    public void setTendencies(List<String> tendencies) {
-        this.tendencies = String.join(",", tendencies);
-    }
-    
-    @JsonSetter("character")
-    public void setCharacter(List<String> character) {
-        this.character = String.join(",", character);
-    }
+	private String[] interest2;
+	private String[] tendencies2;
+	private String[] character2;
 	
 	
 

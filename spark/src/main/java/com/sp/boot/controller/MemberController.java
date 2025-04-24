@@ -89,17 +89,13 @@ public class MemberController {
     // 회원가입
     @PostMapping("/signup")
     public int signup(@RequestBody MemberDto m) {
-    	
     	return memberService.signUp(m);
     	
     }
     
     // 회원 정보입력
     @PostMapping("/insertInfo")
-    public int insertInfo(@RequestBody MemberDto m, @RequestParam MultipartFile uploadFile) {
-    	System.out.println(uploadFile);
-    	System.out.println(m);
-    	
+    public int insertInfo(@RequestBody MemberDto m, @RequestParam MultipartFile uploadFile) {    	
     	return memberService.insertInfo(m,uploadFile);
     }
     
@@ -119,7 +115,7 @@ public class MemberController {
 	// 닉네임 중복검사
 	
 	@GetMapping("/duplicateCheck")
-	public String duplicateCheck(@RequestParam String nickName) {
+	public boolean duplicateCheck(@RequestParam String nickName) {
 		return memberService.duplicateCheck(nickName);
 	}
 	

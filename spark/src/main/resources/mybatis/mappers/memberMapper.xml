@@ -20,9 +20,9 @@
 		<result column="mem_status" property="status" />
 		<result column="mem_regist_date" property="registDate" />
 		<result column="mem_cookie" property="cookie" />
-		<result column="mem_interest" property="interest" typeHandler="org.apache.ibatis.type.StringTypeHandler" />
-		<result column="mem_tendencies" property="tendencies" typeHandler="org.apache.ibatis.type.StringTypeHandler" />
-		<result column="mem_character" property="character" typeHandler="org.apache.ibatis.type.StringTypeHandler" />
+		<result column="mem_interest" property="interest" />
+		<result column="mem_tendencies" property="tendencies" />
+		<result column="mem_character" property="character" />
 		<result column="MEM_PROFILE" property="proFile" />
 
 	</resultMap>
@@ -243,7 +243,9 @@ update
 	          mem_interest LIKE CONCAT('%', #{item}, '%')
 	        </foreach>
 		      OR
-	          mem_tendencies = #{tendencies}
+  			   <foreach collection="tendencies" item="item" separator=" OR ">
+	          mem_tendencies LIKE CONCAT('%', #{item}, '%')
+	        </foreach>
 	        OR
 	        <foreach collection="character" item="item" separator=" OR ">
 	          mem_character LIKE CONCAT('%', #{item}, '%')
