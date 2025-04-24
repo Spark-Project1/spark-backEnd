@@ -37,5 +37,6 @@ public interface MemberMapper {
 	 
 	 int likeMember(Map<String, String> map);
 
+	 int duplicateCheck(String nickName);
 	 
 }

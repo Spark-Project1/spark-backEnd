@@ -8,7 +8,7 @@
 		<result column="mem_name" property="memName" />
 		<result column="mem_gender" property="gender" />
 		<result column="mem_nickName" property="nickName" />
-		<result column="mem_birth" property="birthDate" />
+		<result column="mem_birth" property="birthDate2" />
 		<result column="mem_location" property="location" />
 		<result column="mem_Info" property="memInfo" />
 		<result column="mem_occupation" property="occupation" />
@@ -20,9 +20,9 @@
 		<result column="mem_status" property="status" />
 		<result column="mem_regist_date" property="registDate" />
 		<result column="mem_cookie" property="cookie" />
-		<result column="mem_interest" property="interest" />
-		<result column="mem_tendencies" property="tendencies" />
-		<result column="mem_character" property="character" />
+		<result column="mem_interest" property="interest" typeHandler="org.apache.ibatis.type.StringTypeHandler" />
+		<result column="mem_tendencies" property="tendencies" typeHandler="org.apache.ibatis.type.StringTypeHandler" />
+		<result column="mem_character" property="character" typeHandler="org.apache.ibatis.type.StringTypeHandler" />
 		<result column="MEM_PROFILE" property="proFile" />
 
 	</resultMap>
@@ -215,7 +215,7 @@ update
 		 ,	MEM_INTEREST = #{interest}
 		 ,	MEM_TENDENCIES = #{tendencies}
 		 ,	MEM_CHARACTER = #{character}
-		 ,	MEM_PROFILE = #{profile}
+		 ,	MEM_PROFILE = #{proFile}
  where
  				mem_id = #{memId}
 </update>
@@ -302,7 +302,15 @@ insert
 </insert>
 
 
-
+<!-- 닉네임 중복검사 -->
+<select id="duplicateCheck" >
+select
+			 count(mem_nickName)
+  from
+  		 member
+ where
+ 			 mem_nickname = #{nickName}
+</select>
 
 
 

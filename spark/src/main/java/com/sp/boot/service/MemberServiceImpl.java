@@ -1,6 +1,10 @@
 package com.sp.boot.service;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.time.Year;
+import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -224,16 +228,19 @@ public class MemberServiceImpl implements MemberService{
 
 	@Override
 	public List<MemberDto> recommendList(MemberDto m) {
-		
-		
-	    String[] interestArr = m.getInterest().split(",");
-	    String[] character = m.getCharacter().split(",");
+
 	    Map<String, Object> map = new HashMap<>();
-	    map.put("interest", interestArr);
-	    map.put("character", character);
-	    map.put("tendencies", m.getTendencies());
 	    map.put("memId", m.getMemId());
 		
+	    String[] interestArr = m.getInterest().split(",");
+	    String[] characterArr = m.getCharacter().split(",");
+	    String[] tendenciesArr = m.getTendencies().split(",");
+	    
+	    map.put("interest", interestArr);
+	    map.put("character", characterArr);
+	    map.put("tendencies", tendenciesArr);
+	    
+	    
 		List<MemberDto> list = memberDao.recommendList(map);
 		
 		Collections.shuffle(list);
@@ -245,7 +252,7 @@ public class MemberServiceImpl implements MemberService{
 	
 		
 		for(int i = 0; i < result.size(); i++) {
-			int birthYear = result.get(i).getBirthDate().toLocalDate().getYear();
+			int birthYear = result.get(i).getBirthDate2().toLocalDate().getYear();
 			result.get(i).setAge(currentYear - birthYear);
 		}
 		
@@ -270,6 +277,9 @@ public class MemberServiceImpl implements MemberService{
 		
 		String userId = SecurityContextHolder.getContext().getAuthentication().getName(); // 현재 로그인 중인 회원의 아이디값 불러오기
 		
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd"); // 포맷 정의 
+        LocalDate localDate = LocalDate.parse(m.getBirthDate(), formatter); // localdate 날짜전용 객체에 formatter에 정의한 형식으로 담기
+        m.setBirthDate2(Date.valueOf(localDate)); // sql.date 타입으로 변경
 		m.setMemId(userId);
 		
 	    if (!uploadFile.isEmpty()) {
@@ -300,6 +310,19 @@ public class MemberServiceImpl implements MemberService{
 			return memberDao.likeMember(map);
 		}
 		
+	}
+
+	@Override
+	public String duplicateCheck(String nickName) {
+		
+		int result = memberDao.duplicateCheck(nickName);
+		
+		if(result>0) {
+			return "이미 사용중인 닉네임입니다.";
+		}else {
+			return "사용 가능한 닉네임입니다.";
+		}
+
 	}
 
 	

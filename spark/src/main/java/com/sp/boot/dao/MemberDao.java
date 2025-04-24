@@ -72,6 +72,10 @@ public class MemberDao {
 		return memberMapper.likeMember(map);
 	}
 
+	public int duplicateCheck(String nickName) {
+		return memberMapper.duplicateCheck(nickName);
+	}
+
 
 	
 	

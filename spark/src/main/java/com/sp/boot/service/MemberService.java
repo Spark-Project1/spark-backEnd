@@ -40,6 +40,8 @@ public interface MemberService {
 
 	int likeMember(Map<String,String> map);
 
+	String duplicateCheck(String nickName);
+
 	
 	
 

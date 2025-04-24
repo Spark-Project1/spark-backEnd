@@ -37,7 +37,6 @@ public class MemberController {
 	private final JwtProvider jwtProvider;
 	
 	// 로그인
-	
 	@PostMapping("/login")
 	public LoginInfo MemberLogin(@RequestBody MemberDto m,HttpServletResponse response) {		
 			LoginResult result = memberService.login(m);
@@ -46,6 +45,7 @@ public class MemberController {
 
 	}
 	
+	// 리프레시 토큰 발급
     @PostMapping("/refresh")
     public JwtToken refreshToken(@CookieValue("refreshToken") String refreshTokenHeader,HttpServletResponse response) { // 헤더에있는 Authorization 값 받아옴
     	TokenResult result = memberService.insertRefreshToken(refreshTokenHeader);
@@ -53,20 +53,20 @@ public class MemberController {
         return result.getJwtToken();
     }
     
-    
+    // 유효성 검사
     @GetMapping("/validate")
     public Map<String,Object> validate(@RequestHeader("Authorization") String authHeader) {
     	return memberService.loginUserInfo(authHeader);
     }
     
     
-    
+    // 쿨sms
     @PostMapping("/sms")
     public String sms(@RequestBody String phone) {
     	return memberService.smsCode(phone);
     }
     
-    
+    // 로그아웃
     @PostMapping("/logout")
     public boolean logout(@CookieValue("refreshToken") String refreshTokenHeader, HttpServletResponse response) {
     	
@@ -80,13 +80,13 @@ public class MemberController {
 
     }
     
-    
+    // 메인화면 추천목록
     @PostMapping("/recommend")
     public List<MemberDto> recommendList(@RequestBody MemberDto m) {
     	return memberService.recommendList(m);
     }
     
-    
+    // 회원가입
     @PostMapping("/signup")
     public int signup(@RequestBody MemberDto m) {
     	
@@ -94,23 +94,40 @@ public class MemberController {
     	
     }
     
-    
+    // 회원 정보입력
     @PostMapping("/insertInfo")
     public int insertInfo(@RequestBody MemberDto m, @RequestParam MultipartFile uploadFile) {
+    	System.out.println(uploadFile);
+    	System.out.println(m);
+    	
     	return memberService.insertInfo(m,uploadFile);
     }
     
+    // 추천목록 삭제
     @PostMapping("/recommendDelete")
     public int recommendDelete(@RequestBody Map<String,String> map) {
     	return memberService.recommendDelete(map);
     }
 
+    // 좋아요 신청
 	@PostMapping("/like")
 	public int likeMember(@RequestBody Map<String,String> map) {		
 		System.out.println(map);
 		return memberService.likeMember(map);
 	}
     
+	// 닉네임 중복검사
+	
+	@GetMapping("/duplicateCheck")
+	public String duplicateCheck(@RequestParam String nickName) {
+		return memberService.duplicateCheck(nickName);
+	}
+	
+	
+	
+	
+	
+	
 
     
 
