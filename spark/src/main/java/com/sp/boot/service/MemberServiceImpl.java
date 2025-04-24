@@ -313,14 +313,14 @@ public class MemberServiceImpl implements MemberService{
 	}
 
 	@Override
-	public String duplicateCheck(String nickName) {
+	public boolean duplicateCheck(String nickName) {
 		
 		int result = memberDao.duplicateCheck(nickName);
 		
 		if(result>0) {
-			return "이미 사용중인 닉네임입니다.";
+			return false;
 		}else {
-			return "사용 가능한 닉네임입니다.";
+			return true;
 		}
 
 	}

@@ -119,7 +119,7 @@ public class MemberController {
 	// 닉네임 중복검사
 	
 	@GetMapping("/duplicateCheck")
-	public String duplicateCheck(@RequestParam String nickName) {
+	public boolean duplicateCheck(@RequestParam String nickName) {
 		return memberService.duplicateCheck(nickName);
 	}
 	
