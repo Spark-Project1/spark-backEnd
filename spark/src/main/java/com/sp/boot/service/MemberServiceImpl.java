@@ -282,6 +282,13 @@ public class MemberServiceImpl implements MemberService{
         m.setBirthDate2(Date.valueOf(localDate)); // sql.date 타입으로 변경
 		m.setMemId(userId);
 		
+		m.setInterest(String.join(",", m.getInterest2()));
+		m.setCharacter(String.join(",",m.getCharacter2()));
+		m.setTendencies(String.join(",",m.getTendencies2()));
+
+		
+		
+		
 	    if (!uploadFile.isEmpty()) {
 	        Map<String, String> map = fileUtil.fileupload(uploadFile, "profile");
 	        String filePath = map.get("filePath") + "/" + map.get("filesystemName");
