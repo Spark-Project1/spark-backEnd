@@ -281,11 +281,34 @@ public class MemberServiceImpl implements MemberService{
         LocalDate localDate = LocalDate.parse(m.getBirthDate(), formatter); // localdate 날짜전용 객체에 formatter에 정의한 형식으로 담기
         m.setBirthDate2(Date.valueOf(localDate)); // sql.date 타입으로 변경
 		m.setMemId(userId);
-		
 		m.setInterest(String.join(",", m.getInterest2()));
 		m.setCharacter(String.join(",",m.getCharacter2()));
 		m.setTendencies(String.join(",",m.getTendencies2()));
 
+		if (m.getTall().equals("140 - 145")) {
+		    m.setTall("A");
+		} else if (m.getTall().equals("145 - 150")) {
+		    m.setTall("B");
+		} else if (m.getTall().equals("150 - 155")) {
+		    m.setTall("C");
+		} else if (m.getTall().equals("155 - 160")) {
+		    m.setTall("D");
+		} else if (m.getTall().equals("160 - 165")) {
+		    m.setTall("E");
+		} else if (m.getTall().equals("165 - 170")) {
+		    m.setTall("F");
+		} else if (m.getTall().equals("170 - 175")) {
+		    m.setTall("G");
+		} else if (m.getTall().equals("175 - 180")) {
+		    m.setTall("H");
+		} else if (m.getTall().equals("180 - 185")) {
+		    m.setTall("I");
+		} else if (m.getTall().equals("185 - 190")) {
+		    m.setTall("J");
+		}
+
+		
+		
 		
 		
 		
