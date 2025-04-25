@@ -306,6 +306,11 @@ public class MemberServiceImpl implements MemberService{
 		} else if (m.getTall().equals("185 - 190")) {
 		    m.setTall("J");
 		}
+		
+		
+		if(m.getSmock().equals("자주")) {
+			m.setSmock("Y");
+		}
 
 		
 		

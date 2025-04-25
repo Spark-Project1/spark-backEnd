@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -96,7 +97,7 @@ public class MemberController {
     
     // 회원 정보입력
     @PatchMapping("/insertInfo")
-    public int insertInfo(@RequestBody MemberDto m, @RequestParam MultipartFile uploadFile) {
+    public int insertInfo(@ModelAttribute MemberDto m, @RequestParam("uploadFile") MultipartFile uploadFile) {
     	System.out.println(uploadFile);
     	System.out.println(m);
     	
