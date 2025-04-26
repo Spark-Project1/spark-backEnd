@@ -50,5 +50,8 @@ public class MemberDto {
 	private String[] character2;
 	
 	
+	
+	
+
 
 }

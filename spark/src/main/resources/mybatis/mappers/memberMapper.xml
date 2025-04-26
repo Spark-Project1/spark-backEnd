@@ -239,11 +239,11 @@ update
     )
     
    AND  (
-			    <foreach collection="interest" item="item" separator=" OR ">
+			<foreach collection="interest" item="item" separator=" OR ">
 	          mem_interest LIKE CONCAT('%', #{item}, '%')
 	        </foreach>
-		      OR
-  			   <foreach collection="tendencies" item="item" separator=" OR ">
+		      OR 
+		    <foreach collection="tendencies" item="item" separator=" OR ">
 	          mem_tendencies LIKE CONCAT('%', #{item}, '%')
 	        </foreach>
 	        OR

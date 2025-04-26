@@ -5,6 +5,8 @@ import java.util.Map;
 
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -13,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.sp.boot.dto.FeedDto;
 import com.sp.boot.dto.JwtToken;
 import com.sp.boot.dto.LoginInfo;
 import com.sp.boot.dto.LoginResult;
@@ -94,8 +95,11 @@ public class MemberController {
     }
     
     // 회원 정보입력
-    @PostMapping("/insertInfo")
-    public int insertInfo(@RequestBody MemberDto m, @RequestParam MultipartFile uploadFile) {    	
+    @PatchMapping("/insertInfo")
+    public int insertInfo(@ModelAttribute MemberDto m, @RequestParam("uploadFile") MultipartFile uploadFile) {
+    	System.out.println(uploadFile);
+    	System.out.println(m);
+    	
     	return memberService.insertInfo(m,uploadFile);
     }
     
