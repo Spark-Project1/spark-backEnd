@@ -39,4 +39,8 @@ public interface MemberMapper {
 
 	 int duplicateCheck(String nickName);
 	 
+	 int interestMemCheck(Map<String, String> map);
+	 
+	 int interestMem(Map<String, String> map);
+	 
 }

@@ -273,7 +273,7 @@ public class MemberServiceImpl implements MemberService{
 	}
 
 	@Override
-	public int insertInfo(MemberDto m, MultipartFile uploadFile) {
+	public MemberDto insertInfo(MemberDto m, MultipartFile uploadFile) {
 		
 		String userId = SecurityContextHolder.getContext().getAuthentication().getName(); // 현재 로그인 중인 회원의 아이디값 불러오기
 		
@@ -307,15 +307,14 @@ public class MemberServiceImpl implements MemberService{
 		    m.setTall("J");
 		}
 		
-		
 		if(m.getSmock().equals("자주")) {
 			m.setSmock("Y");
+		}else if(m.getSmock().equals("가끔")){
+			m.setSmock("A");
+		}else if(m.getSmock().equals("안함")){
+			m.setSmock("N");
 		}
 
-		
-		
-		
-		
 		
 	    if (!uploadFile.isEmpty()) {
 	        Map<String, String> map = fileUtil.fileupload(uploadFile, "profile");
@@ -324,8 +323,17 @@ public class MemberServiceImpl implements MemberService{
 	    } else {
 	        m.setProFile(null);
 	    }
+	    int result = memberDao.insertInfo(m);
+	    MemberDto mem = new MemberDto();
+	    mem.setMemId(userId);
+	    		
+	    if(result > 0) {
+	    	MemberDto meme = memberDao.login(mem);
+	    	System.out.println(meme);
+	    	return meme;
+	    }
 		
-		return memberDao.insertInfo(m);
+		return null;
 	}
 
 	@Override
@@ -359,6 +367,32 @@ public class MemberServiceImpl implements MemberService{
 		}
 
 	}
+
+	@Override
+	public int interestMem(Map<String, String> map) {
+		
+		int result = memberDao.interestMemCheck(map); // 이미 등록한 관심회원인지 확인
+		
+		if(result > 0) {
+			result = 0;
+		}else {
+			return memberDao.interestMem(map);
+		}
+		
+		return result;
+	}
+
+//	@Override
+//	public MemberDto detailInfo(String memId) {
+//		// 만약 내가 좋아요를 누른 상태방의 상세정보를 확인할경우
+//		
+//		
+//		
+//		
+//		
+//		
+//		return memberDao.detailInfo(memId);
+//	}
 
 	
 	

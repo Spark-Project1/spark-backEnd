@@ -35,7 +35,6 @@
 
 select
 				mem_id
-		 ,  mem_pwd
 		 , MEM_NAME
      , MEM_GENDER
      , MEM_NICKNAME
@@ -315,12 +314,31 @@ select
 </select>
 
 
+<!-- 관심회원 체크 -->
+<select id="interestMemCheck">
+select
+			 count(*)
+  from
+  		 interested_mem
+ where
+ 			 im_user = #{imUser}
+     , im_target = #{imTarget}
+</select>
 
 
+<!-- 관심회원 등록 -->
+<insert id="interestMem">
+insert
+  into
+  		 interested_mem
+values
+			 (
+			 	 #{imUser}
+			 , #{imTarget}
+			 )
+			 
 
-
-
-
+</insert>
 
 
 

@@ -96,10 +96,7 @@ public class MemberController {
     
     // 회원 정보입력
     @PatchMapping("/insertInfo")
-    public int insertInfo(@ModelAttribute MemberDto m, @RequestParam("uploadFile") MultipartFile uploadFile) {
-    	System.out.println(uploadFile);
-    	System.out.println(m);
-    	
+    public MemberDto insertInfo(@ModelAttribute MemberDto m, @RequestParam("uploadFile") MultipartFile uploadFile) {  	
     	return memberService.insertInfo(m,uploadFile);
     }
     
@@ -124,10 +121,17 @@ public class MemberController {
 	}
 	
 	
+	// 관심목록 추가
+	@PostMapping("/interestMem")
+	public int interestMem(@RequestBody Map<String,String> map) {
+		return memberService.interestMem(map);
+	}
 	
-	
-	
-	
+//	// 상대방 상세정보 불러오기
+//	@GetMapping("/DetailInfo")
+//	public MemberDto detailInfo(@RequestParam String memId) {
+//		return memberService.detailInfo(memId);
+//	}
 
     
 

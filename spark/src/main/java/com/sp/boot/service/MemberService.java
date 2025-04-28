@@ -34,13 +34,17 @@ public interface MemberService {
 
 	int signUp(MemberDto m);
 
-	int insertInfo(MemberDto m, MultipartFile uploadFile);
+	MemberDto insertInfo(MemberDto m, MultipartFile uploadFile);
 
 	int recommendDelete(Map<String,String> map);
 
 	int likeMember(Map<String,String> map);
 
 	boolean duplicateCheck(String nickName);
+
+	int interestMem(Map<String, String> map);
+
+//	MemberDto detailInfo(String memId);
 
 	
 	

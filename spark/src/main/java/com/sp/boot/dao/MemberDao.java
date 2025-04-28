@@ -76,6 +76,14 @@ public class MemberDao {
 		return memberMapper.duplicateCheck(nickName);
 	}
 
+	public int interestMemCheck(Map<String, String> map) {
+		return memberMapper.interestMemCheck(map);
+	}
+
+	public int interestMem(Map<String, String> map) {
+		return memberMapper.interestMem(map);
+	}
+
 
 	
 	
