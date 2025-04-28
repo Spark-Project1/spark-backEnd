@@ -127,11 +127,11 @@ public class MemberController {
 		return memberService.interestMem(map);
 	}
 	
-//	// 상대방 상세정보 불러오기
-//	@GetMapping("/DetailInfo")
-//	public MemberDto detailInfo(@RequestParam String memId) {
-//		return memberService.detailInfo(memId);
-//	}
+	// 상대방 상세정보 불러오기
+	@GetMapping("/DetailInfo")
+	public MemberDto detailInfo(@RequestParam String memId) {
+		return memberService.detailInfo(memId);
+	}
 
     
 

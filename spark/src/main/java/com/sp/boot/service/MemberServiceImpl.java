@@ -48,6 +48,8 @@ public class MemberServiceImpl implements MemberService{
 		// 1. 유저 확인
 	    MemberDto memberDto = memberDao.login(m);
 	    
+	    System.out.println("로그인 :" + memberDto);
+	    
 	    if(memberDto != null && bcryptPwdEncoder.matches(m.getMemPwd(), memberDto.getMemPwd())){
 	    	// 2. 토큰 생성
 	    	String accessToken = jwtProvider.createToken(m.getMemId()); // access 토큰 발급
@@ -382,17 +384,17 @@ public class MemberServiceImpl implements MemberService{
 		return result;
 	}
 
-//	@Override
-//	public MemberDto detailInfo(String memId) {
-//		// 만약 내가 좋아요를 누른 상태방의 상세정보를 확인할경우
-//		
-//		
-//		
-//		
-//		
-//		
-//		return memberDao.detailInfo(memId);
-//	}
+	@Override
+	public MemberDto detailInfo(String memId) {
+		// 만약 내가 좋아요를 누른 상태방의 상세정보를 확인할경우
+		
+		
+		
+		
+		
+		
+		return memberDao.detailInfo(memId);
+	}
 
 	
 	

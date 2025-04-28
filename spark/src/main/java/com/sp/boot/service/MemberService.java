@@ -44,7 +44,7 @@ public interface MemberService {
 
 	int interestMem(Map<String, String> map);
 
-//	MemberDto detailInfo(String memId);
+	MemberDto detailInfo(String memId);
 
 	
 	

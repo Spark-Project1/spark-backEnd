@@ -34,7 +34,8 @@
 <select id="loginMember" resultMap="memberResultMap">
 
 select
-				mem_id
+			 mem_id
+		 , mem_pwd
 		 , MEM_NAME
      , MEM_GENDER
      , MEM_NICKNAME
