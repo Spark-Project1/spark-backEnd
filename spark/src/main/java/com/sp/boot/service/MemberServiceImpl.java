@@ -191,7 +191,7 @@ public class MemberServiceImpl implements MemberService{
 		MemberDto result = memberDao.findById(phone);
 		
 		if(result != null) {
-			throw new LoginFailException("이미 가입된 회원입니다.");
+			return "exist";
 		}
 		
 		
