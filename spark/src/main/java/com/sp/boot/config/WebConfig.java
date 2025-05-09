@@ -21,7 +21,7 @@ public class WebConfig implements WebMvcConfigurer{
 	
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/spark/profile/**") ///spark/profile/** 경로로 들어오는 요청 처리
+        registry.addResourceHandler("/profile/**") ///spark/profile/** 경로로 들어오는 요청 처리
                 .addResourceLocations("file:///C:/spark/profile/"); // 위 요청을 어디파일에 연결할지 설정
     }
 	
