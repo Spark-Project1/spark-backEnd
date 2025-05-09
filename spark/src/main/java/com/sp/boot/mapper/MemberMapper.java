@@ -43,4 +43,6 @@ public interface MemberMapper {
 	 
 	 int interestMem(Map<String, String> map);
 	 
+	 MemberDto detailInfo(String memId);
+	 
 }

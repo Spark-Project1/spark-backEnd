@@ -230,6 +230,8 @@ update
 		   , MEM_BIRTH
        , MEM_INFO
        , MEM_PROFILE
+       , mem_occupation
+       , mem_location
    FROM MEMBER
   WHERE MEM_ID != #{memId}
     AND MEM_ID NOT IN (
@@ -337,9 +339,43 @@ values
 			 	 #{imUser}
 			 , #{imTarget}
 			 )
-			 
-
 </insert>
+
+
+<!-- 멤버 상세정보 -->
+<select id="detailInfo" resultMap="memberResultMap">
+select
+			 mem_id
+		 , MEM_NAME
+     , MEM_GENDER
+     , MEM_NICKNAME
+     , MEM_BIRTH
+     , MEM_LOCATION
+     , MEM_INFO
+     , MEM_OCCUPATION
+     , MEM_EDUCATION
+     , MEM_MBTI
+     , MEM_TALL
+     , MEM_RELIGION
+     , MEM_SMOCK
+     , MEM_STATUS
+     , MEM_REGIST_DATE
+     , MEM_INTEREST
+     , MEM_TENDENCIES
+     , MEM_CHARACTER
+     , MEM_PROFILE
+  from
+  		  member
+ where
+ 				mem_id = #{memId}
+</select>
+
+
+
+
+
+
+
 
 
 

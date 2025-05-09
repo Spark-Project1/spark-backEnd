@@ -84,6 +84,10 @@ public class MemberDao {
 		return memberMapper.interestMem(map);
 	}
 
+	public MemberDto detailInfo(String memId) {
+		return memberMapper.detailInfo(memId);
+	}
+
 
 	
 	

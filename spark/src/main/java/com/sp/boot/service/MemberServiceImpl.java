@@ -4,7 +4,6 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.time.Year;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -69,6 +68,8 @@ public class MemberServiceImpl implements MemberService{
 	    	refreshCookie.setPath("/"); // 어디에 쿠키를 쓸지 경로 설정
 	    	refreshCookie.setSecure(false); // https 환경에서만 사용가능 현재는 false로 막아둔상태 ssl적용x 
 	    	refreshCookie.setMaxAge(60 * 60 * 24 * 7); // 7일
+	    	
+	    	memberDto.setMemPwd(null);
 
 		    return new LoginResult(token, memberDto,refreshCookie);
 	    }else {
@@ -330,9 +331,7 @@ public class MemberServiceImpl implements MemberService{
 	    mem.setMemId(userId);
 	    		
 	    if(result > 0) {
-	    	MemberDto meme = memberDao.login(mem);
-	    	System.out.println(meme);
-	    	return meme;
+	    	return memberDao.login(mem);
 	    }
 		
 		return null;
@@ -388,12 +387,52 @@ public class MemberServiceImpl implements MemberService{
 	public MemberDto detailInfo(String memId) {
 		// 만약 내가 좋아요를 누른 상태방의 상세정보를 확인할경우
 		
+		MemberDto m = memberDao.detailInfo(memId);
+		
+		if (m.getTall().equals("A")) {
+		    m.setTall("140 - 145");
+		} else if (m.getTall().equals("B")) {
+		    m.setTall("145 - 150");
+		} else if (m.getTall().equals("C")) {
+		    m.setTall("150 - 155");
+		} else if (m.getTall().equals("D")) {
+		    m.setTall("155 - 160");
+		} else if (m.getTall().equals("E")) {
+		    m.setTall("160 - 165");
+		} else if (m.getTall().equals("F")) {
+		    m.setTall("165 - 170");
+		} else if (m.getTall().equals("G")) {
+		    m.setTall("170 - 175");
+		} else if (m.getTall().equals("H")) {
+		    m.setTall("175 - 180");
+		} else if (m.getTall().equals("I")) {
+		    m.setTall("180 - 185");
+		} else if (m.getTall().equals("J")) {
+		    m.setTall("185 - 190");
+		}
+		
+		if(m.getSmock().equals("Y")) {
+			m.setSmock("자주");
+		}else if(m.getSmock().equals("A")){
+			m.setSmock("가끔");
+		}else if(m.getSmock().equals("N")){
+			m.setSmock("안함");
+		}
+		Map<String,String> map = new HashMap<>();
+		String userId = SecurityContextHolder.getContext().getAuthentication().getName();
+		map.put("requestId", memId);
+		map.put("responseId", userId);
+		LikeDto ld = memberDao.likeMemberCheck(map);
+		
+		if(ld != null) {
+			m.setLikeStatus("Y");
+		}else {
+			m.setLikeStatus("N");
+		}
 		
 		
 		
-		
-		
-		return memberDao.detailInfo(memId);
+		return m;
 	}
 
 	

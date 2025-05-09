@@ -48,6 +48,7 @@ public class MemberDto {
 	private String[] interest2;
 	private String[] tendencies2;
 	private String[] character2;
+	private String likeStatus;
 	
 	
 	
