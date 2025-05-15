@@ -106,6 +106,7 @@ public class MemberController {
     public int recommendDelete(@RequestBody Map<String,String> map) {
     	return memberService.recommendDelete(map);
     }
+ 
 
     // 좋아요 신청
 	@PostMapping("/like")

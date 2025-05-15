@@ -253,6 +253,19 @@ update
 	          mem_character LIKE CONCAT('%', #{item}, '%')
 	        </foreach>
    			)
+<choose>
+  <when test= "gender.equals('남')">
+    AND mem_gender = '여'
+  </when>
+  <when test="gender.equals('여')">
+    AND mem_gender = '남'
+  </when>
+</choose>
+   AND  mem_id not in (
+   			SELECT IM_TARGET
+   				FROM INTERESTED_MEM
+   			 WHERE IM_USER = #{memId}
+   )
 </select>
 
 

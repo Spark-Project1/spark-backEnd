@@ -242,7 +242,7 @@ public class MemberServiceImpl implements MemberService{
 	    map.put("interest", interestArr);
 	    map.put("character", characterArr);
 	    map.put("tendencies", tendenciesArr);
-	    
+	    map.put("gender",String.valueOf(m.getGender()));
 	    
 		List<MemberDto> list = memberDao.recommendList(map);
 		
