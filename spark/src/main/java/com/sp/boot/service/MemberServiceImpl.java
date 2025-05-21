@@ -21,7 +21,7 @@ import com.sp.boot.dto.LoginResult;
 import com.sp.boot.dto.LogoutResult;
 import com.sp.boot.dto.MemberDto;
 import com.sp.boot.dto.TokenResult;
-import com.sp.boot.exception.LoginFailException;
+import com.sp.boot.exception.CustomException;
 import com.sp.boot.util.FileUtil;
 import com.sp.boot.util.JwtProvider;
 
@@ -58,6 +58,10 @@ public class MemberServiceImpl implements MemberService{
 	    	map.put("refreshToken", refreshToken);
 	    	int result = memberDao.insertRefreshToken(map); // db에 refreshtoken 저장
 	    	
+	    	if(result == 0) {
+	    		throw new CustomException("리프레시 토큰 저장에 실패하였습니다.",500);
+	    	}
+	    	
 	    	JwtToken token = JwtToken.builder()
 	    			.grantType("Bearer")
 	    			.accessToken(accessToken)
@@ -73,7 +77,7 @@ public class MemberServiceImpl implements MemberService{
 
 		    return new LoginResult(token, memberDto,refreshCookie);
 	    }else {
-	    	throw new RuntimeException("아이디 또는 비밀번호가 틀렸습니다.");
+	    	throw new CustomException("아이디 또는 비밀번호가 틀렸습니다.",401);
 	    }
 
 	}
@@ -86,8 +90,7 @@ public class MemberServiceImpl implements MemberService{
     	String validateToken = authHeader.replace("Bearer ", ""); // 토큰만 뺴내어
     	
         if (!jwtProvider.validateToken(validateToken)) { // 유효성 검사 진행
-            map.put("valid", false);
-            return map;
+            throw new CustomException("유효하지 않은 토큰입니다.",401);
         }
     	String token = jwtProvider.getUserId(validateToken);
     	MemberDto memberDto = memberDao.loginUserInfo(token);
@@ -100,7 +103,13 @@ public class MemberServiceImpl implements MemberService{
 
 	@Override
 	public MemberDto findById(String userId) {
-		return memberDao.findById(userId);
+		
+		MemberDto result = memberDao.findById(userId);
+		if(result == null) {
+			throw new CustomException("해당 사용자가 존재하지 않습니다",403);			
+		}	
+		return result;
+		
 	}
 
 	@Override
@@ -109,7 +118,7 @@ public class MemberServiceImpl implements MemberService{
 		String refreshToken = refreshTokenHeader.replace("Bearer ", "");
 
         if (!jwtProvider.validateToken(refreshToken)) {
-            throw new LoginFailException("Refresh Token이 유효하지 않습니다.");
+            throw new CustomException("해당 토큰이 유효하지 않습니다",401);
         }
 		
 	
@@ -123,15 +132,18 @@ public class MemberServiceImpl implements MemberService{
         map.put("refreshToken", newRefreshToken);
         int result = insertRefreshToken(map);
 		
+        if(result == 0) {
+        	throw new CustomException("리프레시 토큰 저장에 실패하였습니다",500);
+        }
+        
         Cookie refreshCookie = null;
-        if(result > 0 ) {
+
         	refreshCookie = new Cookie("refreshToken", newRefreshToken);
         	refreshCookie.setHttpOnly(true); // javascript에서 접근 차단
         	refreshCookie.setPath("/"); // 어디에 쿠키를 쓸지 경로 설정
         	refreshCookie.setSecure(false); // https 환경에서만 사용가능 현재는 false로 막아둔상태
         	refreshCookie.setMaxAge(60 * 60 * 24 * 7); // 7일
 
-        }
         JwtToken jwtToken = JwtToken.builder()
                 .grantType("Bearer")
                 .accessToken(accessToken)
@@ -145,27 +157,26 @@ public class MemberServiceImpl implements MemberService{
 	@Override
 	public LogoutResult deleteToken(String refreshTokenHeader) {
 		
-		
         String refreshToken = refreshTokenHeader.replace("Bearer ", ""); // Bearer를 제거해 token만 추출
-
+        
         if (!jwtProvider.validateToken(refreshToken)) { // 유효성 검사
-            return new LogoutResult(false,null);
+            throw new CustomException("유효하지 않은 토큰입니다",401);
         }
-
+        
         String userId = jwtProvider.getUserId(refreshToken); // 토큰 안에있는 userId 가져오기
         int result = memberDao.deleteToken(userId); // 토큰 db에서 제거
     	
-        if(result > 0) {
-            Cookie deleteCookie = new Cookie("refreshToken", null);
-            deleteCookie.setPath("/");
-            deleteCookie.setHttpOnly(true);
-            deleteCookie.setSecure(false);
-            deleteCookie.setMaxAge(0); // 0초 즉시 만료
-            
-        	return new LogoutResult(true,deleteCookie);
+        if(result == 0) {
+        	throw new CustomException("토큰 삭제에 실패하였습니다",500);
         }
-		
-		return new LogoutResult(false,null);
+    
+        Cookie deleteCookie = new Cookie("refreshToken", null);
+        deleteCookie.setPath("/");
+        deleteCookie.setHttpOnly(true);
+        deleteCookie.setSecure(false);
+        deleteCookie.setMaxAge(0); // 0초 즉시 만료
+        
+    	return new LogoutResult(true,deleteCookie);
 	}
 
 
@@ -173,13 +184,19 @@ public class MemberServiceImpl implements MemberService{
 		
 		int result = memberDao.checkRefreshToken(map);
 		
-		if(result > 0) {
-			int result2 = memberDao.updateRefreshToken(map);
-			return result2;
-
-		}else {
-			return memberDao.insertRefreshToken(map);
-		}
+	    if (result > 0) {
+	        int result2 = memberDao.updateRefreshToken(map);
+	        if (result2 == 0) {
+	            throw new CustomException("리프레시 토큰 업데이트에 실패했습니다.", 500);
+	        }
+	        return result2;
+	    } else {
+	        int insertResult = memberDao.insertRefreshToken(map);
+	        if (insertResult == 0) {
+	            throw new CustomException("리프레시 토큰 저장에 실패했습니다.", 500);
+	        }
+	        return insertResult;
+	    }
 		
 	}
 	
@@ -191,7 +208,7 @@ public class MemberServiceImpl implements MemberService{
 		MemberDto result = memberDao.findById(phone);
 		
 		if(result != null) {
-			return "exist";
+			throw new CustomException("현재 가입된 사용자 입니다.",409);
 		}
 		
 		
@@ -208,21 +225,19 @@ public class MemberServiceImpl implements MemberService{
     	String code = sb.toString();
 
     	DefaultMessageService messageService =  NurigoApp.INSTANCE.initialize("NCSERQEIBVBBZJKR", "NPEW4QVQX3KP5A5V7EQLJKJ8M7PHWOWO", "https://api.coolsms.co.kr");
-    	// Message 패키지가 중복될 경우 net.nurigo.sdk.message.model.Message로 치환하여 주세요
+    	
     	Message message = new Message();
     	message.setFrom("01055106509");
     	message.setTo(phone);
     	message.setText("spark 인증 번호는 : [ "+ code +" ] 입니다");
 
     	try {
-    	  // send 메소드로 ArrayList<Message> 객체를 넣어도 동작합니다!
+    	  
     	  messageService.send(message);
     	} catch (NurigoMessageNotReceivedException exception) {
-    	  // 발송에 실패한 메시지 목록을 확인할 수 있습니다!
-    	  System.out.println(exception.getFailedMessageList());
-    	  System.out.println(exception.getMessage());
+    	  throw new CustomException("문자 발송에 실패하였습니다.",500);
     	} catch (Exception exception) {
-    	  System.out.println(exception.getMessage());
+    		throw new CustomException("문자 발송 중 예기치 못한 오류가 발생하였습니다.",500);
     	}    	
     	
     	return code;
@@ -234,17 +249,17 @@ public class MemberServiceImpl implements MemberService{
 
 	    Map<String, Object> map = new HashMap<>();
 	    map.put("memId", m.getMemId());
-		
-	    String[] interestArr = m.getInterest().split(",");
-	    String[] characterArr = m.getCharacter().split(",");
-	    String[] tendenciesArr = m.getTendencies().split(",");
-	    
-	    map.put("interest", interestArr);
-	    map.put("character", characterArr);
-	    map.put("tendencies", tendenciesArr);
+	    map.put("interest", m.getInterest().split(","));
+	    map.put("character", m.getCharacter().split(","));
+	    map.put("tendencies", m.getTendencies().split(","));
 	    map.put("gender",String.valueOf(m.getGender()));
 	    
 		List<MemberDto> list = memberDao.recommendList(map);
+		
+		if(list == null) {
+			throw new CustomException("추천 리스트 불러오기에 실패하였습니다.",500);
+		}
+		
 		
 		Collections.shuffle(list);
 		
@@ -268,8 +283,12 @@ public class MemberServiceImpl implements MemberService{
 		
 		// 비밀번호 암호화
 		m.setMemPwd(bcryptPwdEncoder.encode(m.getMemPwd()));
-		
 		int memberDto = memberDao.signUp(m);
+		
+		if(memberDto == 0) {
+			throw new CustomException("회원 가입에 실패하였습니다",500);
+		}
+		
 		
 		
 		return memberDto;
@@ -280,9 +299,16 @@ public class MemberServiceImpl implements MemberService{
 		
 		String userId = SecurityContextHolder.getContext().getAuthentication().getName(); // 현재 로그인 중인 회원의 아이디값 불러오기
 		
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd"); // 포맷 정의 
-        LocalDate localDate = LocalDate.parse(m.getBirthDate(), formatter); // localdate 날짜전용 객체에 formatter에 정의한 형식으로 담기
-        m.setBirthDate2(Date.valueOf(localDate)); // sql.date 타입으로 변경
+        
+        try {
+        	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd"); // 포맷 정의 
+        	LocalDate localDate = LocalDate.parse(m.getBirthDate(), formatter); // localdate 날짜전용 객체에 formatter에 정의한 형식으로 담기
+        	m.setBirthDate2(Date.valueOf(localDate)); // sql.date 타입으로 변경
+        }catch (Exception e) {
+        	throw new CustomException("생년월일 형식이 올바르지 않습니다.", 400);
+		}
+        
+        
 		m.setMemId(userId);
 		m.setInterest(String.join(",", m.getInterest2()));
 		m.setCharacter(String.join(",",m.getCharacter2()));
@@ -319,27 +345,43 @@ public class MemberServiceImpl implements MemberService{
 		}
 
 		
-	    if (!uploadFile.isEmpty()) {
-	        Map<String, String> map = fileUtil.fileupload(uploadFile, "profile");
-	        String filePath = map.get("filePath") + "/" + map.get("filesystemName");
-	        m.setProFile(filePath);
+	    if (!uploadFile.isEmpty()) { 	
+	    	try {
+	    		Map<String, String> map = fileUtil.fileupload(uploadFile, "profile");
+	    		String filePath = map.get("filePath") + "/" + map.get("filesystemName");
+	    		m.setProFile(filePath);	
+	    	}catch (Exception e) {
+				throw new CustomException("이미지 등록에 실패하였습니다",500);
+			}
 	    } else {
 	        m.setProFile(null);
 	    }
+	    
 	    int result = memberDao.insertInfo(m);
+	    
+	    if(result == 0) {
+	    	throw new CustomException("회원 정보 추가에 실패하였습니다.",500);
+	    }
+	    
 	    MemberDto mem = new MemberDto();
 	    mem.setMemId(userId);
-	    		
-	    if(result > 0) {
-	    	return memberDao.login(mem);
+	   
+	    MemberDto memInfo = memberDao.login(mem);
+	    if(memInfo == null) {
+	    	throw new CustomException("회원 정보 불러오기가 실패하였습니다.",500);
 	    }
-		
-		return null;
+		return memInfo;
 	}
 
 	@Override
-	public int recommendDelete(Map<String,String> map) {		
-		return memberDao.recommendDelete(map);
+	public int recommendDelete(Map<String,String> map) {
+
+		int result = memberDao.recommendDelete(map);
+		if(result == 0) {
+			throw new CustomException("추천 목록 삭제에 실패하였습니다.",500);
+		}
+		return result;
+		
 	}
 
 	@Override
@@ -349,7 +391,7 @@ public class MemberServiceImpl implements MemberService{
 		LikeDto result = memberDao.likeMemberCheck(map);
 		
 		if(result != null) {
-			throw new LoginFailException("이미 좋아요를 누른상태입니다.");
+			throw new CustomException("이미 좋아요를 누른상태입니다.",401);
 		}else {
 			return memberDao.likeMember(map);
 		}
@@ -358,26 +400,28 @@ public class MemberServiceImpl implements MemberService{
 
 	@Override
 	public boolean duplicateCheck(String nickName) {
-		
-		int result = memberDao.duplicateCheck(nickName);
-		
-		if(result>0) {
-			return false;
-		}else {
-			return true;
-		}
+
+	    try {
+	        int result = memberDao.duplicateCheck(nickName);
+	        return result <= 0;
+	    } catch (Exception e) {
+	        throw new CustomException("닉네임 중복 검사에 실패했습니다.", 500);
+	    }
 
 	}
 
 	@Override
 	public int interestMem(Map<String, String> map) {
 		
-		int result = memberDao.interestMemCheck(map); // 이미 등록한 관심회원인지 확인
+		int check = memberDao.interestMemCheck(map); // 이미 등록한 관심회원인지 확인
+		if(check > 0) {
+			throw new CustomException("이미 관심이 등록된 회원입니다.",409);
+		}
 		
-		if(result > 0) {
-			result = 0;
-		}else {
-			return memberDao.interestMem(map);
+		
+		int result = memberDao.interestMem(map);
+		if(result == 0) {
+			throw new CustomException("관심 회원 등록에 실패하였습니다.",500);
 		}
 		
 		return result;
@@ -388,6 +432,11 @@ public class MemberServiceImpl implements MemberService{
 		// 만약 내가 좋아요를 누른 상태방의 상세정보를 확인할경우
 		
 		MemberDto m = memberDao.detailInfo(memId);
+		
+		if(m == null) {
+			throw new CustomException("해당 회원이 존재하지 않습니다.",404);
+		}
+		
 		
 		if (m.getTall().equals("A")) {
 		    m.setTall("140 - 145");

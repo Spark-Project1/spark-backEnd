@@ -1,9 +1,6 @@
 package com.sp.boot.dto;
 
 import java.sql.Date;
-import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonSetter;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,8 +17,7 @@ import lombok.ToString;
 @Builder
 @ToString
 public class MemberDto {
-	
-	
+
 	private String memId;
 	private String memPwd;
 	private String memName;
