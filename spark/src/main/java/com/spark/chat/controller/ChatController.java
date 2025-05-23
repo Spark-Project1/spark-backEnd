@@ -20,7 +20,6 @@ public class ChatController {
 	
 	private final ChatService chatService;
 	
-	
 	@GetMapping("/chatList")
 	public List<ChatListDto> chatList(@RequestParam String memId){
 		return chatService.chatList(memId);

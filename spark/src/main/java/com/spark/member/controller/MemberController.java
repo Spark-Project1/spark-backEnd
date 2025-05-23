@@ -1,32 +1,16 @@
 package com.spark.member.controller;
 
-import java.util.List;
-import java.util.Map;
-
-import com.spark.base.util.JwtProvider;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
-
-import com.spark.member.dto.JwtToken;
-import com.spark.member.dto.LoginInfo;
-import com.spark.member.dto.LoginResult;
-import com.spark.member.dto.LogoutResult;
-import com.spark.member.dto.MemberDto;
-import com.spark.member.dto.TokenResult;
 import com.spark.member.application.MemberService;
-
+import com.spark.member.dto.*;
+import com.spark.member.dto.response.ValidateResponse;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -34,11 +18,11 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api")
 public class MemberController {
 
-
   private final MemberService memberService;
-  private final JwtProvider jwtProvider;
 
-  // 로그인
+  /**
+   * 로그인
+   */
   @PostMapping("/login")
   public ResponseEntity<LoginInfo> MemberLogin(@RequestBody MemberDto m, HttpServletResponse response) {
     LoginResult result = memberService.login(m);
@@ -57,8 +41,8 @@ public class MemberController {
 
   // 유효성 검사
   @GetMapping("/validate")
-  public ResponseEntity<Map<String, Object>> validate(@RequestHeader("Authorization") String authHeader) {
-    return ResponseEntity.ok(memberService.loginUserInfo(authHeader));
+  public ValidateResponse validate(@RequestHeader("Authorization") String authHeader) {
+    return memberService.loginUserInfo(authHeader);
   }
 
 

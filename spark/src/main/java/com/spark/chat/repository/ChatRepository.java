@@ -13,16 +13,16 @@ import lombok.RequiredArgsConstructor;
 @Repository
 @RequiredArgsConstructor
 public class ChatRepository {
-	
-	private final ChatMapper chatMapper;
 
-	public List<ChatListDto> chatList(String memId) {
-		return chatMapper.chatList(memId);
-	}
+  private final ChatMapper chatMapper;
 
-	public List<MessageDto> message(Map<String, Object> map) {
-		return chatMapper.message(map);
-	}
-	
+  public List<ChatListDto> chatList(String memId) {
+    return chatMapper.chatList(memId);
+  }
+
+  public List<MessageDto> message(Map<String, Object> map) {
+    return chatMapper.message(map);
+  }
+
 
 }

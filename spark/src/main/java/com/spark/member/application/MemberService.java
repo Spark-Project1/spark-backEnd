@@ -7,6 +7,7 @@ import com.spark.member.dto.LoginResult;
 import com.spark.member.dto.LogoutResult;
 import com.spark.member.dto.MemberDto;
 import com.spark.member.dto.TokenResult;
+import com.spark.member.dto.response.ValidateResponse;
 import org.springframework.web.multipart.MultipartFile;
 
 
@@ -16,7 +17,7 @@ public interface MemberService {
 	LoginResult login(MemberDto m);
 
 	// 멤버 목록 불러오기
-	Map<String, Object> loginUserInfo(String userId);
+	ValidateResponse loginUserInfo(String userId);
 
 	// 아이디로 유저 정보 찾기
 	MemberDto findById(String userId);
