@@ -225,13 +225,27 @@ update
 <select id="recommendList" resultMap="memberResultMap">
   SELECT 
   			 DISTINCT 
-			   MEM_ID
-		   , MEM_NICKNAME
-		   , MEM_BIRTH
-       , MEM_INFO
-       , MEM_PROFILE
-       , mem_occupation
-       , mem_location
+				 mem_id
+			 , mem_pwd
+			 , MEM_NAME
+	     , MEM_GENDER
+	     , MEM_NICKNAME
+	     , MEM_BIRTH
+	     , MEM_LOCATION
+	     , MEM_INFO
+	     , MEM_OCCUPATION
+	     , MEM_EDUCATION
+	     , MEM_MBTI
+	     , MEM_TALL
+	     , MEM_RELIGION
+	     , MEM_SMOCK
+	     , MEM_STATUS
+	     , MEM_REGIST_DATE
+	     , MEM_COOKIE
+	     , MEM_INTEREST
+	     , MEM_TENDENCIES
+	     , MEM_CHARACTER
+	     , MEM_PROFILE
    FROM MEMBER
   WHERE MEM_ID != #{memId}
     AND MEM_ID NOT IN (
