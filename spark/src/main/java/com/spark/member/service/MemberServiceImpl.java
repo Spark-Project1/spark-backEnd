@@ -21,16 +21,13 @@ import com.spark.member.dto.MemberDto;
 import com.spark.member.dto.TokenResult;
 import com.spark.member.dto.request.LoginRequest;
 import com.spark.member.dto.request.PhoneRequest;
+import com.spark.member.dto.request.RecommendRequest;
 import com.spark.member.dto.request.TokenRequest;
 import com.spark.member.dto.response.TokenResponse;
 import com.spark.member.dto.response.ValidResponse;
 import com.spark.member.repository.MemberDao;
 
 import lombok.RequiredArgsConstructor;
-import net.nurigo.sdk.NurigoApp;
-import net.nurigo.sdk.message.exception.NurigoMessageNotReceivedException;
-import net.nurigo.sdk.message.model.Message;
-import net.nurigo.sdk.message.service.DefaultMessageService;
 
 @Service
 @RequiredArgsConstructor
@@ -110,7 +107,7 @@ public class MemberServiceImpl implements MemberService{
 	}
 
 	@Override
-	public List<MemberDto> recommendList(MemberDto m) {
+	public List<MemberDto> recommendList(RecommendRequest m) {
 
 	    Map<String, Object> map = new HashMap<>();
 	    map.put("memId", m.getMemId());

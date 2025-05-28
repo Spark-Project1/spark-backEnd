@@ -25,6 +25,7 @@ import com.spark.member.dto.MemberDto;
 import com.spark.member.dto.TokenResult;
 import com.spark.member.dto.request.LoginRequest;
 import com.spark.member.dto.request.PhoneRequest;
+import com.spark.member.dto.request.RecommendRequest;
 import com.spark.member.dto.request.TokenRequest;
 import com.spark.member.dto.response.ValidResponse;
 import com.spark.member.service.MemberService;
@@ -85,7 +86,8 @@ public class MemberController {
     
     // 메인화면 추천목록
     @PostMapping("/recommend")
-    public ResponseEntity<List<MemberDto>> recommendList(@RequestBody MemberDto m) {
+    public ResponseEntity<List<MemberDto>> recommendList(@RequestBody @Valid RecommendRequest m) {
+    	System.out.println(m);
     	return ResponseEntity.ok(memberService.recommendList(m));
     }
     

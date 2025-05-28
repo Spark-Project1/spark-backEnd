@@ -11,6 +11,7 @@ import com.spark.member.dto.MemberDto;
 import com.spark.member.dto.TokenResult;
 import com.spark.member.dto.request.LoginRequest;
 import com.spark.member.dto.request.PhoneRequest;
+import com.spark.member.dto.request.RecommendRequest;
 import com.spark.member.dto.request.TokenRequest;
 import com.spark.member.dto.response.ValidResponse;
 
@@ -33,7 +34,7 @@ public interface MemberService {
 	// 문자로 인증번호 발송
 	String smsCode(PhoneRequest phone);
 
-	List<MemberDto> recommendList(MemberDto m);
+	List<MemberDto> recommendList(RecommendRequest m);
 
 	int signUp(MemberDto m);
 

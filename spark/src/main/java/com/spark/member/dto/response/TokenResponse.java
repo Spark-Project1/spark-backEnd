@@ -3,6 +3,8 @@ package com.spark.member.dto.response;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.stereotype.Component;
+
 import com.spark.base.exception.CustomException;
 import com.spark.base.util.JwtProvider;
 import com.spark.member.dto.JwtToken;
@@ -15,7 +17,7 @@ import com.spark.member.repository.MemberDao;
 import jakarta.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
 
-
+@Component
 @RequiredArgsConstructor
 public class TokenResponse {
 	
