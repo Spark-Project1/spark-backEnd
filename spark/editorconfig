@@ -1,0 +1,12 @@
+# EditorConfig is awesome: https://editorconfig.org
+
+root = true
+
+[*]
+charset = utf-8             # Character encoding
+end_of_line = lf            # Use \n as the line ending for all files (consistent across Windows and macOS)
+indent_style = space        # Indentation style
+indent_size = 4             # Number of spaces per indentation level
+max_line_length = 150       # Maximum line length
+tab_width = 4               # Visual width of a tab character
+ij_smart_tabs = false       # Use consistent tab-based indentation (no mixed tab/space alignment)

@@ -10,26 +10,26 @@ import com.spark.feed.dto.FeedDto;
 
 @Mapper
 public interface FeedMapper {
-	
-	List<FeedDto> feedList();
 
-	FeedDto feedDetail(int feedNo);
-	
-	List<String> feedComment(int feedNo);
-	
-	int createFeed(FeedDto feed);
-	
-	String searchURL(int feedNo);
-	
-	int deleteFeed(int feedNo);
-	
-	int updateFeed(FeedDto feed);
-	
-	int comment(CommentDto comment);
-	
-	String feedUrlCheck(FeedDto feed);
-	
-	int replyComment(CommentDto comment);
-	
-	
+    List<FeedDto> feedList();
+
+    FeedDto feedDetail(int feedNo);
+
+    List<String> feedComment(int feedNo);
+
+    int createFeed(FeedDto feed);
+
+    String searchURL(int feedNo);
+
+    int deleteFeed(int feedNo);
+
+    int updateFeed(FeedDto feed);
+
+    int comment(CommentDto comment);
+
+    String feedUrlCheck(FeedDto feed);
+
+    int replyComment(CommentDto comment);
+
+
 }

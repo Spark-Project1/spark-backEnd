@@ -1,17 +1,16 @@
 package com.spark.base.exception;
 
-public class CustomException extends RuntimeException{
-	
-	private final int statusCode;
+public class CustomException extends RuntimeException {
 
-	public CustomException(String message,int statusCode) {
+    private final int statusCode;
+
+    public CustomException(String message, int statusCode) {
         super(message);
         this.statusCode = statusCode;
     }
-	
+
     public int getStatusCode() {
         return statusCode;
     }
-    
 
 }

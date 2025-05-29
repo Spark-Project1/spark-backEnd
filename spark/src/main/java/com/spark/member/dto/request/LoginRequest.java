@@ -15,10 +15,10 @@ import lombok.ToString;
 @ToString
 @Builder
 public class LoginRequest {
-	
-	@NotBlank(message = "아이디값이 비어있습니다.")
-	private String memId;
-	@NotBlank(message = "비밀번호가 비어있습니다.")
-	private String memPwd;
+
+    @NotBlank(message = "아이디값이 비어있습니다.")
+    private String memId;
+    @NotBlank(message = "비밀번호가 비어있습니다.")
+    private String memPwd;
 
 }

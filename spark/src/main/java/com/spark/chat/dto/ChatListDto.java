@@ -17,8 +17,8 @@ import lombok.ToString;
 @Builder
 public class ChatListDto {
 
-	private int clNo;
-	private String clNewMsg;
-	private Date lastMsgTime;
-	
+    private int clNo;
+    private String clNewMsg;
+    private Date lastMsgTime;
+
 }

@@ -15,23 +15,23 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class ChatServiceImpl implements ChatService{
-	
-	private final ChatDao chatDao;
+public class ChatServiceImpl implements ChatService {
 
-	@Override
-	public List<ChatListDto> chatList(String memId) {
-		return chatDao.chatList(memId);
-	}
+    private final ChatDao chatDao;
 
-	@Override
-	public List<MessageDto> message(int clNo) {
-		String userId = SecurityContextHolder.getContext().getAuthentication().getName(); // 현재 로그인중인 사용자의 아이디값
-		Map<String,Object> map = new HashMap<>();
-		map.put("memId", userId);
-		map.put("clNo",clNo);
-		return chatDao.message(map);
-	}
-	
+    @Override
+    public List<ChatListDto> chatList(String memId) {
+        return chatDao.chatList(memId);
+    }
+
+    @Override
+    public List<MessageDto> message(int clNo) {
+        String userId = SecurityContextHolder.getContext().getAuthentication().getName(); // 현재 로그인중인 사용자의 아이디값
+        Map<String, Object> map = new HashMap<>();
+        map.put("memId", userId);
+        map.put("clNo", clNo);
+        return chatDao.message(map);
+    }
+
 
 }

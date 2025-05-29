@@ -16,16 +16,15 @@ import lombok.ToString;
 @Builder
 @ToString
 public class FeedDto {
-	
-	private int feedNo;
-	private String feedContent;
-	private String feedURL;
-	private Date RegistDate;
-	private Date modifyDate;
-	private String feedId;
-	private String status;
-	private int likeCount;
-	
-	
+
+    private int feedNo;
+    private String feedContent;
+    private String feedURL;
+    private Date RegistDate;
+    private Date modifyDate;
+    private String feedId;
+    private String status;
+    private int likeCount;
+
 
 }

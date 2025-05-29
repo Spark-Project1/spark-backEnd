@@ -10,18 +10,18 @@ import com.spark.feed.dto.FeedDto;
 
 public interface FeedService {
 
-	List<FeedDto> feedList();
+    List<FeedDto> feedList();
 
-	Map<String, Object> feedDetail(int feedNo);
+    Map<String, Object> feedDetail(int feedNo);
 
-	int createFeed(FeedDto feed, MultipartFile uploadFile);
+    int createFeed(FeedDto feed, MultipartFile uploadFile);
 
-	int deleteFeed(int feedNo);
+    int deleteFeed(int feedNo);
 
-	int updateFeed(FeedDto feed, MultipartFile uploadFile);
+    int updateFeed(FeedDto feed, MultipartFile uploadFile);
 
-	int comment(CommentDto comment);
+    int comment(CommentDto comment);
 
-	int replyComment(CommentDto comment);
+    int replyComment(CommentDto comment);
 
 }

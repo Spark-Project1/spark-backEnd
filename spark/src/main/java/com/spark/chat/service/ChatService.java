@@ -7,8 +7,8 @@ import com.spark.chat.dto.MessageDto;
 
 public interface ChatService {
 
-	List<ChatListDto> chatList(String memId);
+    List<ChatListDto> chatList(String memId);
 
-	List<MessageDto> message(int clNo);
+    List<MessageDto> message(int clNo);
 
 }

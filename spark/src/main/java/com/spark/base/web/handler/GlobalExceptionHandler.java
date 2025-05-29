@@ -12,17 +12,16 @@ import com.spark.base.model.ErrorResponse;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-	
-	
-	 @ExceptionHandler(CustomException.class)
-	    public ResponseEntity<ErrorResponse> handleLoginFail(CustomException e) {
-	        
-		 	ErrorResponse error = new ErrorResponse(e.getStatusCode(),"요청 오류",e.getMessage());
 
-		 	return ResponseEntity.status(e.getStatusCode()).body(error);
-		 
-	    }
-	
-	
+
+    @ExceptionHandler(CustomException.class)
+    public ResponseEntity<ErrorResponse> handleLoginFail(CustomException e) {
+
+        ErrorResponse error = new ErrorResponse(e.getStatusCode(), "요청 오류", e.getMessage());
+
+        return ResponseEntity.status(e.getStatusCode()).body(error);
+
+    }
+
 
 }

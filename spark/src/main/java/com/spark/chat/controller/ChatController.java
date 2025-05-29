@@ -18,20 +18,19 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/api")
 public class ChatController {
-	
-	private final ChatService chatService;
-	
-	
-	@GetMapping("/chatList")
-	public List<ChatListDto> chatList(@RequestParam String memId){
-		return chatService.chatList(memId);
-	}
-	
-	@GetMapping("/chatList/{clNo}")
-	public List<MessageDto> message(@PathVariable int clNo){
-		return chatService.message(clNo);
-	}
-	
-	
+
+    private final ChatService chatService;
+
+
+    @GetMapping("/chatList")
+    public List<ChatListDto> chatList(@RequestParam String memId) {
+        return chatService.chatList(memId);
+    }
+
+    @GetMapping("/chatList/{clNo}")
+    public List<MessageDto> message(@PathVariable int clNo) {
+        return chatService.message(clNo);
+    }
+
 
 }

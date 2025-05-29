@@ -24,51 +24,50 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RequestMapping("/api")
 public class FeedController {
-	
-	private final FeedService feedService;
-	
-	// 피드 목록 불러오기
+
+    private final FeedService feedService;
+
+    // 피드 목록 불러오기
     @GetMapping("/feedList")
-    public List<FeedDto> feedList(){
-    	return feedService.feedList();
+    public List<FeedDto> feedList() {
+        return feedService.feedList();
     }
-    
+
     // 피드 상세보기
     @GetMapping("/feedList/{feedNo}")
     public Map<String, Object> feedDetail(@PathVariable int feedNo) {
-    	return feedService.feedDetail(feedNo);
+        return feedService.feedDetail(feedNo);
     }
-    
+
     // 피드 작성
     @PostMapping("/createFeed")
     public int createFeed(FeedDto feed, MultipartFile uploadFile) {
-    	return feedService.createFeed(feed, uploadFile);
+        return feedService.createFeed(feed, uploadFile);
     }
-    
+
     // 피드 삭제
     @DeleteMapping("/deleteFeed")
     public int deleteFeed(@RequestParam int feedNo) {
-    	return feedService.deleteFeed(feedNo);
+        return feedService.deleteFeed(feedNo);
     }
-    
+
     // 피드 수정
     @PatchMapping("/updateFeed")
     public int updateFeed(FeedDto feed, MultipartFile uploadFile) {
-    	return feedService.updateFeed(feed,uploadFile);
+        return feedService.updateFeed(feed, uploadFile);
     }
-    
+
     // 댓글 작성
     @PostMapping("/comment")
     public int comment(@RequestBody CommentDto comment) {
-    	return feedService.comment(comment);
+        return feedService.comment(comment);
     }
-    
+
     // 대댓글 작성
     @PostMapping("replyComment")
     public int replyComment(@RequestBody CommentDto comment) {
-    	return feedService.replyComment(comment);
+        return feedService.replyComment(comment);
     }
-    
-    
+
 
 }
