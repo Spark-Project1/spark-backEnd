@@ -35,11 +35,11 @@ public class JwtProvider {
         Claims claims = Jwts.claims().setSubject(userId);// JWT의 payload 부분 sub에 아이디를 담음
         Date now = new Date(); // 현재 시간 저장
         return Jwts.builder()
-                .setClaims(claims) // 위에만든 claims정보를 집어넣음
-                .setIssuedAt(now)  // 토큰 발급 시간 저장
-                .setExpiration(new Date(now.getTime() + tokenValidTime)) // 토큰 만료 시간 설정 (현재시간+유효시간)
-                .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()), SignatureAlgorithm.HS256) // 알고리즘으로 암호화
-                .compact(); // 위 정보로 jwt 문자열 생성
+            .setClaims(claims) // 위에만든 claims정보를 집어넣음
+            .setIssuedAt(now)  // 토큰 발급 시간 저장
+            .setExpiration(new Date(now.getTime() + tokenValidTime)) // 토큰 만료 시간 설정 (현재시간+유효시간)
+            .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()), SignatureAlgorithm.HS256) // 알고리즘으로 암호화
+            .compact(); // 위 정보로 jwt 문자열 생성
     }
 
 
@@ -48,11 +48,11 @@ public class JwtProvider {
         Claims claims = Jwts.claims().setSubject(userId);
         Date now = new Date();
         return Jwts.builder()
-                .setClaims(claims)
-                .setIssuedAt(now)
-                .setExpiration(new Date(now.getTime() + refreshTokenValidTime))
-                .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()), SignatureAlgorithm.HS256)
-                .compact();
+            .setClaims(claims)
+            .setIssuedAt(now)
+            .setExpiration(new Date(now.getTime() + refreshTokenValidTime))
+            .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()), SignatureAlgorithm.HS256)
+            .compact();
     }
 
 
@@ -62,9 +62,9 @@ public class JwtProvider {
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder()
-                    .setSigningKey(secretKey.getBytes())
-                    .build()
-                    .parseClaimsJws(token); // 토큰 파싱
+                .setSigningKey(secretKey.getBytes())
+                .build()
+                .parseClaimsJws(token); // 토큰 파싱
             return true;
         } catch (JwtException e) {
             return false;
@@ -75,11 +75,11 @@ public class JwtProvider {
     // 토큰에서 사용자 ID 추출
     public String getUserId(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(secretKey.getBytes())
-                .build()
-                .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
+            .setSigningKey(secretKey.getBytes())
+            .build()
+            .parseClaimsJws(token)
+            .getBody()
+            .getSubject();
     }
 
     // 헤더에서 토큰 꺼내기

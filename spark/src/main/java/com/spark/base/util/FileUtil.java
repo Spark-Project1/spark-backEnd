@@ -27,7 +27,7 @@ public class FileUtil {
         // 2) 파일명 수정
         String originalFilename = uploadFile.getOriginalFilename();
         String originalExt = originalFilename.endsWith(".tar.gz") ? ".tar.gz"
-                : originalFilename.substring(originalFilename.lastIndexOf("."));
+            : originalFilename.substring(originalFilename.lastIndexOf("."));
 
         // UUID
         String filesystemName = UUID.randomUUID().toString().replace("-", "") + originalExt;
