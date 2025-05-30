@@ -24,7 +24,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-             .cors(cors -> {
+            .cors(cors -> {
             })
             .csrf(csrf -> csrf.disable()) // 세션을 사용하지않기때문에 csrf를 비활성화
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션을 사용하지 않겠다는 설정
