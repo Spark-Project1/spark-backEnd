@@ -3,15 +3,11 @@ package com.spark.member.dto.response;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.spark.member.dto.*;
 import org.springframework.stereotype.Component;
 
 import com.spark.base.exception.CustomException;
 import com.spark.base.util.JwtProvider;
-import com.spark.member.dto.JwtToken;
-import com.spark.member.dto.LoginResult;
-import com.spark.member.dto.LogoutResult;
-import com.spark.member.dto.MemberDto;
-import com.spark.member.dto.TokenResult;
 import com.spark.member.repository.MemberDao;
 
 import jakarta.servlet.http.Cookie;
@@ -25,7 +21,7 @@ public class TokenResponse {
 	private final MemberDao memberDao;
 	
 	
-	public LoginResult CreateToken(MemberDto m) {
+	public LoginResult CreateToken(Member m) {
 		
     	String accessToken = jwtProvider.createToken(m.getMemId()); // access 토큰 발급
     	String refreshToken = jwtProvider.createRefreshToken(m.getMemId());  // refresh 토큰 발급
@@ -46,8 +42,31 @@ public class TokenResponse {
     	refreshCookie.setSecure(false); // https 환경에서만 사용가능 현재는 false로 막아둔상태 ssl적용x 
     	refreshCookie.setMaxAge(60 * 60 * 24 * 7); // 7일
     	m.setMemPwd(null);
+
+        MemberDto memberDto = MemberDto.builder()
+            .memId(m.getMemId())
+            .memName(m.getMemName())
+            .gender(m.getGender())
+            .nickName(m.getNickName())
+            .birthDate(m.getBirthDate())
+            .location(m.getLocation())
+            .memInfo(m.getMemInfo())
+            .occupation(m.getOccupation())
+            .education(m.getEducation())
+            .mbti(m.getMbti())
+            .tall(m.getTall())
+            .religion(m.getReligion())
+            .smock(m.getSmock())
+            .status(m.getStatus())
+            .registDate(m.getRegistDate())
+            .cookie(m.getCookie())
+            .interest(m.getInterest())
+            .tendencies(m.getTendencies())
+            .character(m.getCharacter())
+            .proFile(m.getProFile())
+            .build();
     	
-    	return new LoginResult(token, m, refreshCookie);
+    	return new LoginResult(token, memberDto, refreshCookie);
 
 	}
 	

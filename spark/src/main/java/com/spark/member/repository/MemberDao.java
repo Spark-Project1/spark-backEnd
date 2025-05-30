@@ -4,11 +4,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import com.spark.member.dto.Member;
+import com.spark.member.dto.request.*;
 import org.springframework.stereotype.Repository;
 
 import com.spark.member.dto.LikeDto;
 import com.spark.member.dto.MemberDto;
-import com.spark.member.dto.request.LoginRequest;
 
 import lombok.RequiredArgsConstructor;
 
@@ -20,7 +21,7 @@ public class MemberDao {
     private final MemberMapper memberMapper;
 
 
-    public Optional<MemberDto> login(LoginRequest m) {
+    public Optional<Member> login(LoginRequest m) {
         return Optional.ofNullable(memberMapper.loginMember(m));
     }
 
@@ -28,7 +29,7 @@ public class MemberDao {
         return memberMapper.loginUserInfo(memId);
     }
 
-    public Optional<MemberDto> findById(String userId) {
+    public Optional<Member> findById(String userId) {
         return Optional.ofNullable(memberMapper.findById(userId));
     }
 
@@ -48,40 +49,40 @@ public class MemberDao {
         return memberMapper.deleteToken(userId);
     }
 
-    public List<MemberDto> recommendList(Map<String, Object> map) {
+    public List<Member> recommendList(Map<String, Object> map) {
         return memberMapper.recommendList(map);
     }
 
-    public int signUp(MemberDto m) {
+    public int signUp(SignUpRequest m) {
         return memberMapper.signUp(m);
     }
 
-    public int insertInfo(MemberDto m) {
+    public int insertInfo(Member m) {
         return memberMapper.insertInfo(m);
     }
 
-    public int recommendDelete(Map<String, String> map) {
-        return memberMapper.recommendDelete(map);
+    public int recommendDelete(RecommendDeleteRequest recommendDelete) {
+        return memberMapper.recommendDelete(recommendDelete);
     }
 
-    public LikeDto likeMemberCheck(Map<String, String> map) {
-        return memberMapper.likeMemberCheck(map);
+    public LikeDto likeMemberCheck(LikeSendRequest likeSend) {
+        return memberMapper.likeMemberCheck(likeSend);
     }
 
-    public int likeMember(Map<String, String> map) {
-        return memberMapper.likeMember(map);
+    public int likeMember(LikeSendRequest likeSend) {
+        return memberMapper.likeMember(likeSend);
     }
 
     public int duplicateCheck(String nickName) {
         return memberMapper.duplicateCheck(nickName);
     }
 
-    public int interestMemCheck(Map<String, String> map) {
-        return memberMapper.interestMemCheck(map);
+    public int interestMemCheck(InterestMemberAddRequest interestMember) {
+        return memberMapper.interestMemCheck(interestMember);
     }
 
-    public int interestMem(Map<String, String> map) {
-        return memberMapper.interestMem(map);
+    public int interestMem(InterestMemberAddRequest interestMember) {
+        return memberMapper.interestMem(interestMember);
     }
 
     public Optional<MemberDto> detailInfo(String memId) {

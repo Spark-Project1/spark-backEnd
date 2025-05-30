@@ -4,20 +4,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import com.spark.member.dto.Member;
+import com.spark.member.dto.request.*;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.spark.member.dto.LikeDto;
 import com.spark.member.dto.MemberDto;
-import com.spark.member.dto.request.LoginRequest;
 
 @Mapper
 public interface MemberMapper {
 
-    MemberDto loginMember(LoginRequest m);
+    Member loginMember(LoginRequest m);
 
     MemberDto loginUserInfo(String userId);
 
-    MemberDto findById(String userId);
+    Member findById(String userId);
 
     int insertRefreshToken(Map<String, Object> map);
 
@@ -27,23 +28,23 @@ public interface MemberMapper {
 
     int deleteToken(String userId);
 
-    List<MemberDto> recommendList(Map<String, Object> map);
+    List<Member> recommendList(Map<String, Object> map);
 
-    int signUp(MemberDto m);
+    int signUp(SignUpRequest m);
 
-    int insertInfo(MemberDto m);
+    int insertInfo(Member m);
 
-    int recommendDelete(Map<String, String> map);
+    int recommendDelete(RecommendDeleteRequest recommendDelete);
 
-    LikeDto likeMemberCheck(Map<String, String> map);
+    LikeDto likeMemberCheck(LikeSendRequest likeSend);
 
-    int likeMember(Map<String, String> map);
+    int likeMember(LikeSendRequest likeSend);
 
     int duplicateCheck(String nickName);
 
-    int interestMemCheck(Map<String, String> map);
+    int interestMemCheck(InterestMemberAddRequest interestMember);
 
-    int interestMem(Map<String, String> map);
+    int interestMem(InterestMemberAddRequest interestMember);
 
     MemberDto detailInfo(String memId);
 

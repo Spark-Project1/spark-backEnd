@@ -3,16 +3,10 @@ package com.spark.member.service;
 import java.util.List;
 import java.util.Map;
 
+import com.spark.member.dto.*;
+import com.spark.member.dto.request.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.spark.member.dto.LoginResult;
-import com.spark.member.dto.LogoutResult;
-import com.spark.member.dto.MemberDto;
-import com.spark.member.dto.TokenResult;
-import com.spark.member.dto.request.LoginRequest;
-import com.spark.member.dto.request.PhoneRequest;
-import com.spark.member.dto.request.RecommendRequest;
-import com.spark.member.dto.request.TokenRequest;
 import com.spark.member.dto.response.ValidResponse;
 
 
@@ -25,7 +19,7 @@ public interface MemberService {
 	ValidResponse loginUserInfo(TokenRequest authHeader);
 
 	// 아이디로 유저 정보 찾기
-	MemberDto findById(String userId);
+    Member findById(String userId);
 
 	TokenResult insertRefreshToken(TokenRequest refreshTokenHeader);
 
@@ -36,17 +30,17 @@ public interface MemberService {
 
 	List<MemberDto> recommendList(RecommendRequest m);
 
-	int signUp(MemberDto m);
+	int signUp(SignUpRequest m);
 
-	MemberDto insertInfo(MemberDto m, MultipartFile uploadFile);
+	MemberDto insertInfo(InsertMemberInfoRequest m, MultipartFile uploadFile);
 
-	int recommendDelete(Map<String,String> map);
+	int recommendDelete(RecommendDeleteRequest recommendDelete);
 
-	int likeMember(Map<String,String> map);
+	int likeMember(LikeSendRequest likeSend);
 
 	boolean duplicateCheck(String nickName);
 
-	int interestMem(Map<String, String> map);
+	int interestMem(InterestMemberAddRequest interestMember);
 
 	MemberDto detailInfo(String memId);
 

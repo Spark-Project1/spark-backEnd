@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
+import com.spark.member.dto.Member;
+import com.spark.member.dto.request.InsertMemberInfoRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,36 +29,52 @@ public class MemberPreprocessor {
     private final FileUtil fileUtil;
 
 
-    public void preprocess(MemberDto m, MultipartFile uploadFile) {
+    public Member preprocess(InsertMemberInfoRequest m, MultipartFile uploadFile) {
+
+        Member member = Member.builder()
+            .nickName(m.getNickName())
+            .location(m.getLocation())
+            .gender(m.getGender())
+            .occupation(m.getOccupation())
+            .education(m.getEducation())
+            .mbti(m.getMbti())
+            .religion(m.getReligion())
+            .tall(m.getTall())
+            .memInfo(m.getMemInfo())
+            .smock(m.getSmock())
+            .build();
 
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
             LocalDate localDate = LocalDate.parse(m.getBirthDate(), formatter);
-            m.setBirthDate2(Date.valueOf(localDate));
+            member.setBirthDate(Date.valueOf(localDate));
         } catch (Exception e) {
             throw new CustomException("생년월일 형식이 올바르지 않습니다.", 400);
         }
 
-        m.setInterest(String.join(",", m.getInterest2()));
-        m.setCharacter(String.join(",", m.getCharacter2()));
-        m.setTendencies(String.join(",", m.getTendencies2()));
+        member.setInterest(String.join(",", m.getInterest()));
+        member.setCharacter(String.join(",", m.getCharacter()));
+        member.setTendencies(String.join(",", m.getTendencies()));
 
 
         if (!uploadFile.isEmpty()) {
             try {
                 Map<String, String> map = fileUtil.fileupload(uploadFile, "profile");
                 String filePath = map.get("filePath") + "/" + map.get("filesystemName");
-                m.setProFile(filePath);
+                member.setProFile(filePath);
             } catch (Exception e) {
                 throw new CustomException("이미지 등록에 실패하였습니다", 500);
             }
         } else {
-            m.setProFile(null);
+            member.setProFile(null);
         }
+
+        return member;
+
     }
 
 
-    public void memberTallDB(MemberDto m) {
+    public void memberTallDB(Member m) {
 
         if (m.getTall().equals("140 - 145")) {
             m.setTall("A");
@@ -84,7 +102,7 @@ public class MemberPreprocessor {
     }
 
 
-    public void memberSmockDB(MemberDto m) {
+    public void memberSmockDB(Member m) {
 
         if (m.getSmock().equals("자주")) {
             m.setSmock("Y");

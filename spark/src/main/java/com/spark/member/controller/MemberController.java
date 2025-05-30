@@ -3,6 +3,7 @@ package com.spark.member.controller;
 import java.util.List;
 import java.util.Map;
 
+import com.spark.member.dto.request.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,10 +24,6 @@ import com.spark.member.dto.LoginResult;
 import com.spark.member.dto.LogoutResult;
 import com.spark.member.dto.MemberDto;
 import com.spark.member.dto.TokenResult;
-import com.spark.member.dto.request.LoginRequest;
-import com.spark.member.dto.request.PhoneRequest;
-import com.spark.member.dto.request.RecommendRequest;
-import com.spark.member.dto.request.TokenRequest;
 import com.spark.member.dto.response.ValidResponse;
 import com.spark.member.service.MemberService;
 
@@ -93,28 +90,27 @@ public class MemberController {
 
     // 회원가입
     @PostMapping("/signup")
-    public ResponseEntity<Integer> signup(@RequestBody MemberDto m) {
+    public ResponseEntity<Integer> signup(@RequestBody @Valid SignUpRequest m) {
         return ResponseEntity.ok(memberService.signUp(m));
 
     }
 
     // 회원 정보입력
     @PatchMapping("/insertInfo")
-    public ResponseEntity<MemberDto> insertInfo(@ModelAttribute MemberDto m, @RequestParam("uploadFile") MultipartFile uploadFile) {
+    public ResponseEntity<MemberDto> insertInfo(@ModelAttribute @Valid InsertMemberInfoRequest m, @RequestParam("uploadFile") MultipartFile uploadFile) {
         return ResponseEntity.ok(memberService.insertInfo(m, uploadFile));
     }
 
     // 추천목록 삭제
     @PostMapping("/recommendDelete")
-    public ResponseEntity<Integer> recommendDelete(@RequestBody Map<String, String> map) {
-        return ResponseEntity.ok(memberService.recommendDelete(map));
+    public ResponseEntity<Integer> recommendDelete(@RequestBody @Valid RecommendDeleteRequest recommendDelete) {
+        return ResponseEntity.ok(memberService.recommendDelete(recommendDelete));
     }
 
     // 좋아요 신청
     @PostMapping("/like")
-    public ResponseEntity<Integer> likeMember(@RequestBody Map<String, String> map) {
-        System.out.println(map);
-        return ResponseEntity.ok(memberService.likeMember(map));
+    public ResponseEntity<Integer> likeMember(@RequestBody LikeSendRequest likeSend) {
+        return ResponseEntity.ok(memberService.likeMember(likeSend));
     }
 
     // 닉네임 중복검사
@@ -127,8 +123,8 @@ public class MemberController {
 
     // 관심목록 추가
     @PostMapping("/interestMem")
-    public ResponseEntity<Integer> interestMem(@RequestBody Map<String, String> map) {
-        return ResponseEntity.ok(memberService.interestMem(map));
+    public ResponseEntity<Integer> interestMem(@RequestBody @Valid InterestMemberAddRequest interestMember) {
+        return ResponseEntity.ok(memberService.interestMem(interestMember));
     }
 
     // 상대방 상세정보 불러오기

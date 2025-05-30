@@ -2,13 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.spark.member.repository.MemberMapper">
 
-    <resultMap id="memberResultMap" type="MemberDto">
+    <resultMap id="memberResultMap" type="Member">
         <result column="mem_Id" property="memId"/>
         <result column="mem_pwd" property="memPwd"/>
         <result column="mem_name" property="memName"/>
         <result column="mem_gender" property="gender"/>
         <result column="mem_nickName" property="nickName"/>
-        <result column="mem_birth" property="birthDate2"/>
+        <result column="mem_birth" property="birthDate"/>
         <result column="mem_location" property="location"/>
         <result column="mem_Info" property="memInfo"/>
         <result column="mem_occupation" property="occupation"/>
