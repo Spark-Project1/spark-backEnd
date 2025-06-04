@@ -26,6 +26,10 @@ classes/
 Servers/
 .class
 
+# inteliJ
+*.iml
+.idea/
+
 
 # External tool builders
 .externalToolBuilders/

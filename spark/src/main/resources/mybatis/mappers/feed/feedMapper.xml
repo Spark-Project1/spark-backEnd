@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.spark.feed.repository.FeedMapper">
+
+    <resultMap id="feedResultMap" type="feedDto">
+        <result column="feed_no" property="feedNo"/>
+        <result column="feed_content" property="feedContent"/>
+        <result column="feed_url" property="feedURL"/>
+        <result column="feed_regist_date" property="RegistDate"/>
+        <result column="feed_modify_date" property="modifyDate"/>
+        <result column="feed_id" property="feedId"/>
+        <result column="feed_status" property="status"/>
+        <result column="feed_like" property="likeCount"/>
+    </resultMap>
+
+    <resultMap id="commentResultMap" type="CommentDto">
+        <result column="com_no" property="comNo"/>
+        <result column="feed_no" property="feedNo"/>
+        <result column="com_comtent" property="comContent"/>
+        <result column="com_type" property="comType"/>
+        <result column="com_ref" property="comRef"/>
+        <result column="com_regist_date" property="registDate"/>
+        <result column="mem_Id" property="memId"/>
+        <result column="MEM_PROFILE" property="proFile"/>
+    </resultMap>
+
+
+    <!-- 피드 목록 불러오기 -->
+
+    <select id="feedList" resultMap="feedResultMap">
+        select
+        *
+        from
+        feed
+    </select>
+
+    <!-- 피드 상세보기 -->
+    <select id="feedDetail" resultMap="feedResultMap">
+        select
+        *
+        from
+        feed
+        where
+        feed_no = #{feedNo}
+    </select>
+
+    <!-- 피드 댓글 불러오기 -->
+    <select id="feedComment" resultMap="commentResultMap">
+        select
+        com_no
+        , feed_no
+        , com_content
+        , com_type
+        , com_ref
+        , com_regist_date
+        , com_id
+        , mem_profile
+        from
+        comment c
+        join member m on m.mem_Id = c.com_id
+        where feed_no = #{feedNo}
+    </select>
+
+    <!-- 피드 생성 -->
+    <insert id="createFeed">
+        insert
+        into
+        feed
+        (
+        feed_content
+        , feed_url
+        , feed_id
+        )
+        values
+        (
+        #{feedContent}
+        , #{feedURL}
+        , #{feedId}
+        )
+
+    </insert>
+
+    <!-- 피드 첨부파일 확인 -->
+    <select id="searchURL" resultType="string">
+        select
+        feed_url
+        from
+        feed
+        where
+        feed_no = #{feedNo}
+
+    </select>
+
+    <!-- 피드 삭제 -->
+    <delete id="deleteFeed">
+        delete
+        from feed
+        where feed_no = #{feedNo}
+    </delete>
+
+
+    <!-- 피드 url 체크 -->
+    <select id="feedUrlCheck" resultType="string">
+        select
+        feed_url
+        from
+        feed
+        where
+        feed_no = #{feedNo}
+    </select>
+
+    <!-- 피드 수정 -->
+    <update id="updateFeed">
+        update
+        feed
+        set
+        feed_content = #{feedContent}
+        , feed_modify_date = CURRENT_TIMESTAMP
+        , feed_url = #{feedURL}
+        where
+        feed_no = #{feedNo}
+
+    </update>
+
+    <!-- 댓글 등록 -->
+    <insert id="comment">
+        insert
+        into
+        comment
+        (
+        feed_no
+        , com_content
+        , com_id
+        )
+        values
+        (
+        #{feedNo}
+        , #{com_content}
+        , #{memId}
+        )
+    </insert>
+
+    <!-- 대댓글 작성 -->
+    <insert id="replycomment">
+        insert
+        into
+        comment
+        (
+        feed_no
+        , com_content
+        , com_type
+        , com_ref
+        , com_id
+        )
+        values
+        (
+        #{feedNo}
+        , #{comContent}
+        , 1
+        , #{comNo}
+        , #{memId}
+        )
+
+    </insert>
+
+
+</mapper>
