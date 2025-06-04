@@ -25,7 +25,7 @@ public class MemberDao {
         return Optional.ofNullable(memberMapper.loginMember(m));
     }
 
-    public MemberDto loginUserInfo(String memId) {
+    public Member loginUserInfo(String memId) {
         return memberMapper.loginUserInfo(memId);
     }
 

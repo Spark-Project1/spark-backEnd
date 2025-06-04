@@ -84,7 +84,6 @@ public class MemberController {
     // 메인화면 추천목록
     @PostMapping("/recommend")
     public ResponseEntity<List<MemberDto>> recommendList(@RequestBody @Valid RecommendRequest m) {
-        System.out.println(m);
         return ResponseEntity.ok(memberService.recommendList(m));
     }
 

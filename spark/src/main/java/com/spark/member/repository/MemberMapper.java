@@ -16,7 +16,7 @@ public interface MemberMapper {
 
     Member loginMember(LoginRequest m);
 
-    MemberDto loginUserInfo(String userId);
+    Member loginUserInfo(String userId);
 
     Member findById(String userId);
 
