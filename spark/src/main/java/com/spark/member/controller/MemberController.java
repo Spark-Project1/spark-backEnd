@@ -127,8 +127,8 @@ public class MemberController {
     }
 
     // 상대방 상세정보 불러오기
-    @GetMapping("/DetailInfo")
-    public ResponseEntity<MemberDto> detailInfo(@RequestParam String memId) {
+    @PostMapping("/DetailInfo")
+    public ResponseEntity<MemberDto> detailInfo(@RequestBody String memId) {
         return ResponseEntity.ok(memberService.detailInfo(memId));
     }
 
