@@ -303,6 +303,9 @@ public class MemberServiceImpl implements MemberService {
         list.setResponse_id(userId);
         LikeDto ld = memberDao.likeMemberCheck(list);
 
+        memberPreprocessor.memberTallFront(m);
+        memberPreprocessor.memberSmockFront(m);
+
         if (ld != null) {
             m.setLikeStatus("Y");
         } else {
