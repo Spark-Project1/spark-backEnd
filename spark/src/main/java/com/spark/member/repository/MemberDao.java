@@ -85,7 +85,7 @@ public class MemberDao {
         return memberMapper.interestMem(interestMember);
     }
 
-    public Optional<MemberDto> detailInfo(String memId) {
+    public Optional<Member> detailInfo(String memId) {
         return Optional.ofNullable(memberMapper.detailInfo(memId));
     }
 

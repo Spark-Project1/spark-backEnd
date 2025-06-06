@@ -27,6 +27,11 @@
 
     </resultMap>
 
+    <resultMap id="likeResultMap" type="LikeSendRequest">
+        <result column="request_id" property="requestId"/>
+        <result column="response_id" property="responseId"/>
+    </resultMap>
+
 
     <!-- 로그인 -->
     <select id="loginMember" resultMap="memberResultMap">
@@ -298,7 +303,7 @@
 
 
     <!-- 좋아요 테이블 db확인 -->
-    <select id="likeMemberCheck" resultMap="memberResultMap">
+    <select id="likeMemberCheck" resultMap="likeResultMap">
         select
         *
         from

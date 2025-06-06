@@ -3,6 +3,7 @@ package com.spark.member.controller;
 import java.util.List;
 import java.util.Map;
 
+import com.spark.member.dto.*;
 import com.spark.member.dto.request.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -18,12 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.spark.base.util.JwtProvider;
-import com.spark.member.dto.JwtToken;
-import com.spark.member.dto.LoginInfo;
-import com.spark.member.dto.LoginResult;
-import com.spark.member.dto.LogoutResult;
-import com.spark.member.dto.MemberDto;
-import com.spark.member.dto.TokenResult;
 import com.spark.member.dto.response.ValidResponse;
 import com.spark.member.service.MemberService;
 
@@ -128,8 +123,8 @@ public class MemberController {
 
     // 상대방 상세정보 불러오기
     @PostMapping("/DetailInfo")
-    public ResponseEntity<MemberDto> detailInfo(@RequestBody String memId) {
-        return ResponseEntity.ok(memberService.detailInfo(memId));
+    public ResponseEntity<MemberDto> detailInfo(@RequestBody Member m) {
+        return ResponseEntity.ok(memberService.detailInfo(m));
     }
 
 

@@ -293,27 +293,51 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public MemberDto detailInfo(String memId) {
+    public MemberDto detailInfo(Member member) {
         // 만약 내가 좋아요를 누른 상태방의 상세정보를 확인할경우
-        MemberDto m = memberDao.detailInfo(memId).orElseThrow(() -> new CustomException("해당 회원이 존재하지 않습니다.", 400));
+        Member m = memberDao.detailInfo(member.getMemId()).orElseThrow(() -> new CustomException("해당 회원이 존재하지 않습니다.", 400));
 
         LikeSendRequest list = new LikeSendRequest();
         String userId = SecurityContextHolder.getContext().getAuthentication().getName();
-        list.setRequest_id(memId);
-        list.setResponse_id(userId);
+        list.setRequestId(member.getMemId());
+        list.setResponseId(userId);
         LikeDto ld = memberDao.likeMemberCheck(list);
+        MemberDto result = MemberDto.builder()
+            .memId(m.getMemId())
+            .memName(m.getMemName())
+            .gender(m.getGender())
+            .nickName(m.getNickName())
+            .birthDate(m.getBirthDate())
+            .location(m.getLocation())
+            .memInfo(m.getMemInfo())
+            .occupation(m.getOccupation())
+            .education(m.getEducation())
+            .mbti(m.getMbti())
+            .tall(m.getTall())
+            .religion(m.getReligion())
+            .smock(m.getSmock())
+            .status(m.getStatus())
+            .registDate(m.getRegistDate())
+            .interest(m.getInterest())
+            .tendencies(m.getTendencies())
+            .character(m.getCharacter())
+            .proFile(m.getProFile())
+            .build();
 
-        memberPreprocessor.memberTallFront(m);
-        memberPreprocessor.memberSmockFront(m);
+        memberPreprocessor.memberTallFront(result);
+        memberPreprocessor.memberSmockFront(result);
+        int currentYear = Year.now().getValue();
+        int birthYear = result.getBirthDate().toLocalDate().getYear();
+        result.setAge(currentYear - birthYear);
 
         if (ld != null) {
-            m.setLikeStatus("Y");
+            result.setLikeStatus("Y");
         } else {
-            m.setLikeStatus("N");
+            result.setLikeStatus("N");
         }
 
 
-        return m;
+        return result;
     }
 
 

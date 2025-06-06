@@ -42,7 +42,7 @@ public interface MemberService {
 
 	int interestMem(InterestMemberAddRequest interestMember);
 
-	MemberDto detailInfo(String memId);
+	MemberDto detailInfo(Member memId);
 
 	
 	
