@@ -128,7 +128,7 @@ public class MemberController {
     }
 
     // 좋아요 목록
-    @PostMapping("likeList")
+    @PostMapping("/me/likeList")
     public ResponseEntity<List<MemberDto>> likeList(@RequestBody likeListRequest likeList){
         return ResponseEntity.ok(memberService.likeList(likeList));
     }

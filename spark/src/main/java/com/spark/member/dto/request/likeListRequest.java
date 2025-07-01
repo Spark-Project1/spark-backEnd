@@ -12,7 +12,7 @@ import lombok.*;
 @ToString
 public class likeListRequest {
 
-    @NotBlank(message = "회원 정보가 없습니다.")
+    @NotBlank(message = "memId 의 값을 받지 못했습니다.")
     private String memId;
 
 
