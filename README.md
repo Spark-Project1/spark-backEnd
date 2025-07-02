@@ -1,7 +1,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/your_username/spark-backend">
-    <img src="https://user-images.githubusercontent.com/00000000/000000000-logo.png" alt="Logo" width="80" height="80">
+    <img src="https://github.com/user-attachments/assets/f8159db0-937d-4b0e-a426-a4d299aadf31" alt="Logo" width="80" height="80">
   </a>
 
   <h3 align="center">Spark 💖</h3>
@@ -72,6 +72,29 @@ Spark는 관심사와 성향 기반의 **맞춤형 소개팅 추천** 서비스�
   **Webhook을 이용하여 Discord 채널로 실시간 알림**을 전송
 - 모든 팀원이 코드 변경 사항과 PR 흐름을 빠르게 공유하고 확인
 - 작업 흐름 자동화 및 커뮤니케이션 강화를 위해 해당 방식으로 운영
+
+
+🔒 브랜치 보호 규칙
+
+프로젝트의 안정성을 위해 다음과 같은 브랜치 보호 규칙을 설정했습니다
+
+main 브랜치에는 직접 푸시(Push)가 금지되어 있습니다.
+
+모든 변경 사항은 Pull Request(PR) 를 통해 병합해야 합니다.
+
+PR은 반드시 아래 조건을 만족해야 병합할 수 있습니다:
+
+✅ 최소 1명 이상의 승인 필요
+
+✅ CODEOWNERS에 지정된 사용자(@kimyeongeuk)의 리뷰 승인 필수
+
+✅ PR에 새로운 커밋이 추가되면 기존 승인은 무효화됨
+
+✅ PR에 남긴 모든 코드 리뷰 코멘트가 해결되어야 함
+
+✅ 관리자도 보호 규칙을 우회할 수 없음
+
+CODEOWNERS 설정을 통해 @kimyeongeuk 계정만이 최종 승인 권한을 가집니다.
 
 <p align="right">(<a href="#top">맨 위로</a>)</p>
 
