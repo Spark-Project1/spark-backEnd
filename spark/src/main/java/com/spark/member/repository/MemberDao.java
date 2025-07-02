@@ -90,4 +90,7 @@ public class MemberDao {
     }
 
 
+    public List<Member> likeList(Member likeListData) {
+        return memberMapper.likeList(likeListData);
+    }
 }

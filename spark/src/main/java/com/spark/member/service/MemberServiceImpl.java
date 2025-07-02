@@ -340,5 +340,30 @@ public class MemberServiceImpl implements MemberService {
         return result;
     }
 
+    @Override
+    public List<MemberDto> likeList(likeListRequest likeList) {
+
+        Member likeListData = likeList.toEntity();
+
+        List<Member> result = memberDao.likeList(likeListData);
+
+        // 현재 년도
+        int currentYear = Year.now().getValue();
+
+        List<MemberDto> likeMemList = result.stream().map(member ->{
+            int birthYear = member.getBirthDate().toLocalDate().getYear();
+            int age = currentYear - birthYear;
+            return MemberDto.builder()
+                .memId(member.getMemId())
+                .nickName(member.getNickName())
+                .birthDate(member.getBirthDate())
+                .age(age)
+                .proFile(member.getProFile())
+                .build();
+        }).toList();
+
+        return null;
+    }
+
 
 }

@@ -399,4 +399,16 @@
     </select>
 
 
+    <!-- 좋아요 목록 -->
+
+    <select id="likeList" resultMap="memberResultMap">
+        select m.mem_id
+        , m.mem_nickname
+        , m.mem_profile
+        , m.mem_birth
+        from `like` l
+        join member m on m.mem_id = l.request_id
+        where l.response_id = #{memId}
+    </select>
+
 </mapper>

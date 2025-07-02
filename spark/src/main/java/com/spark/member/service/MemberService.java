@@ -44,7 +44,6 @@ public interface MemberService {
 
 	MemberDto detailInfo(Member memId);
 
-	
-	
 
+    List<MemberDto> likeList(likeListRequest likeList);
 }

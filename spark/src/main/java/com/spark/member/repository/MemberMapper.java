@@ -48,4 +48,6 @@ public interface MemberMapper {
 
     Member detailInfo(String memId);
 
+    List<Member> likeList(Member likeListData);
+
 }
