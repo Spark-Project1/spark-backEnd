@@ -24,15 +24,15 @@
 
 ## 📌 목차
 
-- [프로젝트 소개](#프로젝트-소개)
-- [사용 기술](#사용-기술)
-- [협업 및 작업 방식](#협업-및-작업-방식)
-- [시작하기](#시작하기)
-  - [사전 준비](#사전-준비)
-  - [설치 방법](#설치-방법)
-- [개발 로드맵](#개발-로드맵)
-- [연락처](#연락처)
-- [참고 자료](#참고-자료)
+- [프로젝트 소개]
+- [사용 기술]
+- [협업 및 작업 방식]
+- [시작하기]
+  - [사전 준비]
+  - [설치 방법]
+- [개발 로드맵]
+- [연락처]
+- [참고 자료]
 
 ---
 
@@ -46,22 +46,20 @@ Spark는 관심사와 성향 기반의 **맞춤형 소개팅 추천** 서비스�
 - 관심사 기반 프로필 추천 알고리즘
 - 실시간 채팅 (STOMP + WebSocket)
 
-<p align="right">(<a href="#top">맨 위로</a>)</p>
+
 
 ---
 
 ## 🛠️ 사용 기술
 
-- [Spring Boot](https://spring.io/projects/spring-boot)
-- [Java 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
-- [MySQL](https://www.mysql.com/)
-- [Redis](https://redis.io/)
-- [JWT](https://jwt.io/)
-- [MyBatis](https://mybatis.org/)
-- [Docker](https://www.docker.com/)
-- [GitHub Actions](https://github.com/features/actions)
-
-<p align="right">(<a href="#top">맨 위로</a>)</p>
+- [Spring Boot]
+- [Java 17]
+- [MySQL]
+- [Redis]
+- [JWT]
+- [MyBatis]
+- [Docker]
+- [GitHub Actions]
 
 ---
 
@@ -96,7 +94,6 @@ PR은 반드시 아래 조건을 만족해야 병합할 수 있습니다:
 
 CODEOWNERS 설정을 통해 @kimyeongeuk 계정만이 최종 승인 권한을 가집니다.
 
-<p align="right">(<a href="#top">맨 위로</a>)</p>
 
 
 ## 🚀 시작하기
@@ -129,7 +126,7 @@ docker build -t spark-backend .
 docker run -d -p 8080:8080 --name spark-app spark-backend
 ```
 
-<p align="right">(<a href="#top">맨 위로</a>)</p>
+
 
 
 ## 📍 개발 로드맵
@@ -143,15 +140,15 @@ docker run -d -p 8080:8080 --name spark-app spark-backend
 - [ ] CI/CD 자동화 (GitHub Actions + AWS)
 - [ ] 테스트 코드 작성 및 테스트 환경 분리
 
-<p align="right">(<a href="#top">맨 위로</a>)</p>
+
 
 
 ## 📬 연락처
 
-**김영욱** - backend@example.com  
+**김영욱** - tklr0731@naver.com  
 **박시우** - frontend@example.com
 
-<p align="right">(<a href="#top">맨 위로</a>)</p>
+
 
 ---
 
@@ -160,4 +157,3 @@ docker run -d -p 8080:8080 --name spark-app spark-backend
 - [Best README Template](https://github.com/othneildrew/Best-README-Template)
 
 
-<p align="right">(<a href="#top">맨 위로</a>)</p>
