@@ -1,7 +1,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/your_username/spark-backend">
-    <img src="https://user-images.githubusercontent.com/00000000/000000000-logo.png" alt="Logo" width="80" height="80">
+    <img src="https://github.com/user-attachments/assets/f8159db0-937d-4b0e-a426-a4d299aadf31" alt="Logo" width="80" height="80">
   </a>
 
   <h3 align="center">Spark 💖</h3>
@@ -24,15 +24,15 @@
 
 ## 📌 목차
 
-- [프로젝트 소개](#프로젝트-소개)
-- [사용 기술](#사용-기술)
-- [협업 및 작업 방식](#협업-및-작업-방식)
-- [시작하기](#시작하기)
-  - [사전 준비](#사전-준비)
-  - [설치 방법](#설치-방법)
-- [개발 로드맵](#개발-로드맵)
-- [연락처](#연락처)
-- [참고 자료](#참고-자료)
+- [프로젝트 소개]
+- [사용 기술]
+- [협업 및 작업 방식]
+- [시작하기]
+  - [사전 준비]
+  - [설치 방법]
+- [개발 로드맵]
+- [연락처]
+- [참고 자료]
 
 ---
 
@@ -46,22 +46,20 @@ Spark는 관심사와 성향 기반의 **맞춤형 소개팅 추천** 서비스�
 - 관심사 기반 프로필 추천 알고리즘
 - 실시간 채팅 (STOMP + WebSocket)
 
-<p align="right">(<a href="#top">맨 위로</a>)</p>
+
 
 ---
 
 ## 🛠️ 사용 기술
 
-- [Spring Boot](https://spring.io/projects/spring-boot)
-- [Java 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
-- [MySQL](https://www.mysql.com/)
-- [Redis](https://redis.io/)
-- [JWT](https://jwt.io/)
-- [MyBatis](https://mybatis.org/)
-- [Docker](https://www.docker.com/)
-- [GitHub Actions](https://github.com/features/actions)
-
-<p align="right">(<a href="#top">맨 위로</a>)</p>
+- [Spring Boot]
+- [Java 17]
+- [MySQL]
+- [Redis]
+- [JWT]
+- [MyBatis]
+- [Docker]
+- [GitHub Actions]
 
 ---
 
@@ -73,7 +71,29 @@ Spark는 관심사와 성향 기반의 **맞춤형 소개팅 추천** 서비스�
 - 모든 팀원이 코드 변경 사항과 PR 흐름을 빠르게 공유하고 확인
 - 작업 흐름 자동화 및 커뮤니케이션 강화를 위해 해당 방식으로 운영
 
-<p align="right">(<a href="#top">맨 위로</a>)</p>
+
+🔒 브랜치 보호 규칙
+
+프로젝트의 안정성을 위해 다음과 같은 브랜치 보호 규칙을 설정했습니다
+
+main 브랜치에는 직접 푸시(Push)가 금지되어 있습니다.
+
+모든 변경 사항은 Pull Request(PR) 를 통해 병합해야 합니다.
+
+PR은 반드시 아래 조건을 만족해야 병합할 수 있습니다:
+
+✅ 최소 1명 이상의 승인 필요
+
+✅ CODEOWNERS에 지정된 사용자(@kimyeongeuk)의 리뷰 승인 필수
+
+✅ PR에 새로운 커밋이 추가되면 기존 승인은 무효화됨
+
+✅ PR에 남긴 모든 코드 리뷰 코멘트가 해결되어야 함
+
+✅ 관리자도 보호 규칙을 우회할 수 없음
+
+CODEOWNERS 설정을 통해 @kimyeongeuk 계정만이 최종 승인 권한을 가집니다.
+
 
 
 ## 🚀 시작하기
@@ -106,7 +126,7 @@ docker build -t spark-backend .
 docker run -d -p 8080:8080 --name spark-app spark-backend
 ```
 
-<p align="right">(<a href="#top">맨 위로</a>)</p>
+
 
 
 ## 📍 개발 로드맵
@@ -120,15 +140,15 @@ docker run -d -p 8080:8080 --name spark-app spark-backend
 - [ ] CI/CD 자동화 (GitHub Actions + AWS)
 - [ ] 테스트 코드 작성 및 테스트 환경 분리
 
-<p align="right">(<a href="#top">맨 위로</a>)</p>
+
 
 
 ## 📬 연락처
 
-**김영욱** - backend@example.com  
+**김영욱** - tklr0731@naver.com  
 **박시우** - frontend@example.com
 
-<p align="right">(<a href="#top">맨 위로</a>)</p>
+
 
 ---
 
@@ -137,4 +157,3 @@ docker run -d -p 8080:8080 --name spark-app spark-backend
 - [Best README Template](https://github.com/othneildrew/Best-README-Template)
 
 
-<p align="right">(<a href="#top">맨 위로</a>)</p>
