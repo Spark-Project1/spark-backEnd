@@ -12,7 +12,6 @@ import lombok.ToString;
 @AllArgsConstructor
 @Getter
 @Setter
-@ToString
 @Builder
 public class TokenRequest {
 	

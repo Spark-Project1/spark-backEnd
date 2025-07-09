@@ -6,9 +6,8 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@Setter
 @Builder
-@ToString
+@Setter
 public class LikeSendRequest {
 
 

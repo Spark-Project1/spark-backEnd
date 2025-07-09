@@ -13,8 +13,6 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@Setter
-@ToString
 @Builder
 public class RecommendRequest {
 

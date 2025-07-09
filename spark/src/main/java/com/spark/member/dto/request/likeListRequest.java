@@ -7,9 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@Setter
 @Builder
-@ToString
 public class likeListRequest {
 
     @NotBlank(message = "memId 의 값을 받지 못했습니다.")

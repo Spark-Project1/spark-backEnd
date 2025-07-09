@@ -6,9 +6,8 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@Setter
-@ToString
 @Builder
+@Setter
 public class SignUpRequest {
 
     @NotBlank(message = "아이디값을 받지 못했습니다.")

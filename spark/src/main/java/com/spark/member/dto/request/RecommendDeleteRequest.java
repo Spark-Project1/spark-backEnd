@@ -6,9 +6,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@Setter
 @Builder
-@ToString
 public class RecommendDeleteRequest {
 
     @NotBlank(message="삭제를 시도하는 사용자의 정보가 없습니다.")
