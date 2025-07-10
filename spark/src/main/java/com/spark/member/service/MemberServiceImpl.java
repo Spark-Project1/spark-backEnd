@@ -195,7 +195,7 @@ public class MemberServiceImpl implements MemberService {
         memberPreprocessor.memberTallDB(member); // 멤버 키 설정
         memberPreprocessor.memberSmockDB(member); // 멤버 흡연 설정
         memberPreprocessor.memberAge(member); // 멤버 나이 설정
-
+        member.setMemId(userId); // 현재 로그인한 회원 아이디
 
         int result = memberDao.insertInfo(member);
         if (result == 0) {
