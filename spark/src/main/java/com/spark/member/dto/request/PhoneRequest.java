@@ -11,8 +11,6 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-@Setter
-@ToString
 @Builder
 public class PhoneRequest {
 

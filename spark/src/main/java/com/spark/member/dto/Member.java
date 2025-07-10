@@ -34,6 +34,7 @@ public class Member {
     private String tendencies; // 연애성향
     private String character; // 특징
     private String proFile; // 사진 경로
+    private int age; // 회원 나이
 
 
 

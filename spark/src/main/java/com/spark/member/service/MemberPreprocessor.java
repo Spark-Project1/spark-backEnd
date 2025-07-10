@@ -2,6 +2,7 @@ package com.spark.member.service;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.Year;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
@@ -184,6 +185,14 @@ public class MemberPreprocessor {
 
         return code;
 
+    }
+
+
+    public void memberAge(Member m){
+        int currentYear = Year.now().getValue();
+        int birthYear = m.getBirthDate().toLocalDate().getYear();
+        int age = currentYear - birthYear;
+        m.setAge(age);
     }
 
 

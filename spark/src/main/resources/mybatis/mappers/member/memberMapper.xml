@@ -24,6 +24,7 @@
         <result column="mem_tendencies" property="tendencies"/>
         <result column="mem_character" property="character"/>
         <result column="MEM_PROFILE" property="proFile"/>
+        <result column="mem_age" property="age"/>
 
     </resultMap>
 
@@ -58,6 +59,7 @@
         , MEM_TENDENCIES
         , MEM_CHARACTER
         , MEM_PROFILE
+        , MEM_AGE
         from
         member
         where
@@ -91,6 +93,7 @@
         , MEM_TENDENCIES
         , MEM_CHARACTER
         , MEM_PROFILE
+        , MEM_AGE
         from
         member
         where
@@ -122,6 +125,7 @@
         , MEM_TENDENCIES
         , MEM_CHARACTER
         , MEM_PROFILE
+        , MEM_AGE
         FROM
         MEMBER
         WHERE
@@ -217,6 +221,7 @@
         , MEM_TENDENCIES = #{tendencies}
         , MEM_CHARACTER = #{character}
         , MEM_PROFILE = #{proFile}
+        , MEM_AGE = #{age}
         where
         mem_id = #{memId}
     </update>
@@ -247,6 +252,7 @@
         , MEM_TENDENCIES
         , MEM_CHARACTER
         , MEM_PROFILE
+        , MEM_AGE
         FROM MEMBER
         WHERE MEM_ID != #{memId}
         AND MEM_ID NOT IN (
@@ -392,6 +398,7 @@
         , MEM_TENDENCIES
         , MEM_CHARACTER
         , MEM_PROFILE
+        , MEM_AGE
         from
         member
         where

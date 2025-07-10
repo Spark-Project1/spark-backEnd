@@ -140,20 +140,14 @@ public class MemberServiceImpl implements MemberService {
         List<Member> result = list.subList(0, Math.min(50, list.size()));
 
 
-        // 현재 년도
-        int currentYear = Year.now().getValue();
-
-        List<MemberDto> recommendMemberList = result.stream().map(member ->{
-            int birthYear = member.getBirthDate().toLocalDate().getYear();
-            int age = currentYear - birthYear;
-
+        List<MemberDto> recommendMemberList = result.stream().map(member -> {
             return MemberDto.builder()
                 .memId(member.getMemId())
                 .memName(member.getMemName())
                 .gender(member.getGender())
                 .nickName(member.getNickName())
                 .birthDate(member.getBirthDate())
-                .age(age)
+                .age(member.getAge())
                 .location(member.getLocation())
                 .memInfo(member.getMemInfo())
                 .occupation(member.getOccupation())
@@ -200,7 +194,7 @@ public class MemberServiceImpl implements MemberService {
         Member member = memberPreprocessor.preprocess(m, uploadFile); // 생년월일 변환 및 파일정보 입력
         memberPreprocessor.memberTallDB(member); // 멤버 키 설정
         memberPreprocessor.memberSmockDB(member); // 멤버 흡연 설정
-        member.setMemId(userId);
+        memberPreprocessor.memberAge(member); // 멤버 나이 설정
 
 
         int result = memberDao.insertInfo(member);
@@ -322,13 +316,10 @@ public class MemberServiceImpl implements MemberService {
             .tendencies(m.getTendencies())
             .character(m.getCharacter())
             .proFile(m.getProFile())
+            .age(m.getAge())
             .build();
-
         memberPreprocessor.memberTallFront(result);
         memberPreprocessor.memberSmockFront(result);
-        int currentYear = Year.now().getValue();
-        int birthYear = result.getBirthDate().toLocalDate().getYear();
-        result.setAge(currentYear - birthYear);
 
         if (ld != null) {
             result.setLikeStatus("Y");
@@ -347,17 +338,13 @@ public class MemberServiceImpl implements MemberService {
 
         List<Member> result = memberDao.likeList(likeListData);
 
-        // 현재 년도
-        int currentYear = Year.now().getValue();
 
-        List<MemberDto> likeMemList = result.stream().map(member ->{
-            int birthYear = member.getBirthDate().toLocalDate().getYear();
-            int age = currentYear - birthYear;
+        List<MemberDto> likeMemList = result.stream().map(member -> {
             return MemberDto.builder()
                 .memId(member.getMemId())
                 .nickName(member.getNickName())
                 .birthDate(member.getBirthDate())
-                .age(age)
+                .age(member.getAge())
                 .proFile(member.getProFile())
                 .build();
         }).toList();

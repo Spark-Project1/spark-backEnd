@@ -11,9 +11,8 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-@Setter
-@ToString
 @Builder
+@Setter
 public class LoginRequest {
 
     @NotBlank(message = "아이디값이 비어있습니다.")

@@ -11,7 +11,6 @@ import java.sql.Date;
 @Getter
 @Setter
 @Builder
-@ToString
 public class InsertMemberInfoRequest {
 
     @NotBlank(message="닉네임값이 없습니다.")
