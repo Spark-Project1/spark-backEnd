@@ -40,7 +40,6 @@ public class MemberDto {
 	private String character; // 특징
 	private String proFile; // 사진 경로
 	private int age;
-	private String likeStatus;
 
 	
 	
