@@ -321,6 +321,7 @@ public class MemberServiceImpl implements MemberService {
         memberPreprocessor.memberTallFront(result);
         memberPreprocessor.memberSmockFront(result);
 
+
         return result;
     }
 
