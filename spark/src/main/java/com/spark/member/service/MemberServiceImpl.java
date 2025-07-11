@@ -321,12 +321,6 @@ public class MemberServiceImpl implements MemberService {
         memberPreprocessor.memberTallFront(result);
         memberPreprocessor.memberSmockFront(result);
 
-        if (ld != null) {
-            result.setLikeStatus("Y");
-        } else {
-            result.setLikeStatus("N");
-        }
-
 
         return result;
     }
