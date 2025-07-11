@@ -322,6 +322,7 @@ public class MemberServiceImpl implements MemberService {
         memberPreprocessor.memberSmockFront(result);
 
 
+
         return result;
     }
 
