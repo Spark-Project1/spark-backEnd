@@ -412,10 +412,23 @@
         select m.mem_id
         , m.mem_nickname
         , m.mem_profile
-        , m.mem_birth
+        , m.mem_age
         from `like` l
         join member m on m.mem_id = l.request_id
         where l.response_id = #{memId}
     </select>
+
+    <!-- 관심목록 조회 -->
+    <select id="interestList" resultMap="memberResultMap">
+        select m.mem_id
+        , m.mem_nickname
+        , m.mem_profile
+        , m.mem_age
+        from interested_mem i
+        join member m on m.mem_id = i.im_user
+        where i.im_target = #{memId}
+    </select>
+
+
 
 </mapper>

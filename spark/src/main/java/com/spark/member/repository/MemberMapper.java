@@ -50,4 +50,6 @@ public interface MemberMapper {
 
     List<Member> likeList(Member likeListData);
 
+    public List<Member> interestList(Member interestListData);
+
 }

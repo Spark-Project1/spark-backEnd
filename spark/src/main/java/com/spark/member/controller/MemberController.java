@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.spark.member.dto.*;
 import com.spark.member.dto.request.*;
+import com.spark.member.dto.response.InterestListResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -129,8 +130,14 @@ public class MemberController {
 
     // 좋아요 목록
     @PostMapping("/me/likeList")
-    public ResponseEntity<List<MemberDto>> likeList(@RequestBody likeListRequest likeList){
+    public ResponseEntity<List<MemberDto>> likeList(@RequestBody @Valid likeListRequest likeList){
         return ResponseEntity.ok(memberService.likeList(likeList));
+    }
+
+    // 관심목록 리스트
+    @GetMapping("/me/interestList")
+    public ResponseEntity<List<InterestListResponse>> interestList(@Valid @RequestParam InterestListRequest interestList){
+        return ResponseEntity.ok(memberService.interestList(interestList));
     }
 
 

@@ -5,6 +5,7 @@ import java.util.*;
 
 import com.spark.member.dto.*;
 import com.spark.member.dto.request.*;
+import com.spark.member.dto.response.InterestListResponse;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -337,13 +338,33 @@ public class MemberServiceImpl implements MemberService {
             return MemberDto.builder()
                 .memId(member.getMemId())
                 .nickName(member.getNickName())
-                .birthDate(member.getBirthDate())
                 .age(member.getAge())
                 .proFile(member.getProFile())
                 .build();
         }).toList();
 
-        return null;
+        return likeMemList;
+    }
+
+    @Override
+    public List<InterestListResponse> interestList(InterestListRequest interestList) {
+
+        Member InterestListData = Member.builder()
+            .memId(interestList.getMemId())
+            .build();
+
+        List<Member> result = memberDao.interestList(InterestListData);
+
+        List<InterestListResponse> interestMemList = result.stream().map(list ->{
+            return InterestListResponse.builder()
+                .memId(list.getMemId())
+                .nickName(list.getNickName())
+                .proFile(list.getProFile())
+                .age(list.getAge())
+                .build();
+        }).toList();
+
+        return interestMemList;
     }
 
 
