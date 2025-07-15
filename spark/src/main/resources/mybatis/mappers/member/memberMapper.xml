@@ -28,9 +28,11 @@
 
     </resultMap>
 
-    <resultMap id="likeResultMap" type="LikeSendRequest">
+    <resultMap id="likeResultMap" type="likeDto">
+        <result column="like_no" property="likeNo"/>
         <result column="request_id" property="requestId"/>
         <result column="response_id" property="responseId"/>
+        <result column="like_status" property="likeStatus"/>
     </resultMap>
 
 
