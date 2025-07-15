@@ -65,8 +65,8 @@ public class MemberDao {
         return memberMapper.recommendDelete(recommendDelete);
     }
 
-    public LikeDto likeMemberCheck(LikeSendRequest likeSend) {
-        return memberMapper.likeMemberCheck(likeSend);
+    public LikeDto likeMemberCheck(LikeDto likeData) {
+        return memberMapper.likeMemberCheck(likeData);
     }
 
     public int likeMember(LikeSendRequest likeSend) {

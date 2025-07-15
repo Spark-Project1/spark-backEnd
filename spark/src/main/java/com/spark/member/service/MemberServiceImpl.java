@@ -249,8 +249,13 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public int likeMember(LikeSendRequest likeSend) {
 
+        LikeDto likeData = LikeDto.builder()
+            .requestId(likeSend.getRequestId())
+            .responseId(likeSend.getResponseId())
+            .build();
+
         // 좋아요 테이블에 이미 저장되어있는지 확인
-        LikeDto result = memberDao.likeMemberCheck(likeSend);
+        LikeDto result = memberDao.likeMemberCheck(likeData);
 
         if (result != null) {
             throw new CustomException("이미 좋아요를 누른상태입니다.", 401);
@@ -292,11 +297,6 @@ public class MemberServiceImpl implements MemberService {
         // 만약 내가 좋아요를 누른 상태방의 상세정보를 확인할경우
         Member m = memberDao.detailInfo(member.getMemId()).orElseThrow(() -> new CustomException("해당 회원이 존재하지 않습니다.", 400));
 
-        LikeSendRequest list = new LikeSendRequest();
-        String userId = SecurityContextHolder.getContext().getAuthentication().getName();
-        list.setRequestId(member.getMemId());
-        list.setResponseId(userId);
-        LikeDto ld = memberDao.likeMemberCheck(list);
         MemberDto result = MemberDto.builder()
             .memId(m.getMemId())
             .memName(m.getMemName())

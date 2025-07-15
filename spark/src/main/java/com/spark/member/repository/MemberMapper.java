@@ -36,7 +36,7 @@ public interface MemberMapper {
 
     int recommendDelete(RecommendDeleteRequest recommendDelete);
 
-    LikeDto likeMemberCheck(LikeSendRequest likeSend);
+    LikeDto likeMemberCheck(LikeDto likeData);
 
     int likeMember(LikeSendRequest likeSend);
 
