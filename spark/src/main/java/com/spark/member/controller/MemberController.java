@@ -6,6 +6,14 @@ import java.util.Map;
 import com.spark.member.dto.*;
 import com.spark.member.dto.request.*;
 import com.spark.member.dto.response.InterestListResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +36,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 
+@Tag(name = "Member API", description = "회원 관련 api")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
@@ -38,6 +47,18 @@ public class MemberController {
     private final JwtProvider jwtProvider;
 
     // 로그인
+    @Operation(summary = "회원 로그인",
+        description = "클라이언트가 회원의 아이디(memId)와 비밀번호(memPwd)를 입력하여 로그인 요청을 수행합니다." +
+                      "로그인 성공 시, accessToken과 refreshToken이 발급되며 회원 프로필 정보도 함께 반환" +
+                      "실패시 400 오류 발생",
+        requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            description = "회원 데이터",
+            required = true,
+            content = @Content(
+                schema = @Schema(implementation = LoginRequest.class)
+            )
+        )
+    )
     @PostMapping("/login")
     public ResponseEntity<LoginInfo> MemberLogin(@RequestBody @Valid LoginRequest m, HttpServletResponse response) {
         LoginResult result = memberService.login(m);
@@ -54,7 +75,33 @@ public class MemberController {
         return ResponseEntity.ok(result.getJwtToken());
     }
 
-    // 유효성 검사
+
+    @Operation(
+        summary = "JWT 토큰 유효성 검사",
+        description = "클라이언트의 토큰을 조회해 토큰정보 일치시 해당 회원정보 반환",
+        security = @SecurityRequirement(name = "JWT"),
+        parameters = {
+            @Parameter(
+                name = "Authorization",
+                description = "Authorization 헤더에 JWT를 담아 보낸후 토큰이 유효한지 확인하고 해당 회원 정보를 반환",
+                required = true,
+                in = ParameterIn.HEADER // 파라미터 위치
+            )
+        },
+        responses = {
+            @ApiResponse(
+                responseCode = "200",
+                description = "성공",
+                content = @Content(
+                    schema = @Schema(implementation = ValidResponse.class)
+                )
+            ),
+            @ApiResponse(
+                responseCode = "400",
+                description = "실패"
+            )
+        }
+    )
     @GetMapping("/validate")
     public ResponseEntity<ValidResponse> validate(@RequestHeader("Authorization") @Valid TokenRequest authHeader) {
         return ResponseEntity.ok(memberService.loginUserInfo(authHeader));
@@ -109,7 +156,6 @@ public class MemberController {
     }
 
     // 닉네임 중복검사
-
     @GetMapping("/duplicateCheck")
     public ResponseEntity<Boolean> duplicateCheck(@RequestParam String nickName) {
         return ResponseEntity.ok(memberService.duplicateCheck(nickName));
@@ -117,6 +163,9 @@ public class MemberController {
 
 
     // 관심목록 추가
+    @Operation(
+        security = @SecurityRequirement(name = "JWT")
+    )
     @PostMapping("/interestMem")
     public ResponseEntity<Integer> interestMem(@RequestBody @Valid InterestMemberAddRequest interestMember) {
         return ResponseEntity.ok(memberService.interestMem(interestMember));
@@ -130,13 +179,13 @@ public class MemberController {
 
     // 좋아요 목록
     @PostMapping("/me/likeList")
-    public ResponseEntity<List<MemberDto>> likeList(@RequestBody @Valid likeListRequest likeList){
+    public ResponseEntity<List<MemberDto>> likeList(@RequestBody @Valid likeListRequest likeList) {
         return ResponseEntity.ok(memberService.likeList(likeList));
     }
 
     // 관심목록 리스트
     @GetMapping("/me/interestList")
-    public ResponseEntity<List<InterestListResponse>> interestList(@Valid @RequestParam InterestListRequest interestList){
+    public ResponseEntity<List<InterestListResponse>> interestList(@Valid @RequestParam InterestListRequest interestList) {
         return ResponseEntity.ok(memberService.interestList(interestList));
     }
 
