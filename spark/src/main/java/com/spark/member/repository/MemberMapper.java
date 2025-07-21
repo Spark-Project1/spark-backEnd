@@ -2,14 +2,12 @@ package com.spark.member.repository;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
-import com.spark.member.dto.Member;
+import com.spark.member.model.Member;
 import com.spark.member.dto.request.*;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.spark.member.dto.LikeDto;
-import com.spark.member.dto.MemberDto;
 
 @Mapper
 public interface MemberMapper {
@@ -50,6 +48,10 @@ public interface MemberMapper {
 
     List<Member> likeList(Member likeListData);
 
-    public List<Member> interestList(Member interestListData);
+    List<Member> interestList(Member interestListData);
+
+    int likeYes(LikeDto likeData);
+
+    int likeNo(LikeDto likeData);
 
 }

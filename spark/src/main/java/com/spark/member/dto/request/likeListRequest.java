@@ -1,6 +1,6 @@
 package com.spark.member.dto.request;
 
-import com.spark.member.dto.Member;
+import com.spark.member.model.Member;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 

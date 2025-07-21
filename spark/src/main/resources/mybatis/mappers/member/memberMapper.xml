@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.spark.member.repository.MemberMapper">
 
-    <resultMap id="memberResultMap" type="Member">
+    <resultMap id="memberResultMap" type="com.spark.member.model.Member">
         <result column="mem_Id" property="memId"/>
         <result column="mem_pwd" property="memPwd"/>
         <result column="mem_name" property="memName"/>
@@ -431,6 +431,21 @@
         where i.im_target = #{memId}
     </select>
 
+    <!-- 좋아요 수락 -->
+    <update id="likeYes">
+        update `like`
+        set like_status = 'Y'
+        where request_id = #{requestId}
+        and response_id = #{responseId}
+    </update>
+
+    <!-- 좋아요 거절 -->
+    <delete id="likeNo">
+        delete
+        from `like`
+        where request_id = #{requestId}
+        and response_id = #{responseId}
+    </delete>
 
 
 </mapper>

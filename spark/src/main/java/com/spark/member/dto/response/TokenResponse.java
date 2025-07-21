@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.spark.member.dto.*;
+import com.spark.member.model.Member;
 import org.springframework.stereotype.Component;
 
 import com.spark.base.exception.CustomException;

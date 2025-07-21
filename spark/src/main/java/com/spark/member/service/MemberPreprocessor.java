@@ -6,7 +6,7 @@ import java.time.Year;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
-import com.spark.member.dto.Member;
+import com.spark.member.model.Member;
 import com.spark.member.dto.request.InsertMemberInfoRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;

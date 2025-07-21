@@ -1,4 +1,4 @@
-package com.spark.member.dto;
+package com.spark.member.model;
 
 
 import lombok.*;
@@ -35,6 +35,9 @@ public class Member {
     private String character; // 특징
     private String proFile; // 사진 경로
     private int age; // 회원 나이
+
+
+
 
 
 

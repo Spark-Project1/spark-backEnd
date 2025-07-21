@@ -1,11 +1,11 @@
 package com.spark.member.service;
 
-import java.time.Year;
 import java.util.*;
 
 import com.spark.member.dto.*;
 import com.spark.member.dto.request.*;
 import com.spark.member.dto.response.InterestListResponse;
+import com.spark.member.model.Member;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -365,6 +365,41 @@ public class MemberServiceImpl implements MemberService {
         }).toList();
 
         return interestMemList;
+    }
+
+    @Override
+    public Integer likeYes(LikeRequest likeInfo) {
+
+        LikeDto likeData = LikeDto.builder()
+            .requestId(likeInfo.getRequestId())
+            .responseId(likeInfo.getResponseId())
+            .build();
+
+        int result = memberDao.likeYes(likeData); // 좋아요 수락 처리
+
+        System.out.println(result);
+        if(result > 0) {
+            // 좋아요 수락 후 채팅방 생성 로직 추가
+            return result;
+        } else {
+            throw new CustomException("좋아요 수락에 실패하였습니다.", 500);
+        }
+    }
+
+    @Override
+    public Integer likeNo(LikeRequest likeInfo) {
+
+        LikeDto likeData = LikeDto.builder()
+            .requestId(likeInfo.getRequestId())
+            .responseId(likeInfo.getResponseId())
+            .build();
+
+        int result = memberDao.likeNo(likeData); // 좋아요 거절 처리
+        if(result > 0) {
+            return result;
+        } else {
+            throw new CustomException("좋아요 거절에 실패하였습니다.", 500);
+        }
     }
 
 

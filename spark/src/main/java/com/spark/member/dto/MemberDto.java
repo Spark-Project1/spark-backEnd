@@ -2,6 +2,7 @@ package com.spark.member.dto;
 
 import java.sql.Date;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,8 +17,10 @@ import lombok.ToString;
 @Setter
 @Builder
 @ToString
+@Schema(description = "회원 정보 DTO")
 public class MemberDto {
 
+    @Schema(description = "회원 아이디" , example = "01011112222")
 	private String memId;
 	private String memPwd;
 	private String memName;

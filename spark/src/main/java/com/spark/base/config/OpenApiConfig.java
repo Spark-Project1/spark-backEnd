@@ -4,6 +4,7 @@ package com.spark.base.config;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
 import org.springframework.context.annotation.Bean;
@@ -35,7 +36,7 @@ public class OpenApiConfig {
                     .bearerFormat("JWT")
                     .in(SecurityScheme.In.HEADER) // JWT 위치는 header
                     .name("Authorization")) // header 키값이름
-            );
+            ).addSecurityItem(new SecurityRequirement().addList("JWT")); // JWT 보안요구사항 추가;
 
     }
 

@@ -1,11 +1,11 @@
 package com.spark.member.service;
 
 import java.util.List;
-import java.util.Map;
 
 import com.spark.member.dto.*;
 import com.spark.member.dto.request.*;
 import com.spark.member.dto.response.InterestListResponse;
+import com.spark.member.model.Member;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.spark.member.dto.response.ValidResponse;
@@ -49,4 +49,8 @@ public interface MemberService {
     List<MemberDto> likeList(likeListRequest likeList);
 
     List<InterestListResponse> interestList(InterestListRequest interestList);
+
+    Integer likeYes(LikeRequest likeInfo);
+
+    Integer likeNo(LikeRequest likeInfo);
 }

@@ -4,12 +4,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import com.spark.member.dto.Member;
+import com.spark.member.model.Member;
 import com.spark.member.dto.request.*;
 import org.springframework.stereotype.Repository;
 
 import com.spark.member.dto.LikeDto;
-import com.spark.member.dto.MemberDto;
 
 import lombok.RequiredArgsConstructor;
 
@@ -96,5 +95,13 @@ public class MemberDao {
 
     public List<Member> interestList(Member interestListData) {
         return memberMapper.interestList(interestListData);
+    }
+
+    public int likeYes(LikeDto likeData) {
+        return memberMapper.likeYes(likeData);
+    }
+
+    public int likeNo(LikeDto likeData) {
+        return memberMapper.likeNo(likeData);
     }
 }
