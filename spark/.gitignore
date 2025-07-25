@@ -22,7 +22,7 @@ local.properties
 .loadpath
 .recommenders
 classes/
-# *.properties
+*.properties
 Servers/
 .class
 
