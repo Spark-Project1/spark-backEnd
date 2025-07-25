@@ -1,9 +1,11 @@
 package com.spark.member.model;
 
 
+import com.spark.member.common.Smock;
 import lombok.*;
 
 import java.sql.Date;
+import java.time.Year;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -26,7 +28,7 @@ public class Member {
     private String mbti;
     private String tall;
     private String religion; // 종교
-    private String smock; // 흡연
+    private Smock smock; // 흡연
     private String status;
     private Date registDate;
     private int cookie;
@@ -35,6 +37,8 @@ public class Member {
     private String character; // 특징
     private String proFile; // 사진 경로
     private int age; // 회원 나이
+
+
 
 
 

@@ -1,5 +1,6 @@
 package com.spark.member.dto;
 
+import com.spark.member.dto.response.LoginResponse;
 import jakarta.servlet.http.Cookie;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,9 +18,8 @@ import lombok.ToString;
 @ToString
 public class LoginResult {
 
-	
 	private JwtToken token;
-	private MemberDto memberDto;
+	private LoginResponse memberDto;
 	private Cookie refreshCookie;
 	
 	

@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import com.spark.member.dto.HiddenProfileDto;
+import com.spark.member.dto.InterestMemDto;
+import com.spark.member.dto.MemberDto;
 import com.spark.member.model.Member;
 import com.spark.member.dto.request.*;
 import org.springframework.stereotype.Repository;
@@ -20,16 +23,16 @@ public class MemberDao {
     private final MemberMapper memberMapper;
 
 
-    public Optional<Member> login(LoginRequest m) {
+    public Optional<MemberDto> login(MemberDto m) {
         return Optional.ofNullable(memberMapper.loginMember(m));
     }
 
-    public Member loginUserInfo(String memId) {
+    public MemberDto loginUserInfo(String memId) {
         return memberMapper.loginUserInfo(memId);
     }
 
-    public Optional<Member> findById(String userId) {
-        return Optional.ofNullable(memberMapper.findById(userId));
+    public Optional<MemberDto> findById(MemberDto memId) {
+        return Optional.ofNullable(memberMapper.findById(memId));
     }
 
     public int insertRefreshToken(Map<String, Object> map) {
@@ -48,60 +51,60 @@ public class MemberDao {
         return memberMapper.deleteToken(userId);
     }
 
-    public List<Member> recommendList(Map<String, Object> map) {
-        return memberMapper.recommendList(map);
+    public List<MemberDto> recommendList(MemberDto memberDto) {
+        return memberMapper.recommendList(memberDto);
     }
 
-    public int signUp(SignUpRequest m) {
+    public int signUp(MemberDto m) {
         return memberMapper.signUp(m);
     }
 
-    public int insertInfo(Member m) {
+    public int insertInfo(MemberDto m) {
         return memberMapper.insertInfo(m);
     }
 
-    public int recommendDelete(RecommendDeleteRequest recommendDelete) {
-        return memberMapper.recommendDelete(recommendDelete);
+    public int recommendDelete(HiddenProfileDto hiddenProfileDto) {
+        return memberMapper.recommendDelete(hiddenProfileDto);
     }
 
     public LikeDto likeMemberCheck(LikeDto likeData) {
         return memberMapper.likeMemberCheck(likeData);
     }
 
-    public int likeMember(LikeSendRequest likeSend) {
+    public int likeMember(LikeDto likeSend) {
         return memberMapper.likeMember(likeSend);
     }
 
-    public int duplicateCheck(String nickName) {
-        return memberMapper.duplicateCheck(nickName);
+    public int duplicateCheck(MemberDto memberDto) {
+        return memberMapper.duplicateCheck(memberDto);
     }
 
-    public int interestMemCheck(InterestMemberAddRequest interestMember) {
-        return memberMapper.interestMemCheck(interestMember);
+    public int interestMemCheck(InterestMemDto interestMemDto) {
+        return memberMapper.interestMemCheck(interestMemDto);
     }
 
-    public int interestMem(InterestMemberAddRequest interestMember) {
-        return memberMapper.interestMem(interestMember);
+    public int interestMem(InterestMemDto interestMemDto) {
+        return memberMapper.interestMem(interestMemDto);
     }
 
-    public Optional<Member> detailInfo(String memId) {
-        return Optional.ofNullable(memberMapper.detailInfo(memId));
+    public Optional<MemberDto> detailInfo(MemberDto memberDto) {
+        return Optional.ofNullable(memberMapper.detailInfo(memberDto));
     }
 
 
-    public List<Member> likeList(Member likeListData) {
-        return memberMapper.likeList(likeListData);
+    public List<MemberDto> likeList(MemberDto memberDto) {
+        return memberMapper.likeList(memberDto);
     }
 
-    public List<Member> interestList(Member interestListData) {
-        return memberMapper.interestList(interestListData);
+    public List<MemberDto> interestList(MemberDto memberDto) {
+        return memberMapper.interestList(memberDto);
     }
 
-    public int likeYes(LikeDto likeData) {
-        return memberMapper.likeYes(likeData);
+    public int likeYes(LikeDto likeDto) {
+        return memberMapper.likeYes(likeDto);
     }
 
-    public int likeNo(LikeDto likeData) {
-        return memberMapper.likeNo(likeData);
+    public int likeNo(LikeDto likeDto) {
+        return memberMapper.likeNo(likeDto);
     }
 }

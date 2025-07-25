@@ -1,24 +1,27 @@
 package com.spark.member.dto.request;
 
+
 import com.spark.member.dto.MemberDto;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
-@NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@NoArgsConstructor
 @Getter
 @Setter
-public class InterestListRequest {
+@Builder
+public class DuplicateCheckRequest {
 
-    @NotBlank(message = "memId의 값을 받지 못했습니다.")
-    private String memId;
+    @NotBlank(message = "nickName 값이 비었습니다.")
+    private String nickName;
 
-    public MemberDto toBuilder(){
+
+    public MemberDto toBuilder() {
         return MemberDto.builder()
-                .memId(memId)
+                .nickName(nickName)
                 .build();
     }
+
 
 
 }

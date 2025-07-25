@@ -4,7 +4,7 @@ import java.util.*;
 
 import com.spark.member.dto.*;
 import com.spark.member.dto.request.*;
-import com.spark.member.dto.response.InterestListResponse;
+import com.spark.member.dto.response.*;
 import com.spark.member.model.Member;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -14,8 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.spark.base.exception.CustomException;
 import com.spark.base.util.FileUtil;
 import com.spark.base.util.JwtProvider;
-import com.spark.member.dto.response.TokenResponse;
-import com.spark.member.dto.response.ValidResponse;
 import com.spark.member.repository.MemberDao;
 
 import lombok.RequiredArgsConstructor;
@@ -35,52 +33,49 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public LoginResult login(LoginRequest m) {
 
-        // 1. 유저 확인
-        Member memberDto = memberDao.login(m).orElseThrow(() -> new CustomException("회원정보가 없습니다.", 400));
+        // MeberDto로 빌드
+        MemberDto memberDto = m.toBuilder();
 
-        memberValidtor.validationPassword(m.getMemPwd(), memberDto.getMemPwd()); // 멤버 비밀번호 유효성 검사
-        // 2. 토큰 생성
+        // 1. 로그인 정보 조회
+        MemberDto result = memberDao.login(memberDto).orElseThrow(() -> new CustomException("회원정보가 없습니다.", 400));
 
-        return tokenResponse.CreateToken(memberDto); // 토큰 생성 클래스 실행
+        // DB에서 조회한 회원 정보 LoginResponse로 빌드
+        LoginResponse response = LoginResponse.toBuilder(result);
+
+        // 비밀번호 유효성 검사
+        memberValidtor.validationPassword(m.getMemPwd(), response.getMemPwd());
+
+        // 토큰 생성
+        return tokenResponse.CreateToken(response);
 
     }
 
     @Override
     public ValidResponse loginUserInfo(TokenRequest authHeader) {
-        String validateToken = authHeader.getTokenRequest().replace("Bearer ", ""); // 토큰만 뺴내어
-        memberValidtor.validToken(validateToken); // 토큰 유효성 검사
+        // 토큰 유효성 검사 및 회원 정보 조회
+        String validateToken = authHeader.getTokenRequest().replace("Bearer ", "");
+        memberValidtor.validToken(validateToken);
 
-        String token = jwtProvider.getUserId(validateToken);
-        Member member = memberDao.loginUserInfo(token);
-        MemberDto result = MemberDto.builder()
-            .memId(member.getMemId())
-            .memName(member.getMemName())
-            .gender(member.getGender())
-            .nickName(member.getNickName())
-            .birthDate(member.getBirthDate())
-            .location(member.getLocation())
-            .memInfo(member.getMemInfo())
-            .occupation(member.getOccupation())
-            .education(member.getEducation())
-            .mbti(member.getMbti())
-            .tall(member.getTall())
-            .religion(member.getReligion())
-            .smock(member.getSmock())
-            .status(member.getStatus())
-            .registDate(member.getRegistDate())
-            .cookie(member.getCookie())
-            .interest(member.getInterest())
-            .tendencies(member.getTendencies())
-            .character(member.getCharacter())
-            .proFile(member.getProFile())
-            .build();
-        return ValidResponse.available(result);
+        // 토큰에서 사용자 아이디 추출
+        String memId = jwtProvider.getUserId(validateToken);
+        // 사용자 아이디로 회원 정보 조회
+        MemberDto memberDto = memberDao.loginUserInfo(memId);
+        if (memberDto == null) {
+            throw new CustomException("해당 사용자가 존재하지 않습니다.", 403);
+        }
+
+        // 회원 정보로 LoginResponse 빌드
+        LoginResponse response = LoginResponse.toBuilder(memberDto);
+
+        return ValidResponse.available(response);
 
     }
 
     @Override
-    public Member findById(String userId) {
-        return memberDao.findById(userId)
+    public MemberDto findById(MemberDto memId) {
+
+        // 사용자 아이디로 회원 정보 조회
+        return memberDao.findById(memId)
             .orElseThrow(() -> new CustomException("해당 사용자가 존재하지 않습니다.", 403));
 
     }
@@ -88,10 +83,13 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public TokenResult insertRefreshToken(TokenRequest refreshTokenHeader) {
 
+        // 헤더에서 Bearer 제거 후 토큰 추출
         String refreshToken = refreshTokenHeader.getTokenRequest().replace("Bearer ", "");
 
-        memberValidtor.validToken(refreshToken); // 리프레시 토큰 유효성검사 진행
+        // 토큰 유효성 검사
+        memberValidtor.validToken(refreshToken);
 
+        // 리프레시 토큰 DB에 저장
         return tokenResponse.insertRefreshToken(refreshToken);
 
     }
@@ -99,10 +97,13 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public LogoutResult deleteToken(TokenRequest refreshTokenHeader) {
 
-        String token = refreshTokenHeader.getTokenRequest().replace("Bearer ", ""); // Bearer를 제거해 token만 추출
+        // 헤더에서 Bearer 제거 후 토큰 추출
+        String token = refreshTokenHeader.getTokenRequest().replace("Bearer ", "");
 
-        memberValidtor.validToken(token); // 토큰 유효성 검사
+        // 토큰 유효성 검사
+        memberValidtor.validToken(token);
 
+        // 토큰 삭제
         return tokenResponse.deleteToken(token);
     }
 
@@ -110,66 +111,45 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public String smsCode(PhoneRequest phone) {
 
+        MemberDto memberDto = phone.toBuilder();
+
         // 가입된 사용자인지 먼저 검사
-        Optional<Member> optional = memberDao.findById(phone.getPhone());
+        Optional<MemberDto> optional = Optional.ofNullable(findById(memberDto));
+
+        // 이미 가입된 사용자라면 예외 처리
         if (optional.isPresent()) {
             throw new CustomException("현재 가입된 사용자입니다.", 409);
         }
+
+        // 쿨 SMS API를 통해 인증 코드 전송
         return memberPreprocessor.coolSms(phone);
 
     }
 
     @Override
-    public List<MemberDto> recommendList(RecommendRequest m) {
+    public List<RecommendResponse> recommendList(RecommendRequest m) {
 
-        Map<String, Object> map = new HashMap<>();
-        map.put("memId", m.getMemId());
-        map.put("interest", m.getInterest().split(","));
-        map.put("character", m.getCharacter().split(","));
-        map.put("tendencies", m.getTendencies().split(","));
-        map.put("gender", String.valueOf(m.getGender()));
+        // MemberDto 빌드
+        MemberDto memberDto = m.toBuilder();
 
-        List<Member> list = memberDao.recommendList(map);
+        // 추천 리스트 조회
+        List<MemberDto> list = memberDao.recommendList(memberDto);
 
+        // 추천 리스트가 비어있거나 null인 경우 예외 처리
         if (list == null) {
             throw new CustomException("추천 리스트 불러오기에 실패하였습니다.", 500);
         }
 
-
+        // 추천 리스트 순서 섞기
         Collections.shuffle(list);
 
-        List<Member> result = list.subList(0, Math.min(50, list.size()));
+        // 추천 리스트에서 최대 50개만 추출
+        List<MemberDto> result = list.subList(0, Math.min(50, list.size()));
 
-
-        List<MemberDto> recommendMemberList = result.stream().map(member -> {
-            return MemberDto.builder()
-                .memId(member.getMemId())
-                .memName(member.getMemName())
-                .gender(member.getGender())
-                .nickName(member.getNickName())
-                .birthDate(member.getBirthDate())
-                .age(member.getAge())
-                .location(member.getLocation())
-                .memInfo(member.getMemInfo())
-                .occupation(member.getOccupation())
-                .education(member.getEducation())
-                .mbti(member.getMbti())
-                .tall(member.getTall())
-                .religion(member.getReligion())
-                .smock(member.getSmock())
-                .status(member.getStatus())
-                .registDate(member.getRegistDate())
-                .cookie(member.getCookie())
-                .interest(member.getInterest())
-                .tendencies(member.getTendencies())
-                .character(member.getCharacter())
-                .proFile(member.getProFile())
-                .build();
-
-        }).toList();
-
-
-        return recommendMemberList;
+        // MemberDto를 RecommendResponse로 변환
+        return result.stream()
+            .map(RecommendResponse::toBuilder)
+            .toList();
     }
 
     @Override
@@ -177,68 +157,52 @@ public class MemberServiceImpl implements MemberService {
 
         // 비밀번호 암호화
         m.setMemPwd(bcryptPwdEncoder.encode(m.getMemPwd()));
-        int memberDto = memberDao.signUp(m);
-        if (memberDto == 0) {
+
+        // MemberDto 빌드
+        MemberDto memberDto = m.toBuilder();
+
+        // 회원 가입 성공 체크
+        int result = memberDao.signUp(memberDto);
+        if (result == 0) {
             throw new CustomException("회원 가입에 실패하였습니다", 500);
         }
 
 
-        return memberDto;
+        return result;
     }
 
     @Override
-    public MemberDto insertInfo(InsertMemberInfoRequest m, MultipartFile uploadFile) {
+    public LoginResponse insertInfo(InsertMemberInfoRequest m, MultipartFile uploadFile) {
 
-        String userId = SecurityContextHolder.getContext().getAuthentication().getName(); // 현재 로그인 중인 회원의 아이디값 불러오기
+        // 로그인 사용자 아이디 추출
+        String userId = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        // 회원 프로필 사진 및 정보 빌드작업
+        MemberDto memberDto = memberPreprocessor.preprocess(m, uploadFile);
+        memberDto.setMemId(userId); // 현재 로그인한 회원 아이디
 
 
-        Member member = memberPreprocessor.preprocess(m, uploadFile); // 생년월일 변환 및 파일정보 입력
-        memberPreprocessor.memberTallDB(member); // 멤버 키 설정
-        memberPreprocessor.memberSmockDB(member); // 멤버 흡연 설정
-        memberPreprocessor.memberAge(member); // 멤버 나이 설정
-        member.setMemId(userId); // 현재 로그인한 회원 아이디
-
-        int result = memberDao.insertInfo(member);
+        int result = memberDao.insertInfo(memberDto);
         if (result == 0) {
             throw new CustomException("회원 정보 추가에 실패하였습니다.", 500);
         }
 
-        LoginRequest mem = new LoginRequest();
-        mem.setMemId(userId);
+        // 회원 정보 조회
+        MemberDto memInfo = memberDao.login(memberDto).orElseThrow(() -> new CustomException("회원 정보 불러오기가 실패하였습니다.", 500));
 
-        Member memInfo = memberDao.login(mem).orElseThrow(() -> new CustomException("회원 정보 불러오기가 실패하였습니다.", 500));
-
-        MemberDto memberDto = MemberDto.builder()
-            .memId(memInfo.getMemId())
-            .memName(memInfo.getMemName())
-            .gender(memInfo.getGender())
-            .nickName(memInfo.getNickName())
-            .birthDate(memInfo.getBirthDate())
-            .location(memInfo.getLocation())
-            .memInfo(memInfo.getMemInfo())
-            .occupation(memInfo.getOccupation())
-            .education(memInfo.getEducation())
-            .mbti(memInfo.getMbti())
-            .tall(memInfo.getTall())
-            .religion(memInfo.getReligion())
-            .smock(memInfo.getSmock())
-            .status(memInfo.getStatus())
-            .registDate(memInfo.getRegistDate())
-            .cookie(memInfo.getCookie())
-            .interest(memInfo.getInterest())
-            .tendencies(memInfo.getTendencies())
-            .character(memInfo.getCharacter())
-            .proFile(memInfo.getProFile())
-            .build();
-
-
-        return memberDto;
+        return LoginResponse.toBuilder(memInfo);
     }
+
+
+
 
     @Override
     public int recommendDelete(RecommendDeleteRequest recommendDelete) {
 
-        int result = memberDao.recommendDelete(recommendDelete);
+        // Dto로 빌드
+        HiddenProfileDto hiddenProfileDto = recommendDelete.toBuilder();
+
+        int result = memberDao.recommendDelete(hiddenProfileDto);
         if (result == 0) {
             throw new CustomException("추천 목록 삭제에 실패하였습니다.", 500);
         }
@@ -249,27 +213,28 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public int likeMember(LikeSendRequest likeSend) {
 
-        LikeDto likeData = LikeDto.builder()
-            .requestId(likeSend.getRequestId())
-            .responseId(likeSend.getResponseId())
-            .build();
+        LikeDto likeDto = likeSend.toBuilder();
 
         // 좋아요 테이블에 이미 저장되어있는지 확인
-        LikeDto result = memberDao.likeMemberCheck(likeData);
+        LikeDto result = memberDao.likeMemberCheck(likeDto);
 
         if (result != null) {
             throw new CustomException("이미 좋아요를 누른상태입니다.", 401);
         } else {
-            return memberDao.likeMember(likeSend);
+            return memberDao.likeMember(likeDto);
         }
 
     }
 
     @Override
-    public boolean duplicateCheck(String nickName) {
+    public boolean duplicateCheck(DuplicateCheckRequest nickName) {
+
+        // Dto로 빌드
+        MemberDto memberDto = nickName.toBuilder();
 
         try {
-            int result = memberDao.duplicateCheck(nickName);
+            // 닉네임 중복 검사
+            int result = memberDao.duplicateCheck(memberDto);
             return result <= 0;
         } catch (Exception e) {
             throw new CustomException("닉네임 중복 검사에 실패했습니다.", 500);
@@ -280,12 +245,17 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public int interestMem(InterestMemberAddRequest interestMember) {
 
-        int check = memberDao.interestMemCheck(interestMember); // 이미 등록한 관심회원인지 확인
+        // Dto로 빌드
+        InterestMemDto interestMemDto = interestMember.toBuilder();
+
+        // 관심 회원 등록 전에 이미 등록된 회원인지 확인
+        int check = memberDao.interestMemCheck(interestMemDto);
         if (check > 0) {
             throw new CustomException("이미 관심이 등록된 회원입니다.", 409);
         }
 
-        int result = memberDao.interestMem(interestMember);
+        // 관심 회원 등록
+        int result = memberDao.interestMem(interestMemDto);
         if (result == 0) {
             throw new CustomException("관심 회원 등록에 실패하였습니다.", 500);
         }
@@ -293,92 +263,58 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public MemberDto detailInfo(Member member) {
-        // 만약 내가 좋아요를 누른 상태방의 상세정보를 확인할경우
-        Member m = memberDao.detailInfo(member.getMemId()).orElseThrow(() -> new CustomException("해당 회원이 존재하지 않습니다.", 400));
+    public DetailMemberInfoResponse detailInfo(DetailMemberInfoRequest detailMemberInfo) {
 
-        MemberDto result = MemberDto.builder()
-            .memId(m.getMemId())
-            .memName(m.getMemName())
-            .gender(m.getGender())
-            .nickName(m.getNickName())
-            .birthDate(m.getBirthDate())
-            .location(m.getLocation())
-            .memInfo(m.getMemInfo())
-            .occupation(m.getOccupation())
-            .education(m.getEducation())
-            .mbti(m.getMbti())
-            .tall(m.getTall())
-            .religion(m.getReligion())
-            .smock(m.getSmock())
-            .status(m.getStatus())
-            .registDate(m.getRegistDate())
-            .interest(m.getInterest())
-            .tendencies(m.getTendencies())
-            .character(m.getCharacter())
-            .proFile(m.getProFile())
-            .age(m.getAge())
-            .build();
-        memberPreprocessor.memberTallFront(result);
-        memberPreprocessor.memberSmockFront(result);
+        // Dto로 빌드
+        MemberDto memberDto = detailMemberInfo.toBuilder();
 
+        // 상태방의 상세정보 조회
+        MemberDto result = memberDao.detailInfo(memberDto).orElseThrow(() -> new CustomException("해당 회원이 존재하지 않습니다.", 400));
 
-        return result;
+        // 상세정보 응답 빌드
+        DetailMemberInfoResponse response = DetailMemberInfoResponse.toBuilder(result);
+
+        return response;
     }
 
     @Override
-    public List<MemberDto> likeList(likeListRequest likeList) {
+    public List<LikeListResponse> likeList(LikeListRequest likeList) {
 
-        Member likeListData = likeList.toEntity();
+        // Dto로 빌드
+        MemberDto memberDto = likeList.toBuilder();
 
-        List<Member> result = memberDao.likeList(likeListData);
+        // 로그인한 사용자의 좋아요 목록 조회
+        List<MemberDto> result = memberDao.likeList(memberDto);
+        if (result == null) {
+            throw new CustomException("좋아요 목록 조회에 실패하였습니다.", 500);
+        }
 
+        return result.stream()
+            .map(LikeListResponse::toBuilder)
+            .toList();
 
-        List<MemberDto> likeMemList = result.stream().map(member -> {
-            return MemberDto.builder()
-                .memId(member.getMemId())
-                .nickName(member.getNickName())
-                .age(member.getAge())
-                .proFile(member.getProFile())
-                .build();
-        }).toList();
-
-        return likeMemList;
     }
 
     @Override
     public List<InterestListResponse> interestList(InterestListRequest interestList) {
 
-        Member InterestListData = Member.builder()
-            .memId(interestList.getMemId())
-            .build();
+        MemberDto memberDto = interestList.toBuilder();
 
-        List<Member> result = memberDao.interestList(InterestListData);
+        List<MemberDto> result = memberDao.interestList(memberDto);
 
-        List<InterestListResponse> interestMemList = result.stream().map(list ->{
-            return InterestListResponse.builder()
-                .memId(list.getMemId())
-                .nickName(list.getNickName())
-                .proFile(list.getProFile())
-                .age(list.getAge())
-                .build();
-        }).toList();
-
-        return interestMemList;
+        return result.stream()
+            .map(InterestListResponse::toBuilder)
+            .toList();
     }
 
     @Override
     public Integer likeYes(LikeRequest likeInfo) {
 
-        LikeDto likeData = LikeDto.builder()
-            .requestId(likeInfo.getRequestId())
-            .responseId(likeInfo.getResponseId())
-            .build();
+        LikeDto likeDto = likeInfo.toBuilder();
 
-        int result = memberDao.likeYes(likeData); // 좋아요 수락 처리
+        int result = memberDao.likeYes(likeDto); // 좋아요 수락 처리
 
-        System.out.println(result);
-        if(result > 0) {
+        if (result > 0) {
             // 좋아요 수락 후 채팅방 생성 로직 추가
             return result;
         } else {
@@ -389,13 +325,10 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Integer likeNo(LikeRequest likeInfo) {
 
-        LikeDto likeData = LikeDto.builder()
-            .requestId(likeInfo.getRequestId())
-            .responseId(likeInfo.getResponseId())
-            .build();
+        LikeDto likeDto = likeInfo.toBuilder();
 
-        int result = memberDao.likeNo(likeData); // 좋아요 거절 처리
-        if(result > 0) {
+        int result = memberDao.likeNo(likeDto); // 좋아요 거절 처리
+        if (result > 0) {
             return result;
         } else {
             throw new CustomException("좋아요 거절에 실패하였습니다.", 500);

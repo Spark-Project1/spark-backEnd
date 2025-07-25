@@ -2,6 +2,7 @@ package com.spark.base.util;
 
 import java.util.Date;
 
+import com.spark.base.config.SparkKeyConfig;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
@@ -25,7 +26,7 @@ public class JwtProvider {
 
 
     // JWT 관련 기능을 제공하는 클래스
-    private final String secretKey = "sparkSuperSecureJwtKey!@#1234567890"; // HMAC 암호화를 위한 비밀 키
+    private final SparkKeyConfig sparkKeyConfig;
     private final long tokenValidTime = 1000 * 60 * 30; // 토큰 유효 시간  1000 * 60 * 60; (1시간 = 3600000ms)
     private final long refreshTokenValidTime = 1000L * 60 * 60 * 24 * 7; // 5시간
 
@@ -38,7 +39,7 @@ public class JwtProvider {
             .setClaims(claims) // 위에만든 claims정보를 집어넣음
             .setIssuedAt(now)  // 토큰 발급 시간 저장
             .setExpiration(new Date(now.getTime() + tokenValidTime)) // 토큰 만료 시간 설정 (현재시간+유효시간)
-            .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()), SignatureAlgorithm.HS256) // 알고리즘으로 암호화
+            .signWith(Keys.hmacShaKeyFor(sparkKeyConfig.getSecretKey().getBytes()), SignatureAlgorithm.HS256) // 알고리즘으로 암호화
             .compact(); // 위 정보로 jwt 문자열 생성
     }
 
@@ -51,7 +52,7 @@ public class JwtProvider {
             .setClaims(claims)
             .setIssuedAt(now)
             .setExpiration(new Date(now.getTime() + refreshTokenValidTime))
-            .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()), SignatureAlgorithm.HS256)
+            .signWith(Keys.hmacShaKeyFor(sparkKeyConfig.getSecretKey().getBytes()), SignatureAlgorithm.HS256)
             .compact();
     }
 
@@ -62,7 +63,7 @@ public class JwtProvider {
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder()
-                .setSigningKey(secretKey.getBytes())
+                .setSigningKey(sparkKeyConfig.getSecretKey().getBytes())
                 .build()
                 .parseClaimsJws(token); // 토큰 파싱
             return true;
@@ -75,7 +76,7 @@ public class JwtProvider {
     // 토큰에서 사용자 ID 추출
     public String getUserId(String token) {
         return Jwts.parserBuilder()
-            .setSigningKey(secretKey.getBytes())
+            .setSigningKey(sparkKeyConfig.getSecretKey().getBytes())
             .build()
             .parseClaimsJws(token)
             .getBody()

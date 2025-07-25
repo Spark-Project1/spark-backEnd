@@ -6,31 +6,26 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Builder
-public class InterestListResponse {
+public class LikeListResponse {
 
     private String memId;
     private String nickName;
-    private String proFile;
     private int age;
+    private String proFile;
 
 
-
-    public static InterestListResponse toBuilder(MemberDto memberDto) {
-
-        return InterestListResponse.builder()
+    public static LikeListResponse toBuilder(MemberDto memberDto) {
+        return LikeListResponse.builder()
             .memId(memberDto.getMemId())
             .nickName(memberDto.getNickName())
-            .proFile(memberDto.getProFile())
             .age(memberDto.getAge())
+            .proFile(memberDto.getProFile())
             .build();
-
     }
-
-
 
 
 }

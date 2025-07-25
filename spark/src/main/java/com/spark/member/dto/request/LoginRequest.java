@@ -1,5 +1,6 @@
 package com.spark.member.dto.request;
 
+import com.spark.member.dto.MemberDto;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,5 +20,12 @@ public class LoginRequest {
     private String memId;
     @NotBlank(message = "비밀번호가 비어있습니다.")
     private String memPwd;
+
+    public MemberDto toBuilder(){
+        return MemberDto.builder()
+                .memId(memId)
+                .memPwd(memPwd)
+                .build();
+    }
 
 }

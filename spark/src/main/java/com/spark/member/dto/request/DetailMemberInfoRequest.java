@@ -1,20 +1,22 @@
 package com.spark.member.dto.request;
 
+
 import com.spark.member.dto.MemberDto;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
-@NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@NoArgsConstructor
 @Getter
-@Setter
-public class InterestListRequest {
+@Builder
 
-    @NotBlank(message = "memId의 값을 받지 못했습니다.")
-    private String memId;
+public class DetailMemberInfoRequest {
 
-    public MemberDto toBuilder(){
+    @NotBlank(message = "memId는 필수 입력값입니다.")
+    private String memId; // 멤버 ID
+
+
+    public MemberDto toBuilder() {
         return MemberDto.builder()
                 .memId(memId)
                 .build();

@@ -14,7 +14,6 @@ import lombok.ToString;
 @Getter
 @Setter
 @Builder
-@ToString
 public class LikeDto {
 	
 	private int likeNo;

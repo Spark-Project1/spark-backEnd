@@ -1,7 +1,11 @@
 package com.spark.member.dto;
 
 import java.sql.Date;
+import java.time.Year;
 
+import com.spark.member.common.Smock;
+import com.spark.member.common.Tall;
+import com.spark.member.dto.request.RecommendRequest;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,34 +24,39 @@ import lombok.ToString;
 @Schema(description = "회원 정보 DTO")
 public class MemberDto {
 
-    @Schema(description = "회원 아이디" , example = "01011112222")
-	private String memId;
-	private String memPwd;
-	private String memName;
-	private String gender;
-	private String nickName;
-	private Date birthDate;
-	private String location;
-	private String memInfo;
-	private String occupation; // 직업
-	private String education; // 학력
-	private String mbti;
-	private String tall;
-	private String religion; // 종교
-	private String smock; // 흡연
-	private String status;
-	private Date registDate;
-	private int cookie;
-	private String interest; // 관심사
-	private String tendencies; // 연애성향
-	private String character; // 특징
-	private String proFile; // 사진 경로
-	private int age;
+    @Schema(description = "회원 아이디", example = "01011112222")
+    private String memId;
+    private String memPwd;
+    private String memName;
+    private String gender;
+    private String nickName;
+    private Date birthDate;
+    private String location;
+    private String memInfo;
+    private String occupation; // 직업
+    private String education; // 학력
+    private String mbti;
+    private Tall tall;
+    private String religion; // 종교
+    private Smock smock; // 흡연
+    private String status;
+    private Date registDate;
+    private int cookie;
+    private String interest; // 관심사
+    private String tendencies; // 연애성향
+    private String character; // 특징
+    private String proFile; // 사진 경로
+    private int age;
 
-	
-	
-	
-	
+
+    private String[] interestArray;
+    private String[] tendenciesArray;
+    private String[] characterArray;
+
+
+
+
+
 
 
 }

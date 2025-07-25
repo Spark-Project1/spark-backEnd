@@ -1,5 +1,6 @@
 package com.spark.member.dto.request;
 
+import com.spark.member.dto.MemberDto;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,9 +13,18 @@ import lombok.ToString;
 @AllArgsConstructor
 @Getter
 @Builder
+@Setter
 public class PhoneRequest {
 
 	@NotBlank(message = "번호가 입력되지 않았습니다.")
 	private String phone;
+
+    public MemberDto toBuilder() {
+        return MemberDto.builder()
+                .memId(phone)
+                .build();
+    }
+
+
 	
 }

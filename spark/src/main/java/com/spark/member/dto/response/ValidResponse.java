@@ -12,15 +12,15 @@ import lombok.RequiredArgsConstructor;
 public class ValidResponse {
 	
 	private  boolean valid;
-	private  MemberDto memberDto;
+	private  LoginResponse memberDto;
 
-	public ValidResponse(boolean valid,MemberDto member) {
+	public ValidResponse(boolean valid,LoginResponse member) {
 		this.valid = valid;
 		this.memberDto = member;
 	}
 
 
-	public static ValidResponse available(MemberDto member) {
+	public static ValidResponse available(LoginResponse member) {
 		return new ValidResponse(true,member);
 	}
 	

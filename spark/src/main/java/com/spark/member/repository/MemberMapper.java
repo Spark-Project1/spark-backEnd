@@ -3,6 +3,9 @@ package com.spark.member.repository;
 import java.util.List;
 import java.util.Map;
 
+import com.spark.member.dto.HiddenProfileDto;
+import com.spark.member.dto.InterestMemDto;
+import com.spark.member.dto.MemberDto;
 import com.spark.member.model.Member;
 import com.spark.member.dto.request.*;
 import org.apache.ibatis.annotations.Mapper;
@@ -12,11 +15,11 @@ import com.spark.member.dto.LikeDto;
 @Mapper
 public interface MemberMapper {
 
-    Member loginMember(LoginRequest m);
+    MemberDto loginMember(MemberDto m);
 
-    Member loginUserInfo(String userId);
+    MemberDto loginUserInfo(String userId);
 
-    Member findById(String userId);
+    MemberDto findById(MemberDto userId);
 
     int insertRefreshToken(Map<String, Object> map);
 
@@ -26,32 +29,32 @@ public interface MemberMapper {
 
     int deleteToken(String userId);
 
-    List<Member> recommendList(Map<String, Object> map);
+    List<MemberDto> recommendList(MemberDto memberDto);
 
-    int signUp(SignUpRequest m);
+    int signUp(MemberDto m);
 
-    int insertInfo(Member m);
+    int insertInfo(MemberDto m);
 
-    int recommendDelete(RecommendDeleteRequest recommendDelete);
+    int recommendDelete(HiddenProfileDto hiddenProfileDto);
 
     LikeDto likeMemberCheck(LikeDto likeData);
 
-    int likeMember(LikeSendRequest likeSend);
+    int likeMember(LikeDto likeSend);
 
-    int duplicateCheck(String nickName);
+    int duplicateCheck(MemberDto memberDto);
 
-    int interestMemCheck(InterestMemberAddRequest interestMember);
+    int interestMemCheck(InterestMemDto interestMemDto);
 
-    int interestMem(InterestMemberAddRequest interestMember);
+    int interestMem(InterestMemDto interestMemDto);
 
-    Member detailInfo(String memId);
+    MemberDto detailInfo(MemberDto memberDto);
 
-    List<Member> likeList(Member likeListData);
+    List<MemberDto> likeList(MemberDto memberDto);
 
-    List<Member> interestList(Member interestListData);
+    List<MemberDto> interestList(MemberDto memberDto);
 
-    int likeYes(LikeDto likeData);
+    int likeYes(LikeDto likeDto);
 
-    int likeNo(LikeDto likeData);
+    int likeNo(LikeDto likeDto);
 
 }

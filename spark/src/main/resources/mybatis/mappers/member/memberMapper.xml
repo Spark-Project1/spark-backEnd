@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.spark.member.repository.MemberMapper">
 
-    <resultMap id="memberResultMap" type="com.spark.member.model.Member">
+    <resultMap id="memberResultMap" type="com.spark.member.dto.MemberDto">
         <result column="mem_Id" property="memId"/>
         <result column="mem_pwd" property="memPwd"/>
         <result column="mem_name" property="memName"/>
@@ -14,9 +14,9 @@
         <result column="mem_occupation" property="occupation"/>
         <result column="mem_education" property="education"/>
         <result column="mem_mbti" property="mbti"/>
-        <result column="mem_tall" property="tall"/>
+        <result column="mem_tall" property="tall" typeHandler="com.spark.member.handler.TallTypeHandler"/>
         <result column="mem_religion" property="religion"/>
-        <result column="mem_smock" property="smock"/>
+        <result column="mem_smock" property="smock" typeHandler="com.spark.member.handler.SmockTypeHandler"/>
         <result column="mem_status" property="status"/>
         <result column="mem_regist_date" property="registDate"/>
         <result column="mem_cookie" property="cookie"/>
@@ -28,13 +28,23 @@
 
     </resultMap>
 
-    <resultMap id="likeResultMap" type="likeDto">
+    <resultMap id="likeResultMap" type="com.spark.member.dto.LikeDto">
         <result column="like_no" property="likeNo"/>
         <result column="request_id" property="requestId"/>
         <result column="response_id" property="responseId"/>
-        <result column="like_status" property="likeStatus"/>
+        <result column="like_status" property="status"/>
     </resultMap>
 
+    <resultMap id="hiddenProfileResultMap" type="com.spark.member.dto.HiddenProfileDto">
+        <result column="hidden_no" property="hiddenNo"/>
+        <result column="hidden_id" property="hiddenId"/>
+        <result column="hidden_target" property="hiddenTarget"/>
+    </resultMap>
+
+    <resultMap id ="interestedMemberResultMap" type="com.spark.member.dto.InterestMemDto">
+        <result column="im_user" property="imUser"/>
+        <result column="im_target" property="imTarget"/>
+    </resultMap>
 
     <!-- 로그인 -->
     <select id="loginMember" resultMap="memberResultMap">
@@ -264,15 +274,15 @@
         )
 
         AND (
-        <foreach collection="interest" item="item" separator=" OR ">
+        <foreach collection="interestArray" item="item" separator=" OR ">
             mem_interest LIKE CONCAT('%', #{item}, '%')
         </foreach>
         OR
-        <foreach collection="tendencies" item="item" separator=" OR ">
+        <foreach collection="tendenciesArray" item="item" separator=" OR ">
             mem_tendencies LIKE CONCAT('%', #{item}, '%')
         </foreach>
         OR
-        <foreach collection="character" item="item" separator=" OR ">
+        <foreach collection="characterArray" item="item" separator=" OR ">
             mem_character LIKE CONCAT('%', #{item}, '%')
         </foreach>
         )
@@ -354,14 +364,14 @@
 
 
     <!-- 관심회원 체크 -->
-    <select id="interestMemCheck">
+    <select id="interestMemCheck" resultMap="interestedMemberResultMap">
         select
         count(*)
         from
         interested_mem
         where
         im_user = #{imUser}
-        , im_target = #{imTarget}
+        AND im_target = #{imTarget}
     </select>
 
 
@@ -421,7 +431,7 @@
     </select>
 
     <!-- 관심목록 조회 -->
-    <select id="interestList" resultMap="memberResultMap">
+    <select id="interestList" resultMap="interestedMemberResultMap">
         select m.mem_id
         , m.mem_nickname
         , m.mem_profile
