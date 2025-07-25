@@ -12,9 +12,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum Smock {
 
-    Y("자주")
-    , N("안함")
-    , A("가끔");
+    Y("자주"), N("안함"), A("가끔");
 
     private final String smock;
 
@@ -22,7 +20,7 @@ public enum Smock {
     // Smock value를 순환하여 str값과 일치하는 값을 반환 일치하는 값이 없으면 예외 발생
     @JsonCreator
     public static Smock fromDescription(String str) {
-        if(str == null || str.isBlank()) return null;
+        if (str == null || str.isBlank()) return null;
         for (Smock s : values()) {
             if (s.getSmock().equals(str)) return s;
         }

@@ -2,7 +2,7 @@ package com.spark.member.dto.response;
 
 import com.spark.member.common.Smock;
 import com.spark.member.common.Tall;
-import com.spark.member.dto.MemberDto;
+import com.spark.member.model.Member;
 import lombok.*;
 
 import java.sql.Date;
@@ -27,7 +27,7 @@ public class LoginResponse {
     private String mbti;
     private Tall tall;
     private String religion;
-    private Smock smock; // 흡연
+    private Smock smock;
     private String status;
     private Date registDate;
     private int cookie;
@@ -38,30 +38,30 @@ public class LoginResponse {
     private Integer age;
 
 
-    public static LoginResponse toBuilder(MemberDto memberDto) {
+    public static LoginResponse from(Member member) {
         return LoginResponse.builder()
-            .memId(memberDto.getMemId())
-            .memPwd(memberDto.getMemPwd())
-            .memName(memberDto.getMemName())
-            .gender(memberDto.getGender())
-            .nickName(memberDto.getNickName())
-            .birthDate(memberDto.getBirthDate())
-            .location(memberDto.getLocation())
-            .memInfo(memberDto.getMemInfo())
-            .occupation(memberDto.getOccupation())
-            .education(memberDto.getEducation())
-            .mbti(memberDto.getMbti())
-            .tall(memberDto.getTall())
-            .religion(memberDto.getReligion())
-            .smock(memberDto.getSmock())
-            .status(memberDto.getStatus())
-            .registDate(memberDto.getRegistDate())
-            .cookie(memberDto.getCookie())
-            .interest(memberDto.getInterest())
-            .tendencies(memberDto.getTendencies())
-            .character(memberDto.getCharacter())
-            .proFile(memberDto.getProFile())
-            .age(memberDto.getAge())
+            .memId(member.getMemId())
+            .memPwd(member.getMemPwd())
+            .memName(member.getMemName())
+            .gender(member.getGender())
+            .nickName(member.getNickName())
+            .birthDate(member.getBirthDate())
+            .location(member.getLocation())
+            .memInfo(member.getMemInfo())
+            .occupation(member.getOccupation())
+            .education(member.getEducation())
+            .mbti(member.getMbti())
+            .tall(member.getTall())
+            .religion(member.getReligion())
+            .smock(member.getSmock())
+            .status(member.getStatus())
+            .registDate(member.getRegistDate())
+            .cookie(member.getCookie())
+            .interest(member.getInterest())
+            .tendencies(member.getTendencies())
+            .character(member.getCharacter())
+            .proFile(member.getProFile())
+            .age(member.getAge())
             .build();
 
     }

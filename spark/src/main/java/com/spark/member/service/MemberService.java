@@ -5,6 +5,7 @@ import java.util.List;
 import com.spark.member.dto.*;
 import com.spark.member.dto.request.*;
 import com.spark.member.dto.response.*;
+import com.spark.member.model.Member;
 import org.springframework.web.multipart.MultipartFile;
 
 
@@ -17,7 +18,7 @@ public interface MemberService {
 	ValidResponse loginUserInfo(TokenRequest authHeader);
 
 	// 아이디로 유저 정보 찾기
-    MemberDto findById(MemberDto userId);
+    Member findById(String userId);
 
 	TokenResult insertRefreshToken(TokenRequest refreshTokenHeader);
 

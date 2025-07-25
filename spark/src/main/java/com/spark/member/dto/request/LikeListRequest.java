@@ -1,7 +1,5 @@
 package com.spark.member.dto.request;
 
-import com.spark.member.dto.MemberDto;
-import com.spark.member.model.Member;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
@@ -15,11 +13,6 @@ public class LikeListRequest {
     private String memId;
 
 
-    public MemberDto toBuilder() {
-        return MemberDto.builder()
-            .memId(this.memId)
-            .build();
-    }
 
 }
 

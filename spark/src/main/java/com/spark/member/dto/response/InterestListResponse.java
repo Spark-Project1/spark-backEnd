@@ -1,6 +1,6 @@
 package com.spark.member.dto.response;
 
-import com.spark.member.dto.MemberDto;
+import com.spark.member.model.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,13 +19,13 @@ public class InterestListResponse {
 
 
 
-    public static InterestListResponse toBuilder(MemberDto memberDto) {
+    public static InterestListResponse from(Member member) {
 
         return InterestListResponse.builder()
-            .memId(memberDto.getMemId())
-            .nickName(memberDto.getNickName())
-            .proFile(memberDto.getProFile())
-            .age(memberDto.getAge())
+            .memId(member.getMemId())
+            .nickName(member.getNickName())
+            .proFile(member.getProFile())
+            .age(member.getAge())
             .build();
 
     }

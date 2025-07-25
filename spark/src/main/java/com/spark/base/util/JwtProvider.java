@@ -3,14 +3,8 @@ package com.spark.base.util;
 import java.util.Date;
 
 import com.spark.base.config.SparkKeyConfig;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import com.spark.member.dto.MemberDto;
-import com.spark.member.service.MemberService;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;

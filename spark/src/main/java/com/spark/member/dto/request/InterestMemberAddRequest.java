@@ -17,12 +17,4 @@ public class InterestMemberAddRequest {
     private String imTarget;
 
 
-    public InterestMemDto toBuilder() {
-        return InterestMemDto.builder()
-                .imUser(imUser)
-                .imTarget(imTarget)
-                .build();
-    }
-
-
 }

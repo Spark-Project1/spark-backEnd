@@ -3,9 +3,6 @@ package com.spark.member.repository;
 import java.util.List;
 import java.util.Map;
 
-import com.spark.member.dto.HiddenProfileDto;
-import com.spark.member.dto.InterestMemDto;
-import com.spark.member.dto.MemberDto;
 import com.spark.member.model.Member;
 import com.spark.member.dto.request.*;
 import org.apache.ibatis.annotations.Mapper;
@@ -15,11 +12,11 @@ import com.spark.member.dto.LikeDto;
 @Mapper
 public interface MemberMapper {
 
-    MemberDto loginMember(MemberDto m);
+    Member loginMember(Member m);
 
-    MemberDto loginUserInfo(String userId);
+    Member loginUserInfo(String userId);
 
-    MemberDto findById(MemberDto userId);
+    Member findById(String userId);
 
     int insertRefreshToken(Map<String, Object> map);
 
@@ -29,32 +26,32 @@ public interface MemberMapper {
 
     int deleteToken(String userId);
 
-    List<MemberDto> recommendList(MemberDto memberDto);
+    List<Member> recommendList(Member member);
 
-    int signUp(MemberDto m);
+    int signUp(Member member);
 
-    int insertInfo(MemberDto m);
+    int insertInfo(Member member);
 
-    int recommendDelete(HiddenProfileDto hiddenProfileDto);
+    int recommendDelete(RecommendDeleteRequest recommendDelete);
 
-    LikeDto likeMemberCheck(LikeDto likeData);
+    LikeDto likeMemberCheck(LikeSendRequest likeSendRequest);
 
-    int likeMember(LikeDto likeSend);
+    int likeMember(LikeSendRequest likeSendRequest);
 
-    int duplicateCheck(MemberDto memberDto);
+    int duplicateCheck(DuplicateCheckRequest duplicateCheckRequest);
 
-    int interestMemCheck(InterestMemDto interestMemDto);
+    int interestMemCheck(InterestMemberAddRequest interestMemberAddRequest);
 
-    int interestMem(InterestMemDto interestMemDto);
+    int interestMem(InterestMemberAddRequest interestMemberAddRequest);
 
-    MemberDto detailInfo(MemberDto memberDto);
+    Member detailInfo(DetailMemberInfoRequest detailMemberInfo);
 
-    List<MemberDto> likeList(MemberDto memberDto);
+    List<Member> likeList(LikeListRequest likeList);
 
-    List<MemberDto> interestList(MemberDto memberDto);
+    List<Member> interestList(InterestListRequest interestList);
 
-    int likeYes(LikeDto likeDto);
+    int likeYes(LikeRequest likeInfo);
 
-    int likeNo(LikeDto likeDto);
+    int likeNo(LikeRequest likeInfo);
 
 }

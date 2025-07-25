@@ -1,6 +1,6 @@
 package com.spark.member.dto.response;
 
-import com.spark.member.dto.MemberDto;
+import com.spark.member.model.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,12 +18,12 @@ public class LikeListResponse {
     private String proFile;
 
 
-    public static LikeListResponse toBuilder(MemberDto memberDto) {
+    public static LikeListResponse from(Member member) {
         return LikeListResponse.builder()
-            .memId(memberDto.getMemId())
-            .nickName(memberDto.getNickName())
-            .age(memberDto.getAge())
-            .proFile(memberDto.getProFile())
+            .memId(member.getMemId())
+            .nickName(member.getNickName())
+            .age(member.getAge())
+            .proFile(member.getProFile())
             .build();
     }
 

@@ -1,13 +1,13 @@
 package com.spark.member.dto.request;
 
 
-import com.spark.base.exception.CustomException;
 import com.spark.member.common.Smock;
 import com.spark.member.common.Tall;
-import com.spark.member.dto.MemberDto;
+import com.spark.member.model.Member;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -52,8 +52,9 @@ public class InsertMemberInfoRequest {
 
     private int age;
 
-    public MemberDto toBuilder() {
+    public Member toDomain() {
 
+        String userId = SecurityContextHolder.getContext().getAuthentication().getName();
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
         LocalDate localDate = LocalDate.parse(birthDate, formatter);
@@ -62,7 +63,8 @@ public class InsertMemberInfoRequest {
         int calAge = currentYear - birthYear;
 
 
-        return MemberDto.builder()
+        return Member.builder()
+            .memId(userId)
             .nickName(nickName)
             .location(location)
             .gender(gender)

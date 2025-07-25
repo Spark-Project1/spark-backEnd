@@ -1,7 +1,5 @@
 package com.spark.member.dto.request;
 
-import com.spark.member.dto.HiddenProfileDto;
-import com.spark.member.dto.MemberDto;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
@@ -15,15 +13,5 @@ public class RecommendDeleteRequest {
     private String hiddenId;
     @NotBlank(message="추천목록에 삭제할 대상의 정보가 없습니다.")
     private String hiddenTarget;
-
-
-
-    public HiddenProfileDto toBuilder() {
-        return HiddenProfileDto.builder()
-                .hiddenId(hiddenId)
-                .hiddenTarget(hiddenTarget)
-                .build();
-    }
-
 
 }

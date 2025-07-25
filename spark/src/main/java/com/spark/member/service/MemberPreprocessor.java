@@ -1,20 +1,10 @@
 package com.spark.member.service;
 
-import java.sql.Date;
-import java.time.LocalDate;
-import java.time.Year;
-import java.time.format.DateTimeFormatter;
-import java.util.Map;
-
 import com.spark.base.config.CoolSmsConfig;
-import com.spark.member.model.Member;
-import com.spark.member.dto.request.InsertMemberInfoRequest;
 import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.spark.base.exception.CustomException;
 import com.spark.base.util.FileUtil;
-import com.spark.member.dto.MemberDto;
 import com.spark.member.dto.request.PhoneRequest;
 
 import lombok.RequiredArgsConstructor;
@@ -31,25 +21,7 @@ public class MemberPreprocessor {
     private final FileUtil fileUtil;
     private final CoolSmsConfig coolSmsConfig;
 
-    public MemberDto preprocess(InsertMemberInfoRequest m, MultipartFile uploadFile) {
 
-        MemberDto memberDto = m.toBuilder();
-
-
-        if (!uploadFile.isEmpty()) {
-            try {
-                Map<String, String> map = fileUtil.fileupload(uploadFile, "profile");
-                String filePath = map.get("filePath") + "/" + map.get("filesystemName");
-                memberDto.setProFile(filePath);
-            } catch (Exception e) {
-                throw new CustomException("이미지 등록에 실패하였습니다", 500);
-            }
-        } else {
-            memberDto.setProFile(null);
-        }
-        return memberDto;
-
-    }
 
 
     public String coolSms(PhoneRequest phone) {

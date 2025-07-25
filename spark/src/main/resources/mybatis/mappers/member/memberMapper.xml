@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.spark.member.repository.MemberMapper">
 
-    <resultMap id="memberResultMap" type="com.spark.member.dto.MemberDto">
+    <resultMap id="memberResultMap" type="com.spark.member.model.Member">
         <result column="mem_Id" property="memId"/>
         <result column="mem_pwd" property="memPwd"/>
         <result column="mem_name" property="memName"/>

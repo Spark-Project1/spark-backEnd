@@ -11,16 +11,16 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum Tall {
 
-        A("140 - 145"),
-        B("145 - 150"),
-        C("150 - 155"),
-        D("155 - 160"),
-        E("160 - 165"),
-        F("165 - 170"),
-        G("170 - 175"),
-        H("175 - 180"),
-        I("180 - 185"),
-        J("185 - 190");
+    A("140 - 145"),
+    B("145 - 150"),
+    C("150 - 155"),
+    D("155 - 160"),
+    E("160 - 165"),
+    F("165 - 170"),
+    G("170 - 175"),
+    H("175 - 180"),
+    I("180 - 185"),
+    J("185 - 190");
 
     private final String tall;
 
@@ -37,8 +37,6 @@ public enum Tall {
     public String toJson() {
         return tall;
     }
-
-
 
 
 }

@@ -1,7 +1,6 @@
 package com.spark.member.dto.request;
 
 
-import com.spark.member.dto.MemberDto;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
@@ -14,13 +13,6 @@ public class DetailMemberInfoRequest {
 
     @NotBlank(message = "memId는 필수 입력값입니다.")
     private String memId; // 멤버 ID
-
-
-    public MemberDto toBuilder() {
-        return MemberDto.builder()
-                .memId(memId)
-                .build();
-    }
 
 
 }

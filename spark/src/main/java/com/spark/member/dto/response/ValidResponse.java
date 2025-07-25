@@ -3,8 +3,6 @@ package com.spark.member.dto.response;
 import lombok.Getter;
 import org.springframework.stereotype.Component;
 
-import com.spark.member.dto.MemberDto;
-
 import lombok.RequiredArgsConstructor;
 @Getter
 @Component

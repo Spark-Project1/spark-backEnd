@@ -1,15 +1,11 @@
 package com.spark.member.dto.request;
 
-import java.sql.Date;
-
-import com.spark.member.dto.MemberDto;
+import com.spark.member.model.Member;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -28,7 +24,7 @@ public class RecommendRequest {
     @NotBlank(message = "특징 정보가 비었습니다.")
     private String character;
 
-    public MemberDto toBuilder() {
+    public Member toDomain() {
 
         String[] interestArray = interest.split(",");
 
@@ -36,7 +32,7 @@ public class RecommendRequest {
 
         String[] characterArray = character.split(",");
 
-        return MemberDto.builder()
+        return Member.builder()
             .memId(memId)
             .gender(gender)
             .interestArray(interestArray)

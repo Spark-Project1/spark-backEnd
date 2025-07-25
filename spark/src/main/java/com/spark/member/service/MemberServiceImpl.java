@@ -33,22 +33,23 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public LoginResult login(LoginRequest m) {
 
-        // MeberDto로 빌드
-        MemberDto memberDto = m.toBuilder();
+        // Member로 빌드
+        Member member = m.toDomain();
 
         // 1. 로그인 정보 조회
-        MemberDto result = memberDao.login(memberDto).orElseThrow(() -> new CustomException("회원정보가 없습니다.", 400));
-
-        // DB에서 조회한 회원 정보 LoginResponse로 빌드
-        LoginResponse response = LoginResponse.toBuilder(result);
+        Member result = memberDao.login(member).orElseThrow(() -> new CustomException("회원정보가 없습니다.", 400));
 
         // 비밀번호 유효성 검사
-        memberValidtor.validationPassword(m.getMemPwd(), response.getMemPwd());
+        result.validationPassword(m.getMemPwd(), bcryptPwdEncoder);
+
+        // DB에서 조회한 회원 정보 LoginResponse로 빌드
+        LoginResponse response = LoginResponse.from(result);
 
         // 토큰 생성
         return tokenResponse.CreateToken(response);
 
     }
+
 
     @Override
     public ValidResponse loginUserInfo(TokenRequest authHeader) {
@@ -59,20 +60,21 @@ public class MemberServiceImpl implements MemberService {
         // 토큰에서 사용자 아이디 추출
         String memId = jwtProvider.getUserId(validateToken);
         // 사용자 아이디로 회원 정보 조회
-        MemberDto memberDto = memberDao.loginUserInfo(memId);
-        if (memberDto == null) {
+        Member member = memberDao.loginUserInfo(memId);
+
+        if (member == null) {
             throw new CustomException("해당 사용자가 존재하지 않습니다.", 403);
         }
 
         // 회원 정보로 LoginResponse 빌드
-        LoginResponse response = LoginResponse.toBuilder(memberDto);
+        LoginResponse response = LoginResponse.from(member);
 
         return ValidResponse.available(response);
 
     }
 
     @Override
-    public MemberDto findById(MemberDto memId) {
+    public Member findById(String memId) {
 
         // 사용자 아이디로 회원 정보 조회
         return memberDao.findById(memId)
@@ -111,10 +113,8 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public String smsCode(PhoneRequest phone) {
 
-        MemberDto memberDto = phone.toBuilder();
-
         // 가입된 사용자인지 먼저 검사
-        Optional<MemberDto> optional = Optional.ofNullable(findById(memberDto));
+        Optional<Member> optional = Optional.ofNullable(findById(phone.getPhone()));
 
         // 이미 가입된 사용자라면 예외 처리
         if (optional.isPresent()) {
@@ -127,13 +127,13 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public List<RecommendResponse> recommendList(RecommendRequest m) {
+    public List<RecommendResponse> recommendList(RecommendRequest recommendRequest) {
 
-        // MemberDto 빌드
-        MemberDto memberDto = m.toBuilder();
+        // Member로 빌드
+        Member member = recommendRequest.toDomain();
 
         // 추천 리스트 조회
-        List<MemberDto> list = memberDao.recommendList(memberDto);
+        List<Member> list = memberDao.recommendList(member);
 
         // 추천 리스트가 비어있거나 null인 경우 예외 처리
         if (list == null) {
@@ -144,25 +144,25 @@ public class MemberServiceImpl implements MemberService {
         Collections.shuffle(list);
 
         // 추천 리스트에서 최대 50개만 추출
-        List<MemberDto> result = list.subList(0, Math.min(50, list.size()));
+        List<Member> result = list.subList(0, Math.min(50, list.size()));
 
         // MemberDto를 RecommendResponse로 변환
         return result.stream()
-            .map(RecommendResponse::toBuilder)
+            .map(RecommendResponse::from)
             .toList();
     }
 
     @Override
     public int signUp(SignUpRequest m) {
 
-        // 비밀번호 암호화
-        m.setMemPwd(bcryptPwdEncoder.encode(m.getMemPwd()));
+        // Member로 빌드
+        Member member = m.toDomain();
 
-        // MemberDto 빌드
-        MemberDto memberDto = m.toBuilder();
+        // 비밀번호 암호화
+        member.encryptPassword(bcryptPwdEncoder);
 
         // 회원 가입 성공 체크
-        int result = memberDao.signUp(memberDto);
+        int result = memberDao.signUp(member);
         if (result == 0) {
             throw new CustomException("회원 가입에 실패하였습니다", 500);
         }
@@ -172,37 +172,30 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public LoginResponse insertInfo(InsertMemberInfoRequest m, MultipartFile uploadFile) {
+    public LoginResponse insertInfo(InsertMemberInfoRequest insertMemberInfo, MultipartFile uploadFile) {
 
-        // 로그인 사용자 아이디 추출
-        String userId = SecurityContextHolder.getContext().getAuthentication().getName();
+        Member member = insertMemberInfo.toDomain();
 
-        // 회원 프로필 사진 및 정보 빌드작업
-        MemberDto memberDto = memberPreprocessor.preprocess(m, uploadFile);
-        memberDto.setMemId(userId); // 현재 로그인한 회원 아이디
+        // 회원 프로필 사진 빌드작업
+        member.setProFile(uploadFile, fileUtil);
 
 
-        int result = memberDao.insertInfo(memberDto);
+        int result = memberDao.insertInfo(member);
         if (result == 0) {
             throw new CustomException("회원 정보 추가에 실패하였습니다.", 500);
         }
 
         // 회원 정보 조회
-        MemberDto memInfo = memberDao.login(memberDto).orElseThrow(() -> new CustomException("회원 정보 불러오기가 실패하였습니다.", 500));
+        Member memInfo = memberDao.login(member).orElseThrow(() -> new CustomException("회원 정보 불러오기가 실패하였습니다.", 500));
 
-        return LoginResponse.toBuilder(memInfo);
+        return LoginResponse.from(memInfo);
     }
-
-
 
 
     @Override
     public int recommendDelete(RecommendDeleteRequest recommendDelete) {
 
-        // Dto로 빌드
-        HiddenProfileDto hiddenProfileDto = recommendDelete.toBuilder();
-
-        int result = memberDao.recommendDelete(hiddenProfileDto);
+        int result = memberDao.recommendDelete(recommendDelete);
         if (result == 0) {
             throw new CustomException("추천 목록 삭제에 실패하였습니다.", 500);
         }
@@ -213,28 +206,23 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public int likeMember(LikeSendRequest likeSend) {
 
-        LikeDto likeDto = likeSend.toBuilder();
-
         // 좋아요 테이블에 이미 저장되어있는지 확인
-        LikeDto result = memberDao.likeMemberCheck(likeDto);
+        LikeDto result = memberDao.likeMemberCheck(likeSend);
 
         if (result != null) {
             throw new CustomException("이미 좋아요를 누른상태입니다.", 401);
         } else {
-            return memberDao.likeMember(likeDto);
+            return memberDao.likeMember(likeSend);
         }
 
     }
 
     @Override
-    public boolean duplicateCheck(DuplicateCheckRequest nickName) {
-
-        // Dto로 빌드
-        MemberDto memberDto = nickName.toBuilder();
+    public boolean duplicateCheck(DuplicateCheckRequest duplicateCheck) {
 
         try {
             // 닉네임 중복 검사
-            int result = memberDao.duplicateCheck(memberDto);
+            int result = memberDao.duplicateCheck(duplicateCheck);
             return result <= 0;
         } catch (Exception e) {
             throw new CustomException("닉네임 중복 검사에 실패했습니다.", 500);
@@ -243,19 +231,16 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public int interestMem(InterestMemberAddRequest interestMember) {
-
-        // Dto로 빌드
-        InterestMemDto interestMemDto = interestMember.toBuilder();
+    public int interestMem(InterestMemberAddRequest interestMemberAdd) {
 
         // 관심 회원 등록 전에 이미 등록된 회원인지 확인
-        int check = memberDao.interestMemCheck(interestMemDto);
+        int check = memberDao.interestMemCheck(interestMemberAdd);
         if (check > 0) {
             throw new CustomException("이미 관심이 등록된 회원입니다.", 409);
         }
 
         // 관심 회원 등록
-        int result = memberDao.interestMem(interestMemDto);
+        int result = memberDao.interestMem(interestMemberAdd);
         if (result == 0) {
             throw new CustomException("관심 회원 등록에 실패하였습니다.", 500);
         }
@@ -265,32 +250,25 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public DetailMemberInfoResponse detailInfo(DetailMemberInfoRequest detailMemberInfo) {
 
-        // Dto로 빌드
-        MemberDto memberDto = detailMemberInfo.toBuilder();
-
         // 상태방의 상세정보 조회
-        MemberDto result = memberDao.detailInfo(memberDto).orElseThrow(() -> new CustomException("해당 회원이 존재하지 않습니다.", 400));
+        Member result = memberDao.detailInfo(detailMemberInfo).orElseThrow(() -> new CustomException("해당 회원이 존재하지 않습니다.", 400));
 
         // 상세정보 응답 빌드
-        DetailMemberInfoResponse response = DetailMemberInfoResponse.toBuilder(result);
+        return DetailMemberInfoResponse.from(result);
 
-        return response;
     }
 
     @Override
     public List<LikeListResponse> likeList(LikeListRequest likeList) {
 
-        // Dto로 빌드
-        MemberDto memberDto = likeList.toBuilder();
-
         // 로그인한 사용자의 좋아요 목록 조회
-        List<MemberDto> result = memberDao.likeList(memberDto);
+        List<Member> result = memberDao.likeList(likeList);
         if (result == null) {
             throw new CustomException("좋아요 목록 조회에 실패하였습니다.", 500);
         }
 
         return result.stream()
-            .map(LikeListResponse::toBuilder)
+            .map(LikeListResponse::from)
             .toList();
 
     }
@@ -298,21 +276,18 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public List<InterestListResponse> interestList(InterestListRequest interestList) {
 
-        MemberDto memberDto = interestList.toBuilder();
 
-        List<MemberDto> result = memberDao.interestList(memberDto);
+        List<Member> result = memberDao.interestList(interestList);
 
         return result.stream()
-            .map(InterestListResponse::toBuilder)
+            .map(InterestListResponse::from)
             .toList();
     }
 
     @Override
     public Integer likeYes(LikeRequest likeInfo) {
 
-        LikeDto likeDto = likeInfo.toBuilder();
-
-        int result = memberDao.likeYes(likeDto); // 좋아요 수락 처리
+        int result = memberDao.likeYes(likeInfo); // 좋아요 수락 처리
 
         if (result > 0) {
             // 좋아요 수락 후 채팅방 생성 로직 추가
@@ -325,9 +300,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Integer likeNo(LikeRequest likeInfo) {
 
-        LikeDto likeDto = likeInfo.toBuilder();
-
-        int result = memberDao.likeNo(likeDto); // 좋아요 거절 처리
+        int result = memberDao.likeNo(likeInfo); // 좋아요 거절 처리
         if (result > 0) {
             return result;
         } else {

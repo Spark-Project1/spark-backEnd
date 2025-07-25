@@ -2,7 +2,7 @@ package com.spark.member.dto.response;
 
 import com.spark.member.common.Smock;
 import com.spark.member.common.Tall;
-import com.spark.member.dto.MemberDto;
+import com.spark.member.model.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -39,28 +39,28 @@ public class DetailMemberInfoResponse {
     private int age;
 
 
-    public static DetailMemberInfoResponse toBuilder(MemberDto memberDto) {
+    public static DetailMemberInfoResponse from(Member member) {
         return DetailMemberInfoResponse.builder()
-                .memId(memberDto.getMemId())
-                .memName(memberDto.getMemName())
-            .gender(memberDto.getGender())
-            .nickName(memberDto.getNickName())
-            .birthDate(memberDto.getBirthDate())
-            .location(memberDto.getLocation())
-            .memInfo(memberDto.getMemInfo())
-            .occupation(memberDto.getOccupation())
-            .education(memberDto.getEducation())
-            .mbti(memberDto.getMbti())
-            .tall(memberDto.getTall())
-            .religion(memberDto.getReligion())
-            .smock(memberDto.getSmock())
-            .status(memberDto.getStatus())
-            .registDate(memberDto.getRegistDate())
-            .interest(memberDto.getInterest())
-            .tendencies(memberDto.getTendencies())
-            .character(memberDto.getCharacter())
-            .proFile(memberDto.getProFile())
-            .age(memberDto.getAge())
+                .memId(member.getMemId())
+                .memName(member.getMemName())
+            .gender(member.getGender())
+            .nickName(member.getNickName())
+            .birthDate(member.getBirthDate())
+            .location(member.getLocation())
+            .memInfo(member.getMemInfo())
+            .occupation(member.getOccupation())
+            .education(member.getEducation())
+            .mbti(member.getMbti())
+            .tall(member.getTall())
+            .religion(member.getReligion())
+            .smock(member.getSmock())
+            .status(member.getStatus())
+            .registDate(member.getRegistDate())
+            .interest(member.getInterest())
+            .tendencies(member.getTendencies())
+            .character(member.getCharacter())
+            .proFile(member.getProFile())
+            .age(member.getAge())
             .build();
 
     }

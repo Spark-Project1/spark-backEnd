@@ -1,6 +1,6 @@
 package com.spark.member.dto.request;
 
-import com.spark.member.dto.MemberDto;
+import com.spark.member.model.Member;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
@@ -17,9 +17,8 @@ public class SignUpRequest {
     private String memPwd;
 
 
-
-    public MemberDto toBuilder() {
-        return MemberDto.builder()
+    public Member toDomain() {
+        return Member.builder()
             .memId(memId)
             .memPwd(memPwd)
             .build();
