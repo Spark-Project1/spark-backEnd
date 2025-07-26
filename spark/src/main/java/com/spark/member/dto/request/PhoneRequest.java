@@ -11,7 +11,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Builder
-@Setter
 public class PhoneRequest {
 
 	@NotBlank(message = "번호가 입력되지 않았습니다.")

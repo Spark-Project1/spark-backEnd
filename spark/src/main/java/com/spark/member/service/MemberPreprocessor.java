@@ -1,6 +1,7 @@
 package com.spark.member.service;
 
 import com.spark.base.config.CoolSmsConfig;
+import com.spark.member.model.Member;
 import org.springframework.stereotype.Component;
 
 import com.spark.base.exception.CustomException;
@@ -12,6 +13,9 @@ import net.nurigo.sdk.NurigoApp;
 import net.nurigo.sdk.message.exception.NurigoMessageNotReceivedException;
 import net.nurigo.sdk.message.model.Message;
 import net.nurigo.sdk.message.service.DefaultMessageService;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
@@ -21,6 +25,21 @@ public class MemberPreprocessor {
     private final FileUtil fileUtil;
     private final CoolSmsConfig coolSmsConfig;
 
+
+    public void uploadProfileImg(MultipartFile uploadFile, Member member) {
+
+        if (!uploadFile.isEmpty()) {
+            try {
+                Map<String, String> map = fileUtil.fileupload(uploadFile, "profile");
+                member.updateProFile(map.get("filePath") + "/" + map.get("filesystemName"));
+            } catch (Exception e) {
+                throw new CustomException("이미지 등록에 실패하였습니다", 500);
+            }
+        } else {
+            member.updateProFile(null);
+        }
+
+    }
 
 
 

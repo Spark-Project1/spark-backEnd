@@ -8,7 +8,6 @@ import lombok.*;
 @NoArgsConstructor
 @Getter
 @Builder
-@Setter
 public class LikeSendRequest {
 
 

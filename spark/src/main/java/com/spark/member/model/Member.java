@@ -7,6 +7,7 @@ import com.spark.member.common.Smock;
 import com.spark.member.common.Tall;
 import lombok.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Date;
@@ -16,7 +17,6 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@Setter
 @Builder
 public class Member {
 
@@ -49,7 +49,7 @@ public class Member {
 
 
     // 비밀번호 검증
-    public void validationPassword(String inputPassword, BCryptPasswordEncoder password) {
+    public void validationPassword(String inputPassword, PasswordEncoder password) {
 
         if (!password.matches(inputPassword, this.memPwd)) {
             throw new CustomException("올비르지 않은 비밀번호 입니다.", 401);
@@ -60,7 +60,7 @@ public class Member {
     }
 
     // 비밀번호 암호화
-    public void encryptPassword(BCryptPasswordEncoder password) {
+    public void encryptPassword(PasswordEncoder password) {
         if (this.memPwd != null && !this.memPwd.isEmpty()) {
             this.memPwd = password.encode(this.memPwd);
         } else {
@@ -70,18 +70,8 @@ public class Member {
 
 
     // 프로필 사진 경로 설정
-    public void setProFile(MultipartFile uploadFile, FileUtil fileUtil) {
-
-        if (!uploadFile.isEmpty()) {
-            try {
-                Map<String, String> map = fileUtil.fileupload(uploadFile, "profile");
-                this.proFile = map.get("filePath") + "/" + map.get("filesystemName");
-            } catch (Exception e) {
-                throw new CustomException("이미지 등록에 실패하였습니다", 500);
-            }
-        } else {
-            this.proFile = null;
-        }
+    public void updateProFile(String proFileURL) {
+        this.proFile = proFileURL;
     }
 
 

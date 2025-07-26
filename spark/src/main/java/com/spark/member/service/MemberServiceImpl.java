@@ -8,6 +8,7 @@ import com.spark.member.dto.response.*;
 import com.spark.member.model.Member;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,7 +25,7 @@ public class MemberServiceImpl implements MemberService {
 
     private final MemberDao memberDao;
     private final JwtProvider jwtProvider;
-    private final BCryptPasswordEncoder bcryptPwdEncoder;
+    private final PasswordEncoder passwordEncoder;
     private final FileUtil fileUtil;
     private final MemberValidator memberValidtor;
     private final TokenResponse tokenResponse;
@@ -40,7 +41,7 @@ public class MemberServiceImpl implements MemberService {
         Member result = memberDao.login(member).orElseThrow(() -> new CustomException("회원정보가 없습니다.", 400));
 
         // 비밀번호 유효성 검사
-        result.validationPassword(m.getMemPwd(), bcryptPwdEncoder);
+        result.validationPassword(m.getMemPwd(), passwordEncoder);
 
         // DB에서 조회한 회원 정보 LoginResponse로 빌드
         LoginResponse response = LoginResponse.from(result);
@@ -159,7 +160,7 @@ public class MemberServiceImpl implements MemberService {
         Member member = m.toDomain();
 
         // 비밀번호 암호화
-        member.encryptPassword(bcryptPwdEncoder);
+        member.encryptPassword(passwordEncoder);
 
         // 회원 가입 성공 체크
         int result = memberDao.signUp(member);
@@ -177,7 +178,7 @@ public class MemberServiceImpl implements MemberService {
         Member member = insertMemberInfo.toDomain();
 
         // 회원 프로필 사진 빌드작업
-        member.setProFile(uploadFile, fileUtil);
+
 
 
         int result = memberDao.insertInfo(member);
