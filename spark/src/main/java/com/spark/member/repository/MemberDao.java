@@ -20,7 +20,7 @@ public class MemberDao {
     private final MemberMapper memberMapper;
 
 
-    public Optional<Member> login(Member m) {
+    public Optional<Member> login(String m) {
         return Optional.ofNullable(memberMapper.loginMember(m));
     }
 

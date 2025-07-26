@@ -55,9 +55,11 @@ public class InsertMemberInfoRequest {
     public Member toDomain() {
 
         String userId = SecurityContextHolder.getContext().getAuthentication().getName();
-
+        // "20000101" 형식의 생일 문자열을 LocalDate로 변환하여 2000-01-01 형태로 변환
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
         LocalDate localDate = LocalDate.parse(birthDate, formatter);
+
+        // 현재 연도와 생년을 이용하여 나이 계산
         int currentYear = Year.now().getValue();
         int birthYear = localDate.getYear();
         int calAge = currentYear - birthYear;

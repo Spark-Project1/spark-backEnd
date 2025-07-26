@@ -12,7 +12,7 @@ import com.spark.member.dto.LikeDto;
 @Mapper
 public interface MemberMapper {
 
-    Member loginMember(Member m);
+    Member loginMember(String m);
 
     Member loginUserInfo(String userId);
 

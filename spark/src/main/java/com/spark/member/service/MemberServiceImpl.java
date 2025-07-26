@@ -26,7 +26,6 @@ public class MemberServiceImpl implements MemberService {
     private final MemberDao memberDao;
     private final JwtProvider jwtProvider;
     private final PasswordEncoder passwordEncoder;
-    private final FileUtil fileUtil;
     private final MemberValidator memberValidtor;
     private final TokenResponse tokenResponse;
     private final MemberPreprocessor memberPreprocessor;
@@ -34,11 +33,8 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public LoginResult login(LoginRequest m) {
 
-        // Member로 빌드
-        Member member = m.toDomain();
-
         // 1. 로그인 정보 조회
-        Member result = memberDao.login(member).orElseThrow(() -> new CustomException("회원정보가 없습니다.", 400));
+        Member result = memberDao.login(m.getMemId()).orElseThrow(() -> new CustomException("회원정보가 없습니다.", 400));
 
         // 비밀번호 유효성 검사
         result.validationPassword(m.getMemPwd(), passwordEncoder);
@@ -177,17 +173,13 @@ public class MemberServiceImpl implements MemberService {
 
         Member member = insertMemberInfo.toDomain();
 
-        // 회원 프로필 사진 빌드작업
-
-
-
         int result = memberDao.insertInfo(member);
         if (result == 0) {
             throw new CustomException("회원 정보 추가에 실패하였습니다.", 500);
         }
 
         // 회원 정보 조회
-        Member memInfo = memberDao.login(member).orElseThrow(() -> new CustomException("회원 정보 불러오기가 실패하였습니다.", 500));
+        Member memInfo = memberDao.login(member.getMemId()).orElseThrow(() -> new CustomException("회원 정보 불러오기가 실패하였습니다.", 500));
 
         return LoginResponse.from(memInfo);
     }
