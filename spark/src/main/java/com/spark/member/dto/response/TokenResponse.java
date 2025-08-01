@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.spark.member.dto.*;
+import com.spark.member.model.Member;
 import org.springframework.stereotype.Component;
 
 import com.spark.base.exception.CustomException;
@@ -21,12 +22,12 @@ public class TokenResponse {
 	private final MemberDao memberDao;
 	
 	
-	public LoginResult CreateToken(Member m) {
+	public LoginResult CreateToken(LoginResponse response) {
 		
-    	String accessToken = jwtProvider.createToken(m.getMemId()); // access 토큰 발급
-    	String refreshToken = jwtProvider.createRefreshToken(m.getMemId());  // refresh 토큰 발급
+    	String accessToken = jwtProvider.createToken(response.getMemId()); // access 토큰 발급
+    	String refreshToken = jwtProvider.createRefreshToken(response.getMemId());  // refresh 토큰 발급
     	Map<String,Object> map = new HashMap<>();
-    	map.put("memId", m.getMemId());
+    	map.put("memId", response.getMemId());
     	map.put("refreshToken", refreshToken);
     	int result = memberDao.insertRefreshToken(map); // db에 refreshtoken 저장
     	if(result == 0) {
@@ -41,32 +42,9 @@ public class TokenResponse {
     	refreshCookie.setPath("/"); // 어디에 쿠키를 쓸지 경로 설정
     	refreshCookie.setSecure(false); // https 환경에서만 사용가능 현재는 false로 막아둔상태 ssl적용x 
     	refreshCookie.setMaxAge(60 * 60 * 24 * 7); // 7일
-    	m.setMemPwd(null);
+    	response.setMemPwd(null); // 비밀번호는 클라이언트에 보내지 않음
 
-        MemberDto memberDto = MemberDto.builder()
-            .memId(m.getMemId())
-            .memName(m.getMemName())
-            .gender(m.getGender())
-            .nickName(m.getNickName())
-            .birthDate(m.getBirthDate())
-            .location(m.getLocation())
-            .memInfo(m.getMemInfo())
-            .occupation(m.getOccupation())
-            .education(m.getEducation())
-            .mbti(m.getMbti())
-            .tall(m.getTall())
-            .religion(m.getReligion())
-            .smock(m.getSmock())
-            .status(m.getStatus())
-            .registDate(m.getRegistDate())
-            .cookie(m.getCookie())
-            .interest(m.getInterest())
-            .tendencies(m.getTendencies())
-            .character(m.getCharacter())
-            .proFile(m.getProFile())
-            .build();
-    	
-    	return new LoginResult(token, memberDto, refreshCookie);
+    	return new LoginResult(token, response, refreshCookie);
 
 	}
 	
@@ -77,8 +55,7 @@ public class TokenResponse {
 		String userId = jwtProvider.getUserId(refreshToken);
         String accessToken = jwtProvider.createToken(userId);
         String newRefreshToken = jwtProvider.createRefreshToken(userId);
-		
-		
+
         Map<String, Object> map = new HashMap<>();
         map.put("memId", userId);
         map.put("refreshToken", newRefreshToken);

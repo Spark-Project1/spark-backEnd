@@ -13,17 +13,6 @@ import lombok.RequiredArgsConstructor;
 public class MemberValidator {
 
     private final JwtProvider jwtProvider;
-    private final BCryptPasswordEncoder bcryptPwdEncoder;
-
-
-    public void validationPassword(String inputPassword, String password) {
-
-        if (!bcryptPwdEncoder.matches(inputPassword, password)) {
-            throw new CustomException("올비르지 않은 비밀번호 입니다.", 401);
-        }
-
-    }
-
 
     public void validToken(String validateToken) {
 

@@ -6,6 +6,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -29,7 +30,8 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable()) // 세션을 사용하지않기때문에 csrf를 비활성화
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션을 사용하지 않겠다는 설정
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/login", "/api/validate", "/api/refresh", "/api/logout", "/api/sms", "/api/signup", "/profile/**").permitAll() // 로그인/회원가입 허용
+                .requestMatchers("/api/login", "/api/validate", "/api/refresh", "/api/logout", "/api/sms", "/api/signup", "/profile/**"
+                                         , "/swagger-ui/**","/v3/api-docs/**").permitAll() // 로그인/회원가입 허용
                 .anyRequest().authenticated() // 그 외의 api는 인증이 필요
             )
             .addFilterBefore(
@@ -41,7 +43,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    BCryptPasswordEncoder bcryptPwdEncoder() {
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 

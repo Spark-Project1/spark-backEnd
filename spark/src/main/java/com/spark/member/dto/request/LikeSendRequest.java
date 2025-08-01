@@ -1,5 +1,6 @@
 package com.spark.member.dto.request;
 
+import com.spark.member.dto.LikeDto;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
@@ -7,7 +8,6 @@ import lombok.*;
 @NoArgsConstructor
 @Getter
 @Builder
-@Setter
 public class LikeSendRequest {
 
 

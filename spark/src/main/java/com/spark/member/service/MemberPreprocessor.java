@@ -1,19 +1,11 @@
 package com.spark.member.service;
 
-import java.sql.Date;
-import java.time.LocalDate;
-import java.time.Year;
-import java.time.format.DateTimeFormatter;
-import java.util.Map;
-
-import com.spark.member.dto.Member;
-import com.spark.member.dto.request.InsertMemberInfoRequest;
+import com.spark.base.config.CoolSmsConfig;
+import com.spark.member.model.Member;
 import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.spark.base.exception.CustomException;
 import com.spark.base.util.FileUtil;
-import com.spark.member.dto.MemberDto;
 import com.spark.member.dto.request.PhoneRequest;
 
 import lombok.RequiredArgsConstructor;
@@ -21,6 +13,9 @@ import net.nurigo.sdk.NurigoApp;
 import net.nurigo.sdk.message.exception.NurigoMessageNotReceivedException;
 import net.nurigo.sdk.message.model.Message;
 import net.nurigo.sdk.message.service.DefaultMessageService;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
@@ -28,127 +23,24 @@ public class MemberPreprocessor {
 
 
     private final FileUtil fileUtil;
+    private final CoolSmsConfig coolSmsConfig;
 
 
-    public Member preprocess(InsertMemberInfoRequest m, MultipartFile uploadFile) {
-
-        Member member = Member.builder()
-            .nickName(m.getNickName())
-            .location(m.getLocation())
-            .gender(m.getGender())
-            .occupation(m.getOccupation())
-            .education(m.getEducation())
-            .mbti(m.getMbti())
-            .religion(m.getReligion())
-            .tall(m.getTall())
-            .memInfo(m.getMemInfo())
-            .smock(m.getSmock())
-            .build();
-
-        try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-            LocalDate localDate = LocalDate.parse(m.getBirthDate(), formatter);
-            member.setBirthDate(Date.valueOf(localDate));
-        } catch (Exception e) {
-            throw new CustomException("생년월일 형식이 올바르지 않습니다.", 400);
-        }
-
-        member.setInterest(String.join(",", m.getInterest()));
-        member.setCharacter(String.join(",", m.getCharacter()));
-        member.setTendencies(String.join(",", m.getTendencies()));
-
+    public void uploadProfileImg(MultipartFile uploadFile, Member member) {
 
         if (!uploadFile.isEmpty()) {
             try {
                 Map<String, String> map = fileUtil.fileupload(uploadFile, "profile");
-                String filePath = map.get("filePath") + "/" + map.get("filesystemName");
-                member.setProFile(filePath);
+                member.updateProFile(map.get("filePath") + "/" + map.get("filesystemName"));
             } catch (Exception e) {
                 throw new CustomException("이미지 등록에 실패하였습니다", 500);
             }
         } else {
-            member.setProFile(null);
-        }
-
-        return member;
-
-    }
-
-
-    public void memberTallDB(Member m) {
-
-        if (m.getTall().equals("140 - 145")) {
-            m.setTall("A");
-        } else if (m.getTall().equals("145 - 150")) {
-            m.setTall("B");
-        } else if (m.getTall().equals("150 - 155")) {
-            m.setTall("C");
-        } else if (m.getTall().equals("155 - 160")) {
-            m.setTall("D");
-        } else if (m.getTall().equals("160 - 165")) {
-            m.setTall("E");
-        } else if (m.getTall().equals("165 - 170")) {
-            m.setTall("F");
-        } else if (m.getTall().equals("170 - 175")) {
-            m.setTall("G");
-        } else if (m.getTall().equals("175 - 180")) {
-            m.setTall("H");
-        } else if (m.getTall().equals("180 - 185")) {
-            m.setTall("I");
-        } else if (m.getTall().equals("185 - 190")) {
-            m.setTall("J");
-        }
-
-
-    }
-
-
-    public void memberSmockDB(Member m) {
-
-        if (m.getSmock().equals("자주")) {
-            m.setSmock("Y");
-        } else if (m.getSmock().equals("가끔")) {
-            m.setSmock("A");
-        } else if (m.getSmock().equals("안함")) {
-            m.setSmock("N");
+            member.updateProFile(null);
         }
 
     }
 
-
-    public void memberTallFront(MemberDto m) {
-        if (m.getTall().equals("A")) {
-            m.setTall("140 - 145");
-        } else if (m.getTall().equals("B")) {
-            m.setTall("145 - 150");
-        } else if (m.getTall().equals("C")) {
-            m.setTall("150 - 155");
-        } else if (m.getTall().equals("D")) {
-            m.setTall("155 - 160");
-        } else if (m.getTall().equals("E")) {
-            m.setTall("160 - 165");
-        } else if (m.getTall().equals("F")) {
-            m.setTall("165 - 170");
-        } else if (m.getTall().equals("G")) {
-            m.setTall("170 - 175");
-        } else if (m.getTall().equals("H")) {
-            m.setTall("175 - 180");
-        } else if (m.getTall().equals("I")) {
-            m.setTall("180 - 185");
-        } else if (m.getTall().equals("J")) {
-            m.setTall("185 - 190");
-        }
-    }
-
-    public void memberSmockFront(MemberDto m) {
-        if (m.getSmock().equals("Y")) {
-            m.setSmock("자주");
-        } else if (m.getSmock().equals("A")) {
-            m.setSmock("가끔");
-        } else if (m.getSmock().equals("N")) {
-            m.setSmock("안함");
-        }
-    }
 
 
     public String coolSms(PhoneRequest phone) {
@@ -166,7 +58,7 @@ public class MemberPreprocessor {
         }
         String code = sb.toString();
 
-        DefaultMessageService messageService = NurigoApp.INSTANCE.initialize("NCSERQEIBVBBZJKR", "NPEW4QVQX3KP5A5V7EQLJKJ8M7PHWOWO", "https://api.coolsms.co.kr");
+        DefaultMessageService messageService = NurigoApp.INSTANCE.initialize(coolSmsConfig.getApiKey(), coolSmsConfig.getSecretKey(), "https://api.coolsms.co.kr");
 
         Message message = new Message();
         message.setFrom("01055106509");
@@ -188,12 +80,7 @@ public class MemberPreprocessor {
     }
 
 
-    public void memberAge(Member m){
-        int currentYear = Year.now().getValue();
-        int birthYear = m.getBirthDate().toLocalDate().getYear();
-        int age = currentYear - birthYear;
-        m.setAge(age);
-    }
+
 
 
 }

@@ -1,14 +1,12 @@
 package com.spark.member.service;
 
 import java.util.List;
-import java.util.Map;
 
 import com.spark.member.dto.*;
 import com.spark.member.dto.request.*;
-import com.spark.member.dto.response.InterestListResponse;
+import com.spark.member.dto.response.*;
+import com.spark.member.model.Member;
 import org.springframework.web.multipart.MultipartFile;
-
-import com.spark.member.dto.response.ValidResponse;
 
 
 public interface MemberService {
@@ -29,24 +27,28 @@ public interface MemberService {
 	// 문자로 인증번호 발송
 	String smsCode(PhoneRequest phone);
 
-	List<MemberDto> recommendList(RecommendRequest m);
+	List<RecommendResponse> recommendList(RecommendRequest m);
 
 	int signUp(SignUpRequest m);
 
-	MemberDto insertInfo(InsertMemberInfoRequest m, MultipartFile uploadFile);
+    LoginResponse insertInfo(InsertMemberInfoRequest m, MultipartFile uploadFile);
 
 	int recommendDelete(RecommendDeleteRequest recommendDelete);
 
 	int likeMember(LikeSendRequest likeSend);
 
-	boolean duplicateCheck(String nickName);
+	boolean duplicateCheck(DuplicateCheckRequest nickName);
 
 	int interestMem(InterestMemberAddRequest interestMember);
 
-	MemberDto detailInfo(Member memId);
+    DetailMemberInfoResponse detailInfo(DetailMemberInfoRequest detailMemberInfo);
 
 
-    List<MemberDto> likeList(likeListRequest likeList);
+    List<LikeListResponse> likeList(LikeListRequest likeList);
 
     List<InterestListResponse> interestList(InterestListRequest interestList);
+
+    Integer likeYes(LikeRequest likeInfo);
+
+    Integer likeNo(LikeRequest likeInfo);
 }

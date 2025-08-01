@@ -2,19 +2,17 @@ package com.spark.member.repository;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
-import com.spark.member.dto.Member;
+import com.spark.member.model.Member;
 import com.spark.member.dto.request.*;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.spark.member.dto.LikeDto;
-import com.spark.member.dto.MemberDto;
 
 @Mapper
 public interface MemberMapper {
 
-    Member loginMember(LoginRequest m);
+    Member loginMember(String m);
 
     Member loginUserInfo(String userId);
 
@@ -28,28 +26,32 @@ public interface MemberMapper {
 
     int deleteToken(String userId);
 
-    List<Member> recommendList(Map<String, Object> map);
+    List<Member> recommendList(Member member);
 
-    int signUp(SignUpRequest m);
+    int signUp(Member member);
 
-    int insertInfo(Member m);
+    int insertInfo(Member member);
 
     int recommendDelete(RecommendDeleteRequest recommendDelete);
 
-    LikeDto likeMemberCheck(LikeDto likeData);
+    LikeDto likeMemberCheck(LikeSendRequest likeSendRequest);
 
-    int likeMember(LikeSendRequest likeSend);
+    int likeMember(LikeSendRequest likeSendRequest);
 
-    int duplicateCheck(String nickName);
+    int duplicateCheck(DuplicateCheckRequest duplicateCheckRequest);
 
-    int interestMemCheck(InterestMemberAddRequest interestMember);
+    int interestMemCheck(InterestMemberAddRequest interestMemberAddRequest);
 
-    int interestMem(InterestMemberAddRequest interestMember);
+    int interestMem(InterestMemberAddRequest interestMemberAddRequest);
 
-    Member detailInfo(String memId);
+    Member detailInfo(DetailMemberInfoRequest detailMemberInfo);
 
-    List<Member> likeList(Member likeListData);
+    List<Member> likeList(LikeListRequest likeList);
 
-    public List<Member> interestList(Member interestListData);
+    List<Member> interestList(InterestListRequest interestList);
+
+    int likeYes(LikeRequest likeInfo);
+
+    int likeNo(LikeRequest likeInfo);
 
 }

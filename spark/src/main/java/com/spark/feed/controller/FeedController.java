@@ -3,6 +3,7 @@ package com.spark.feed.controller;
 import java.util.List;
 import java.util.Map;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -20,6 +21,7 @@ import com.spark.feed.service.FeedService;
 
 import lombok.RequiredArgsConstructor;
 
+@Tag(name = "Feed API",description = "피드 관련 api")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
