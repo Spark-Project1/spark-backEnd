@@ -16,7 +16,9 @@ public class MemberValidator {
 
     public void validToken(String validateToken) {
 
-        if (!jwtProvider.validateToken(validateToken)) { // 유효성 검사 진행
+        String token = validateToken.replace("Bearer ", "");
+
+        if (!jwtProvider.validateToken(token)) { // 유효성 검사 진행
             throw new CustomException("유효하지 않은 토큰입니다.", 401);
         }
 

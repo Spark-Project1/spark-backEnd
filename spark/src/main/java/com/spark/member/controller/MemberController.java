@@ -2,12 +2,12 @@ package com.spark.member.controller;
 
 import java.util.List;
 
+import com.spark.member.config.InjectMember;
 import com.spark.member.dto.*;
 import com.spark.member.dto.request.*;
 import com.spark.member.dto.response.*;
 import com.spark.member.model.Member;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -57,8 +57,8 @@ public class MemberController {
         summary = "JWT 토큰 유효성 검사",
         description = "클라이언트의 토큰을 조회해 토큰정보 일치시 해당 회원정보 반환")
     @GetMapping("/validate")
-    public ResponseEntity<ValidResponse> validate(@RequestHeader("Authorization") @Valid TokenRequest authHeader) {
-        return ResponseEntity.ok(memberService.loginUserInfo(authHeader));
+    public ResponseEntity<ValidResponse> validate(@InjectMember Member member) {
+        return ResponseEntity.ok(ValidResponse.available(LoginResponse.from(member)));
     }
 
 
@@ -86,7 +86,7 @@ public class MemberController {
     @Operation(summary = "회원 추천리스트 조회",
         description = "메인화면 진입시 클라이언트가 입력한 성격,취미 등에 맞춰 공통 관심사에 해당하는 회원목록 조회")
     @PostMapping("/recommend")
-    public ResponseEntity<List<RecommendResponse>> recommendList(@RequestBody @Valid RecommendRequest m) {
+    public ResponseEntity<List<RecommendResponse>> recommendList(@RequestBody @Valid RecommendRequest m, @InjectMember Member member) {
         return ResponseEntity.ok(memberService.recommendList(m));
     }
 
@@ -103,8 +103,10 @@ public class MemberController {
     @Operation(summary = "회원 정보입력",
         description = "본인의 나이,성격,취미 등 인적사항을 작성")
     @PatchMapping("/insertInfo")
-    public ResponseEntity<LoginResponse> insertInfo(@ModelAttribute @Valid InsertMemberInfoRequest m, @RequestParam("uploadFile") MultipartFile uploadFile) {
-        return ResponseEntity.ok(memberService.insertInfo(m, uploadFile));
+    public ResponseEntity<LoginResponse> insertInfo(@ModelAttribute @Valid UpdateMemberInfoRequest m
+                                                  , @RequestParam("uploadFile") MultipartFile uploadFile
+                                                  , @InjectMember Member member) {
+        return ResponseEntity.ok(memberService.insertInfo(m, uploadFile,member));
     }
 
     // 추천목록 삭제

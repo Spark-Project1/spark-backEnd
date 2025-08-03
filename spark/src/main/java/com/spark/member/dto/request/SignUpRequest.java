@@ -16,12 +16,6 @@ public class SignUpRequest {
     private String memPwd;
 
 
-    public Member toDomain() {
-        return Member.builder()
-            .memId(memId)
-            .memPwd(memPwd)
-            .build();
-    }
 
 
 }

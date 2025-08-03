@@ -4,6 +4,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import com.spark.member.common.Character;
+import com.spark.member.common.Interest;
+import com.spark.member.common.Tendencies;
+import com.spark.member.dto.MemberAttributeDto;
 import com.spark.member.model.Member;
 import com.spark.member.dto.request.*;
 import org.springframework.stereotype.Repository;
@@ -36,7 +40,7 @@ public class MemberDao {
         return memberMapper.insertRefreshToken(map);
     }
 
-    public int checkRefreshToken(Map<String, Object> map) {
+    public int checkRefreshToken(Map<String,Object> map) {
         return memberMapper.checkRefreshToken(map);
     }
 
@@ -48,8 +52,8 @@ public class MemberDao {
         return memberMapper.deleteToken(userId);
     }
 
-    public List<Member> recommendList(Member member) {
-        return memberMapper.recommendList(member);
+    public List<Member> recommendList(RecommendRequest recommendRequest) {
+        return memberMapper.recommendList(recommendRequest);
     }
 
     public int signUp(Member member) {
@@ -103,5 +107,9 @@ public class MemberDao {
 
     public int likeNo(LikeRequest likeInfo) {
         return memberMapper.likeNo(likeInfo);
+    }
+
+    public int insertMemberAttribute(MemberAttributeDto dto) {
+        return memberMapper.insertMemberAttribute(dto);
     }
 }

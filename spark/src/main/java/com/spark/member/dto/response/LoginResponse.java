@@ -41,7 +41,6 @@ public class LoginResponse {
     public static LoginResponse from(Member member) {
         return LoginResponse.builder()
             .memId(member.getMemId())
-            .memPwd(member.getMemPwd())
             .memName(member.getMemName())
             .gender(member.getGender())
             .nickName(member.getNickName())

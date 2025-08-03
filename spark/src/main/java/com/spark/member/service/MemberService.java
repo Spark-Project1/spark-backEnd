@@ -14,9 +14,6 @@ public interface MemberService {
 	// 멤버 로그인
 	LoginResult login(LoginRequest m);
 
-	// 멤버 목록 불러오기
-	ValidResponse loginUserInfo(TokenRequest authHeader);
-
 	// 아이디로 유저 정보 찾기
     Member findById(String userId);
 
@@ -31,7 +28,7 @@ public interface MemberService {
 
 	int signUp(SignUpRequest m);
 
-    LoginResponse insertInfo(InsertMemberInfoRequest m, MultipartFile uploadFile);
+    LoginResponse insertInfo(UpdateMemberInfoRequest m, MultipartFile uploadFile, Member member);
 
 	int recommendDelete(RecommendDeleteRequest recommendDelete);
 

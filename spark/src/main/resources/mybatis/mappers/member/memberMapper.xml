@@ -41,7 +41,7 @@
         <result column="hidden_target" property="hiddenTarget"/>
     </resultMap>
 
-    <resultMap id ="interestedMemberResultMap" type="com.spark.member.dto.InterestMemDto">
+    <resultMap id="interestedMemberResultMap" type="com.spark.member.dto.InterestMemDto">
         <result column="im_user" property="imUser"/>
         <result column="im_target" property="imTarget"/>
     </resultMap>
@@ -49,33 +49,33 @@
     <!-- 로그인 -->
     <select id="loginMember" resultMap="memberResultMap">
 
-        select
-        mem_id
-        , mem_pwd
-        , MEM_NAME
-        , MEM_GENDER
-        , MEM_NICKNAME
-        , MEM_BIRTH
-        , MEM_LOCATION
-        , MEM_INFO
-        , MEM_OCCUPATION
-        , MEM_EDUCATION
-        , MEM_MBTI
-        , MEM_TALL
-        , MEM_RELIGION
-        , MEM_SMOCK
-        , MEM_STATUS
-        , MEM_REGIST_DATE
-        , MEM_COOKIE
-        , MEM_INTEREST
-        , MEM_TENDENCIES
-        , MEM_CHARACTER
-        , MEM_PROFILE
-        , MEM_AGE
-        from
-        member
-        where
-        mem_id = #{memId}
+        SELECT m.mem_id
+             , m.mem_pwd
+             , m.MEM_NAME
+             , m.MEM_GENDER
+             , m.MEM_NICKNAME
+             , m.MEM_BIRTH
+             , m.MEM_LOCATION
+             , m.MEM_INFO
+             , m.MEM_OCCUPATION
+             , m.MEM_EDUCATION
+             , m.MEM_MBTI
+             , m.MEM_TALL
+             , m.MEM_RELIGION
+             , m.MEM_SMOCK
+             , m.MEM_STATUS
+             , m.MEM_REGIST_DATE
+             , m.MEM_COOKIE
+             , GROUP_CONCAT(CASE WHEN ma.MA_TYPE = 'INTEREST' THEN ac.AC_Name END)   AS mem_interest
+             , GROUP_CONCAT(CASE WHEN ma.MA_TYPE = 'TENDENCIES' THEN ac.AC_Name END) AS mem_tendencies
+             , GROUP_CONCAT(CASE WHEN ma.MA_TYPE = 'CHARACTER' THEN ac.AC_Name END)  AS mem_character
+             , m.MEM_PROFILE
+             , m.MEM_AGE
+        FROM `member` m
+                 left join member_attribute ma on (m.mem_id = ma.mem_id)
+                 left join attribute_code ac on (ma.ac_no = ac.ac_no)
+        where m.mem_id = #{memId}
+        group by m.mem_id
 
 
     </select>
@@ -83,103 +83,93 @@
     <!-- 유효성 검사후 멤버값 리턴 -->
     <select id="loginUserInfo" resultMap="memberResultMap">
 
-        select
-        mem_id
-        , mem_pwd
-        , MEM_NAME
-        , MEM_GENDER
-        , MEM_NICKNAME
-        , MEM_BIRTH
-        , MEM_LOCATION
-        , MEM_INFO
-        , MEM_OCCUPATION
-        , MEM_EDUCATION
-        , MEM_MBTI
-        , MEM_TALL
-        , MEM_RELIGION
-        , MEM_SMOCK
-        , MEM_STATUS
-        , MEM_REGIST_DATE
-        , MEM_COOKIE
-        , MEM_INTEREST
-        , MEM_TENDENCIES
-        , MEM_CHARACTER
-        , MEM_PROFILE
-        , MEM_AGE
-        from
-        member
-        where
-        mem_id = #{memId}
+        SELECT m.mem_id
+             , m.mem_pwd
+             , m.MEM_NAME
+             , m.MEM_GENDER
+             , m.MEM_NICKNAME
+             , m.MEM_BIRTH
+             , m.MEM_LOCATION
+             , m.MEM_INFO
+             , m.MEM_OCCUPATION
+             , m.MEM_EDUCATION
+             , m.MEM_MBTI
+             , m.MEM_TALL
+             , m.MEM_RELIGION
+             , m.MEM_SMOCK
+             , m.MEM_STATUS
+             , m.MEM_REGIST_DATE
+             , m.MEM_COOKIE
+             , GROUP_CONCAT(CASE WHEN ma.MA_TYPE = 'INTEREST' THEN ac.AC_Name END)   AS mem_interest
+             , GROUP_CONCAT(CASE WHEN ma.MA_TYPE = 'TENDENCIES' THEN ac.AC_Name END) AS mem_tendencies
+             , GROUP_CONCAT(CASE WHEN ma.MA_TYPE = 'CHARACTER' THEN ac.AC_Name END)  AS mem_character
+             , m.MEM_PROFILE
+             , m.MEM_AGE
+        FROM `member` m
+                 left join member_attribute ma on (m.mem_id = ma.mem_id)
+                 left join attribute_code ac on (ma.ac_no = ac.ac_no)
+        where m.mem_id = #{memId}
+        group by m.mem_id
 
 
     </select>
 
     <!-- 필터에서 유효형검사 -->
     <select id="findById" resultMap="memberResultMap">
-        SELECT MEM_ID
-        , MEM_PWD
-        , MEM_NAME
-        , MEM_GENDER
-        , MEM_NICKNAME
-        , MEM_BIRTH
-        , MEM_LOCATION
-        , MEM_INFO
-        , MEM_OCCUPATION
-        , MEM_EDUCATION
-        , MEM_MBTI
-        , MEM_TALL
-        , MEM_RELIGION
-        , MEM_SMOCK
-        , MEM_STATUS
-        , MEM_REGIST_DATE
-        , MEM_COOKIE
-        , MEM_INTEREST
-        , MEM_TENDENCIES
-        , MEM_CHARACTER
-        , MEM_PROFILE
-        , MEM_AGE
-        FROM
-        MEMBER
-        WHERE
-        MEM_ID = #{memId};
+        SELECT m.mem_id
+             , m.mem_pwd
+             , m.MEM_NAME
+             , m.MEM_GENDER
+             , m.MEM_NICKNAME
+             , m.MEM_BIRTH
+             , m.MEM_LOCATION
+             , m.MEM_INFO
+             , m.MEM_OCCUPATION
+             , m.MEM_EDUCATION
+             , m.MEM_MBTI
+             , m.MEM_TALL
+             , m.MEM_RELIGION
+             , m.MEM_SMOCK
+             , m.MEM_STATUS
+             , m.MEM_REGIST_DATE
+             , m.MEM_COOKIE
+             , GROUP_CONCAT(CASE WHEN ma.MA_TYPE = 'INTEREST' THEN ac.AC_Name END)   AS mem_interest
+             , GROUP_CONCAT(CASE WHEN ma.MA_TYPE = 'TENDENCIES' THEN ac.AC_Name END) AS mem_tendencies
+             , GROUP_CONCAT(CASE WHEN ma.MA_TYPE = 'CHARACTER' THEN ac.AC_Name END)  AS mem_character
+             , m.MEM_PROFILE
+             , m.MEM_AGE
+        FROM `member` m
+                 left join member_attribute ma on (m.mem_id = ma.mem_id)
+                 left join attribute_code ac on (ma.ac_no = ac.ac_no)
+        where m.mem_id = #{memId}
+        group by m.mem_id
     </select>
 
 
     <!-- 리프레시 토큰 db저장 -->
     <insert id="insertRefreshToken">
         INSERT
-        INTO
-        refresh_token
-        (
-        MEM_ID
-        , rt_info
-        )
-        VALUES
-        (
-        #{memId}
-        , #{refreshToken}
-        )
+        INTO refresh_token
+        ( MEM_ID
+        , rt_info)
+        VALUES ( #{memId}
+               , #{refreshToken})
     </insert>
 
 
     <!-- 리프레시 토큰 db에 있는지 확인 -->
     <select id="checkRefreshToken">
-        select
-        count(rt_info)
-        from
-        refresh_token
-        where
-        mem_id = #{memId}
+        select count(rt_info)
+        from refresh_token
+        where mem_id = #{memId}
     </select>
 
     <!-- 리프레시토큰 보유시 수정 -->
     <delete id="updateRefreshToken">
         update
-        refresh_token
-        set
-        rt_info = #{refreshToken}
-        where
-        mem_id = #{memId}
+            refresh_token
+        set rt_info = #{refreshToken}
+        where mem_id = #{memId}
     </delete>
 
 
@@ -194,19 +184,13 @@
     <!-- 회원가입 -->
     <insert id="signUp">
         insert
-        into
-        member
-        (
-        mem_id
+        into member
+        ( mem_id
         , mem_pwd
-        , mem_status
-        )
-        values
-        (
-        #{memId}
-        , #{memPwd}
-        , 'A'
-        )
+        , mem_status)
+        values ( #{memId}
+               , #{memPwd}
+               , 'A')
 
     </insert>
 
@@ -214,28 +198,23 @@
     <update id="insertInfo">
 
         update
-        member
-        set
-        MEM_NAME = #{memName}
-        , MEM_GENDER = #{gender}
-        , MEM_NICKNAME = #{nickName}
-        , MEM_BIRTH = #{birthDate}
-        , MEM_LOCATION = #{location}
-        , MEM_INFO = #{memInfo}
-        , MEM_OCCUPATION = #{occupation}
-        , MEM_EDUCATION = #{education}
-        , MEM_MBTI = #{mbti}
-        , MEM_TALL = #{tall}
-        , MEM_RELIGION = #{religion}
-        , MEM_SMOCK = #{smock}
-        , MEM_STATUS = 'Y'
-        , MEM_INTEREST = #{interest}
-        , MEM_TENDENCIES = #{tendencies}
-        , MEM_CHARACTER = #{character}
-        , MEM_PROFILE = #{proFile}
-        , MEM_AGE = #{age}
-        where
-        mem_id = #{memId}
+            member
+        set MEM_NAME       = #{memName}
+          , MEM_GENDER     = #{gender}
+          , MEM_NICKNAME   = #{nickName}
+          , MEM_BIRTH      = #{birthDate}
+          , MEM_LOCATION   = #{location}
+          , MEM_INFO       = #{memInfo}
+          , MEM_OCCUPATION = #{occupation}
+          , MEM_EDUCATION  = #{education}
+          , MEM_MBTI       = #{mbti}
+          , MEM_TALL       = #{tall}
+          , MEM_RELIGION   = #{religion}
+          , MEM_SMOCK      = #{smock}
+          , MEM_STATUS     = #{status}
+          , MEM_PROFILE    = #{proFile}
+          , MEM_AGE        = #{age}
+        where mem_id = #{memId}
     </update>
 
 
@@ -243,58 +222,71 @@
     <select id="recommendList" resultMap="memberResultMap">
         SELECT
         DISTINCT
-        mem_id
-        , mem_pwd
-        , MEM_NAME
-        , MEM_GENDER
-        , MEM_NICKNAME
-        , MEM_BIRTH
-        , MEM_LOCATION
-        , MEM_INFO
-        , MEM_OCCUPATION
-        , MEM_EDUCATION
-        , MEM_MBTI
-        , MEM_TALL
-        , MEM_RELIGION
-        , MEM_SMOCK
-        , MEM_STATUS
-        , MEM_REGIST_DATE
-        , MEM_COOKIE
-        , MEM_INTEREST
-        , MEM_TENDENCIES
-        , MEM_CHARACTER
-        , MEM_PROFILE
-        , MEM_AGE
-        FROM MEMBER
-        WHERE MEM_ID != #{memId}
-        AND MEM_ID NOT IN (
+        m.mem_id
+        , m.MEM_NAME
+        , m.MEM_GENDER
+        , m.MEM_NICKNAME
+        , m.MEM_BIRTH
+        , m.MEM_LOCATION
+        , m.MEM_INFO
+        , m.MEM_OCCUPATION
+        , m.MEM_EDUCATION
+        , m.MEM_MBTI
+        , m.MEM_TALL
+        , m.MEM_RELIGION
+        , m.MEM_SMOCK
+        , m.MEM_STATUS
+        , m.MEM_REGIST_DATE
+        , m.MEM_COOKIE
+        , m.MEM_PROFILE
+        , m.MEM_AGE
+        FROM MEMBER m
+
+        JOIN MEMBER_ATTRIBUTE ma_inter ON m.MEM_ID = ma_inter.MEM_ID AND ma_inter.MA_TYPE = 'INTEREST'
+
+        JOIN MEMBER_ATTRIBUTE ma_tend ON m.MEM_ID = ma_tend.MEM_ID AND ma_tend.MA_TYPE = 'TENDENCIES'
+
+        JOIN MEMBER_ATTRIBUTE ma_char ON m.MEM_ID = ma_char.MEM_ID AND ma_char.MA_TYPE = 'CHARACTER'
+
+        WHERE m.MEM_ID != #{memId}
+        AND m.MEM_ID NOT IN (
         SELECT HIDDEN_TARGET
         FROM HIDDEN_PROFILE
         WHERE HIDDEN_ID = #{memId}
         )
 
         AND (
-        <foreach collection="interestArray" item="item" separator=" OR ">
-            mem_interest LIKE CONCAT('%', #{item}, '%')
-        </foreach>
-        OR
-        <foreach collection="tendenciesArray" item="item" separator=" OR ">
-            mem_tendencies LIKE CONCAT('%', #{item}, '%')
-        </foreach>
-        OR
-        <foreach collection="characterArray" item="item" separator=" OR ">
-            mem_character LIKE CONCAT('%', #{item}, '%')
-        </foreach>
+        <if test="interestArray != null and interestArray.size() > 0">
+            ma_inter.AC_NO IN
+            <foreach collection="interestArray" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="tendenciesArray != null and tendenciesArray.size() > 0">
+            <if test="interestArray != null and interestArray.size() > 0">OR</if>
+            ma_tend.AC_NO IN
+            <foreach collection="tendenciesArray" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="characterArray != null and characterArray.size() > 0">
+            <if test="(interestArray != null and interestArray.size() > 0) or (tendenciesArray != null and tendenciesArray.size() > 0)">OR</if>
+            ma_char.AC_NO IN
+            <foreach collection="characterArray" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+
         )
         <choose>
             <when test="gender.equals('남')">
-                AND mem_gender = '여'
+                AND m.mem_gender = '여'
             </when>
             <when test="gender.equals('여')">
-                AND mem_gender = '남'
+                AND m.mem_gender = '남'
             </when>
         </choose>
-        AND mem_id not in (
+        AND m.mem_id not in (
         SELECT IM_TARGET
         FROM INTERESTED_MEM
         WHERE IM_USER = #{memId}
@@ -305,116 +297,92 @@
     <!-- 추천삭제목록 -->
     <insert id="recommendDelete">
         insert
-        into
-        hidden_profile
-        (
-        hidden_id
-        , hidden_target
-        )
-        values
-        (
-        #{hiddenId}
-        , #{hiddenTarget}
-        )
+        into hidden_profile
+        ( hidden_id
+        , hidden_target)
+        values ( #{hiddenId}
+               , #{hiddenTarget})
 
     </insert>
 
 
     <!-- 좋아요 테이블 db확인 -->
     <select id="likeMemberCheck" resultMap="likeResultMap">
-        select
-        *
-        from
-        `like`
-        where
-        (
-        (request_id = #{requestId} and response_id = #{responseId})
-        or
-        (request_id = #{responseId} and response_id = #{requestId})
-        )
+        select *
+        from `like`
+        where (
+                  (request_id = #{requestId} and response_id = #{responseId})
+                      or
+                  (request_id = #{responseId} and response_id = #{requestId})
+                  )
 
     </select>
 
     <!-- 좋아요 테이블에 db삽입 -->
     <insert id="likeMember">
         insert
-        into
-        `like`
-        (
-        request_id
-        , response_id
-        )
-        values
-        (
-        #{requestId}
-        ,#{responseId}
-        )
+        into `like`
+        ( request_id
+        , response_id)
+        values ( #{requestId}
+               , #{responseId})
     </insert>
 
 
     <!-- 닉네임 중복검사 -->
     <select id="duplicateCheck">
-        select
-        count(mem_nickName)
-        from
-        member
-        where
-        mem_nickname = #{nickName}
+        select count(mem_nickName)
+        from member
+        where mem_nickname = #{nickName}
     </select>
 
 
     <!-- 관심회원 체크 -->
     <select id="interestMemCheck" resultMap="interestedMemberResultMap">
-        select
-        count(*)
-        from
-        interested_mem
-        where
-        im_user = #{imUser}
-        AND im_target = #{imTarget}
+        select count(*)
+        from interested_mem
+        where im_user = #{imUser}
+          AND im_target = #{imTarget}
     </select>
 
 
     <!-- 관심회원 등록 -->
     <insert id="interestMem">
         insert
-        into
-        interested_mem
-        values
-        (
-        #{imUser}
-        , #{imTarget}
-        )
+        into interested_mem
+        values ( #{imUser}
+               , #{imTarget})
     </insert>
 
 
     <!-- 멤버 상세정보 -->
     <select id="detailInfo" resultMap="memberResultMap">
-        select
-        mem_id
-        , MEM_NAME
-        , MEM_GENDER
-        , MEM_NICKNAME
-        , MEM_BIRTH
-        , MEM_LOCATION
-        , MEM_INFO
-        , MEM_OCCUPATION
-        , MEM_EDUCATION
-        , MEM_MBTI
-        , MEM_TALL
-        , MEM_RELIGION
-        , MEM_SMOCK
-        , MEM_STATUS
-        , MEM_REGIST_DATE
-        , MEM_INTEREST
-        , MEM_TENDENCIES
-        , MEM_CHARACTER
-        , MEM_PROFILE
-        , MEM_AGE
-        from
-        member
-        where
-        mem_id = #{memId}
+        SELECT m.mem_id
+             , m.MEM_NAME
+             , m.MEM_GENDER
+             , m.MEM_NICKNAME
+             , m.MEM_BIRTH
+             , m.MEM_LOCATION
+             , m.MEM_INFO
+             , m.MEM_OCCUPATION
+             , m.MEM_EDUCATION
+             , m.MEM_MBTI
+             , m.MEM_TALL
+             , m.MEM_RELIGION
+             , m.MEM_SMOCK
+             , m.MEM_STATUS
+             , m.MEM_REGIST_DATE
+             , m.MEM_COOKIE
+             , GROUP_CONCAT(CASE WHEN ma.MA_TYPE = 'INTEREST' THEN ac.AC_Name END)   AS mem_interest
+             , GROUP_CONCAT(CASE WHEN ma.MA_TYPE = 'TENDENCIES' THEN ac.AC_Name END) AS mem_tendencies
+             , GROUP_CONCAT(CASE WHEN ma.MA_TYPE = 'CHARACTER' THEN ac.AC_Name END)  AS mem_character
+             , m.MEM_PROFILE
+             , m.MEM_AGE
+        FROM `member` m
+                 left join member_attribute ma on (m.mem_id = ma.mem_id)
+                 left join attribute_code ac on (ma.ac_no = ac.ac_no)
+        where m.mem_id = #{memId}
+        group by m.mem_id
     </select>
 
 
@@ -422,22 +390,22 @@
 
     <select id="likeList" resultMap="memberResultMap">
         select m.mem_id
-        , m.mem_nickname
-        , m.mem_profile
-        , m.mem_age
+             , m.mem_nickname
+             , m.mem_profile
+             , m.mem_age
         from `like` l
-        join member m on m.mem_id = l.request_id
+                 join member m on m.mem_id = l.request_id
         where l.response_id = #{memId}
     </select>
 
     <!-- 관심목록 조회 -->
     <select id="interestList" resultMap="interestedMemberResultMap">
         select m.mem_id
-        , m.mem_nickname
-        , m.mem_profile
-        , m.mem_age
+             , m.mem_nickname
+             , m.mem_profile
+             , m.mem_age
         from interested_mem i
-        join member m on m.mem_id = i.im_user
+                 join member m on m.mem_id = i.im_user
         where i.im_target = #{memId}
     </select>
 
@@ -446,7 +414,7 @@
         update `like`
         set like_status = 'Y'
         where request_id = #{requestId}
-        and response_id = #{responseId}
+          and response_id = #{responseId}
     </update>
 
     <!-- 좋아요 거절 -->
@@ -454,8 +422,21 @@
         delete
         from `like`
         where request_id = #{requestId}
-        and response_id = #{responseId}
+          and response_id = #{responseId}
     </delete>
+
+    <!-- 흥미,연애성향, 성격 상세정보 추가 -->
+    <insert id="insertMemberAttribute">
+        insert
+        into member_attribute
+        ( mem_id
+        , ac_no
+        , ma_type)
+        values ( #{memId}
+               , #{code}
+               , #{type})
+
+    </insert>
 
 
 </mapper>

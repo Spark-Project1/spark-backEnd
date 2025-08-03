@@ -2,18 +2,18 @@ package com.spark.member.service;
 
 import java.util.*;
 
+import com.spark.member.common.Character;
+import com.spark.member.common.Interest;
+import com.spark.member.common.Tendencies;
 import com.spark.member.dto.*;
 import com.spark.member.dto.request.*;
 import com.spark.member.dto.response.*;
 import com.spark.member.model.Member;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.spark.base.exception.CustomException;
-import com.spark.base.util.FileUtil;
 import com.spark.base.util.JwtProvider;
 import com.spark.member.repository.MemberDao;
 
@@ -34,13 +34,13 @@ public class MemberServiceImpl implements MemberService {
     public LoginResult login(LoginRequest m) {
 
         // 1. 로그인 정보 조회
-        Member result = memberDao.login(m.getMemId()).orElseThrow(() -> new CustomException("회원정보가 없습니다.", 400));
+        Member member = memberDao.login(m.getMemId()).orElseThrow(() -> new CustomException("회원정보가 없습니다.", 400));
 
         // 비밀번호 유효성 검사
-        result.validationPassword(m.getMemPwd(), passwordEncoder);
+        member.validationPassword(m.getMemPwd(), passwordEncoder);
 
         // DB에서 조회한 회원 정보 LoginResponse로 빌드
-        LoginResponse response = LoginResponse.from(result);
+        LoginResponse response = LoginResponse.from(member);
 
         // 토큰 생성
         return tokenResponse.CreateToken(response);
@@ -49,30 +49,7 @@ public class MemberServiceImpl implements MemberService {
 
 
     @Override
-    public ValidResponse loginUserInfo(TokenRequest authHeader) {
-        // 토큰 유효성 검사 및 회원 정보 조회
-        String validateToken = authHeader.getTokenRequest().replace("Bearer ", "");
-        memberValidtor.validToken(validateToken);
-
-        // 토큰에서 사용자 아이디 추출
-        String memId = jwtProvider.getUserId(validateToken);
-        // 사용자 아이디로 회원 정보 조회
-        Member member = memberDao.loginUserInfo(memId);
-
-        if (member == null) {
-            throw new CustomException("해당 사용자가 존재하지 않습니다.", 403);
-        }
-
-        // 회원 정보로 LoginResponse 빌드
-        LoginResponse response = LoginResponse.from(member);
-
-        return ValidResponse.available(response);
-
-    }
-
-    @Override
     public Member findById(String memId) {
-
         // 사용자 아이디로 회원 정보 조회
         return memberDao.findById(memId)
             .orElseThrow(() -> new CustomException("해당 사용자가 존재하지 않습니다.", 403));
@@ -82,28 +59,22 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public TokenResult insertRefreshToken(TokenRequest refreshTokenHeader) {
 
-        // 헤더에서 Bearer 제거 후 토큰 추출
-        String refreshToken = refreshTokenHeader.getTokenRequest().replace("Bearer ", "");
-
         // 토큰 유효성 검사
-        memberValidtor.validToken(refreshToken);
+        memberValidtor.validToken(refreshTokenHeader.getTokenRequest());
 
         // 리프레시 토큰 DB에 저장
-        return tokenResponse.insertRefreshToken(refreshToken);
+        return tokenResponse.insertRefreshToken(refreshTokenHeader.getTokenRequest());
 
     }
 
     @Override
     public LogoutResult deleteToken(TokenRequest refreshTokenHeader) {
 
-        // 헤더에서 Bearer 제거 후 토큰 추출
-        String token = refreshTokenHeader.getTokenRequest().replace("Bearer ", "");
-
         // 토큰 유효성 검사
-        memberValidtor.validToken(token);
+        memberValidtor.validToken(refreshTokenHeader.getTokenRequest());
 
         // 토큰 삭제
-        return tokenResponse.deleteToken(token);
+        return tokenResponse.deleteToken(refreshTokenHeader.getTokenRequest());
     }
 
 
@@ -126,17 +97,19 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public List<RecommendResponse> recommendList(RecommendRequest recommendRequest) {
 
-        // Member로 빌드
-        Member member = recommendRequest.toDomain();
+        recommendRequest.toArray();
 
-        // 추천 리스트 조회
-        List<Member> list = memberDao.recommendList(member);
+
+        List<Member> list = memberDao.recommendList(recommendRequest);
 
         // 추천 리스트가 비어있거나 null인 경우 예외 처리
         if (list == null) {
             throw new CustomException("추천 리스트 불러오기에 실패하였습니다.", 500);
         }
-
+        if (list.isEmpty()) {
+            // 빈 리스트 반환
+            return Collections.emptyList();
+        }
         // 추천 리스트 순서 섞기
         Collections.shuffle(list);
 
@@ -152,9 +125,8 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public int signUp(SignUpRequest m) {
 
-        // Member로 빌드
-        Member member = m.toDomain();
-
+        // 임시 Member 생성
+        Member member = Member.tempMember(m.getMemId(), m.getMemPwd());
         // 비밀번호 암호화
         member.encryptPassword(passwordEncoder);
 
@@ -164,24 +136,28 @@ public class MemberServiceImpl implements MemberService {
             throw new CustomException("회원 가입에 실패하였습니다", 500);
         }
 
-
         return result;
     }
 
     @Override
-    public LoginResponse insertInfo(InsertMemberInfoRequest insertMemberInfo, MultipartFile uploadFile) {
+    public LoginResponse insertInfo(UpdateMemberInfoRequest insertMemberInfo, MultipartFile uploadFile, Member member) {
 
-        Member member = insertMemberInfo.toDomain();
-
+        member.updateMember(insertMemberInfo);
+        member.statusActive();
+        memberPreprocessor.uploadProfileImg(uploadFile, member);
         int result = memberDao.insertInfo(member);
         if (result == 0) {
             throw new CustomException("회원 정보 추가에 실패하였습니다.", 500);
         }
 
-        // 회원 정보 조회
-        Member memInfo = memberDao.login(member.getMemId()).orElseThrow(() -> new CustomException("회원 정보 불러오기가 실패하였습니다.", 500));
+        memberPreprocessor.insertMemberAttributes(member.getMemId(),insertMemberInfo.getInterest().stream().map(Interest::name).toList(),"interest");
 
-        return LoginResponse.from(memInfo);
+        memberPreprocessor.insertMemberAttributes(member.getMemId(),insertMemberInfo.getTendencies().stream().map(Tendencies::name).toList(),"tendencies");
+
+        memberPreprocessor.insertMemberAttributes(member.getMemId(),insertMemberInfo.getCharacter().stream().map(Character::name).toList(),"character");
+
+
+        return LoginResponse.from(member);
     }
 
 
@@ -259,6 +235,10 @@ public class MemberServiceImpl implements MemberService {
         if (result == null) {
             throw new CustomException("좋아요 목록 조회에 실패하였습니다.", 500);
         }
+        if (result.isEmpty()) {
+            // 빈 리스트 반환
+            return Collections.emptyList();
+        }
 
         return result.stream()
             .map(LikeListResponse::from)
@@ -271,6 +251,15 @@ public class MemberServiceImpl implements MemberService {
 
 
         List<Member> result = memberDao.interestList(interestList);
+        if (result == null) {
+            throw new CustomException("관심 목록 조회에 실패하였습니다.", 500);
+        }
+        if (result.isEmpty()) {
+            // 빈 리스트 반환
+            return Collections.emptyList();
+        }
+
+
 
         return result.stream()
             .map(InterestListResponse::from)
