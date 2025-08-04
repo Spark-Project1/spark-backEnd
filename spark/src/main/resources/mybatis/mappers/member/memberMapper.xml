@@ -338,7 +338,7 @@
 
 
     <!-- 관심회원 체크 -->
-    <select id="interestMemCheck" resultMap="interestedMemberResultMap">
+    <select id="interestMemCheck">
         select count(*)
         from interested_mem
         where im_user = #{imUser}

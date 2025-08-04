@@ -2,6 +2,8 @@ package com.spark.member.model;
 
 
 import com.spark.base.exception.CustomException;
+import com.spark.base.exception.SparkErrorCode;
+import com.spark.base.exception.SparkException;
 import com.spark.base.util.FileUtil;
 import com.spark.member.common.Character;
 import com.spark.member.common.Interest;
@@ -57,7 +59,7 @@ public class Member {
 
     private Member(String memId, String memPwd) {
         if (memId == null || memPwd == null) {
-            throw new CustomException("아이디와 비밀번호는 필수 입력값입니다.", 400);
+            throw new SparkException(SparkErrorCode.SPARK_888);
         }
         this.memId = memId;
         this.memPwd = memPwd;
@@ -102,7 +104,7 @@ public class Member {
     public void validationPassword(String inputPassword, PasswordEncoder password) {
 
         if (!password.matches(inputPassword, this.memPwd)) {
-            throw new CustomException("올비르지 않은 비밀번호 입니다.", 401);
+            throw new SparkException(SparkErrorCode.SPARK_101);
         }else{
             this.memPwd = null;
         }
@@ -114,7 +116,7 @@ public class Member {
         if (this.memPwd != null && !this.memPwd.isEmpty()) {
             this.memPwd = password.encode(this.memPwd);
         } else {
-            throw new CustomException("비밀번호가 입력되지 않았습니다.", 400);
+            throw new SparkException(SparkErrorCode.SPARK_888);
         }
     }
 

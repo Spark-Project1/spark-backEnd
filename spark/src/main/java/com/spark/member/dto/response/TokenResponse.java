@@ -3,6 +3,8 @@ package com.spark.member.dto.response;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.spark.base.exception.SparkErrorCode;
+import com.spark.base.exception.SparkException;
 import com.spark.member.dto.*;
 import com.spark.member.model.Member;
 import org.springframework.stereotype.Component;
@@ -31,7 +33,7 @@ public class TokenResponse {
     	map.put("refreshToken", refreshToken);
     	int result = memberDao.insertRefreshToken(map); // db에 refreshtoken 저장
     	if(result == 0) {
-    		throw new CustomException("리프레시 토큰 저장에 실패하였습니다.",500);
+    		throw new SparkException(SparkErrorCode.SPARK_999);
     	}
     	JwtToken token = JwtToken.builder()
     			.grantType("Bearer")
@@ -62,7 +64,7 @@ public class TokenResponse {
         map.put("refreshToken", newRefreshToken);
         int result = checkRefreshToken(map);
         if(result == 0) {
-        	throw new CustomException("리프레시 토큰 저장에 실패하였습니다",500);
+        	throw new SparkException(SparkErrorCode.SPARK_999);
         }   
         Cookie refreshCookie = null;
     	refreshCookie = new Cookie("refreshToken", newRefreshToken);
@@ -88,13 +90,13 @@ public class TokenResponse {
 	    if (result > 0) {
 	        int result2 = memberDao.updateRefreshToken(map);
 	        if (result2 == 0) {
-	            throw new CustomException("리프레시 토큰 업데이트에 실패했습니다.", 500);
+	            throw new SparkException(SparkErrorCode.SPARK_999);
 	        }
 	        return result2;
 	    } else {
 	        int insertResult = memberDao.insertRefreshToken(map);
 	        if (insertResult == 0) {
-	            throw new CustomException("리프레시 토큰 저장에 실패했습니다.", 500);
+	            throw new SparkException(SparkErrorCode.SPARK_999);
 	        }
 	        return insertResult;
 	    }
@@ -110,7 +112,7 @@ public class TokenResponse {
         int result = memberDao.deleteToken(userId); // 토큰 db에서 제거
     	
         if(result == 0) {
-        	throw new CustomException("토큰 삭제에 실패하였습니다",500);
+        	throw new SparkException(SparkErrorCode.SPARK_999);
         }
     
         Cookie deleteCookie = new Cookie("refreshToken", null);

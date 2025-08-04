@@ -1,6 +1,8 @@
 package com.spark.member.service;
 
 import com.spark.base.config.CoolSmsConfig;
+import com.spark.base.exception.SparkErrorCode;
+import com.spark.base.exception.SparkException;
 import com.spark.member.dto.MemberAttributeDto;
 import com.spark.member.model.Member;
 import com.spark.member.repository.MemberDao;
@@ -36,7 +38,7 @@ public class MemberPreprocessor {
                 Map<String, String> map = fileUtil.fileupload(uploadFile, "profile");
                 member.updateProFile(map.get("filePath") + "/" + map.get("filesystemName"));
             } catch (Exception e) {
-                throw new CustomException("이미지 등록에 실패하였습니다", 500);
+                throw new SparkException(SparkErrorCode.SPARK_999);
             }
         } else {
             member.updateProFile(null);
@@ -72,9 +74,9 @@ public class MemberPreprocessor {
 
             messageService.send(message);
         } catch (NurigoMessageNotReceivedException exception) {
-            throw new CustomException("문자 발송에 실패하였습니다.", 500);
+            throw new SparkException(SparkErrorCode.SPARK_999);
         } catch (Exception exception) {
-            throw new CustomException("문자 발송 중 예기치 못한 오류가 발생하였습니다.", 500);
+            throw new SparkException(SparkErrorCode.SPARK_999);
         }
 
 
@@ -88,7 +90,7 @@ public class MemberPreprocessor {
             MemberAttributeDto dto = new MemberAttributeDto(memId, code,type);
             int result = memberDao.insertMemberAttribute(dto);
             if (result == 0) {
-                throw new CustomException("흥미 추가 실패", 500);
+                throw new SparkException(SparkErrorCode.SPARK_999);
             }
         }
 
