@@ -1,13 +1,30 @@
 package com.spark.base.config;
 
+import com.spark.member.config.InjectMemberArgument;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.util.List;
+
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
+
+    private final InjectMemberArgument injectMemberArgument;
+
+    public WebConfig(InjectMemberArgument injectMemberArgument) {
+        this.injectMemberArgument = injectMemberArgument;
+    }
+
+    @Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
+        // InjectMemberArgument를 Argument Resolver로 등록
+        resolvers.add(injectMemberArgument);
+    }
+
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {

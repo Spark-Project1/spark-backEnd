@@ -11,9 +11,9 @@ import lombok.*;
 public class LikeRequest {
 
     @NotBlank(message = "requestId는 필수 입력값입니다.")
-    private String requestId;
+    private String requestId; // 좋아요 보낸사람
     @NotBlank(message = "responseId는 필수 입력값입니다.")
-    private String responseId;
+    private String responseId; // 좋아요 받은사람
 
 
 

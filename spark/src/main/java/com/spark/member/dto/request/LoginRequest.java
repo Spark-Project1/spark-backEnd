@@ -19,11 +19,5 @@ public class LoginRequest {
     @NotBlank(message = "비밀번호가 비어있습니다.")
     private String memPwd;
 
-    public Member toDomain() {
-        return Member.builder()
-            .memId(memId)
-            .memPwd(memPwd)
-            .build();
-    }
 
 }

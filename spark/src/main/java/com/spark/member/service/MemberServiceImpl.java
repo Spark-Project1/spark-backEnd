@@ -2,18 +2,20 @@ package com.spark.member.service;
 
 import java.util.*;
 
+import com.spark.base.exception.SparkErrorCode;
+import com.spark.base.exception.SparkException;
+import com.spark.member.common.Character;
+import com.spark.member.common.Interest;
+import com.spark.member.common.Tendencies;
 import com.spark.member.dto.*;
 import com.spark.member.dto.request.*;
 import com.spark.member.dto.response.*;
 import com.spark.member.model.Member;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.spark.base.exception.CustomException;
-import com.spark.base.util.FileUtil;
 import com.spark.base.util.JwtProvider;
 import com.spark.member.repository.MemberDao;
 
@@ -34,13 +36,13 @@ public class MemberServiceImpl implements MemberService {
     public LoginResult login(LoginRequest m) {
 
         // 1. 로그인 정보 조회
-        Member result = memberDao.login(m.getMemId()).orElseThrow(() -> new CustomException("회원정보가 없습니다.", 400));
+        Member member = memberDao.login(m.getMemId()).orElseThrow(() -> new SparkException(SparkErrorCode.SPARK_100)); // 존재하지않는 회원시 에러처리
 
         // 비밀번호 유효성 검사
-        result.validationPassword(m.getMemPwd(), passwordEncoder);
+        member.validationPassword(m.getMemPwd(), passwordEncoder);
 
         // DB에서 조회한 회원 정보 LoginResponse로 빌드
-        LoginResponse response = LoginResponse.from(result);
+        LoginResponse response = LoginResponse.from(member);
 
         // 토큰 생성
         return tokenResponse.CreateToken(response);
@@ -49,61 +51,32 @@ public class MemberServiceImpl implements MemberService {
 
 
     @Override
-    public ValidResponse loginUserInfo(TokenRequest authHeader) {
-        // 토큰 유효성 검사 및 회원 정보 조회
-        String validateToken = authHeader.getTokenRequest().replace("Bearer ", "");
-        memberValidtor.validToken(validateToken);
-
-        // 토큰에서 사용자 아이디 추출
-        String memId = jwtProvider.getUserId(validateToken);
-        // 사용자 아이디로 회원 정보 조회
-        Member member = memberDao.loginUserInfo(memId);
-
-        if (member == null) {
-            throw new CustomException("해당 사용자가 존재하지 않습니다.", 403);
-        }
-
-        // 회원 정보로 LoginResponse 빌드
-        LoginResponse response = LoginResponse.from(member);
-
-        return ValidResponse.available(response);
-
-    }
-
-    @Override
     public Member findById(String memId) {
-
         // 사용자 아이디로 회원 정보 조회
         return memberDao.findById(memId)
-            .orElseThrow(() -> new CustomException("해당 사용자가 존재하지 않습니다.", 403));
+            .orElseThrow(() -> new SparkException(SparkErrorCode.SPARK_100)); // 존재하지 않는 회원시 에러 처리
 
     }
 
     @Override
     public TokenResult insertRefreshToken(TokenRequest refreshTokenHeader) {
 
-        // 헤더에서 Bearer 제거 후 토큰 추출
-        String refreshToken = refreshTokenHeader.getTokenRequest().replace("Bearer ", "");
-
         // 토큰 유효성 검사
-        memberValidtor.validToken(refreshToken);
+        memberValidtor.validToken(refreshTokenHeader.getTokenRequest());
 
         // 리프레시 토큰 DB에 저장
-        return tokenResponse.insertRefreshToken(refreshToken);
+        return tokenResponse.insertRefreshToken(refreshTokenHeader.getTokenRequest());
 
     }
 
     @Override
     public LogoutResult deleteToken(TokenRequest refreshTokenHeader) {
 
-        // 헤더에서 Bearer 제거 후 토큰 추출
-        String token = refreshTokenHeader.getTokenRequest().replace("Bearer ", "");
-
         // 토큰 유효성 검사
-        memberValidtor.validToken(token);
+        memberValidtor.validToken(refreshTokenHeader.getTokenRequest());
 
         // 토큰 삭제
-        return tokenResponse.deleteToken(token);
+        return tokenResponse.deleteToken(refreshTokenHeader.getTokenRequest());
     }
 
 
@@ -115,7 +88,7 @@ public class MemberServiceImpl implements MemberService {
 
         // 이미 가입된 사용자라면 예외 처리
         if (optional.isPresent()) {
-            throw new CustomException("현재 가입된 사용자입니다.", 409);
+            throw new SparkException(SparkErrorCode.SPARK_102);
         }
 
         // 쿨 SMS API를 통해 인증 코드 전송
@@ -126,17 +99,19 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public List<RecommendResponse> recommendList(RecommendRequest recommendRequest) {
 
-        // Member로 빌드
-        Member member = recommendRequest.toDomain();
+        recommendRequest.toArray();
 
-        // 추천 리스트 조회
-        List<Member> list = memberDao.recommendList(member);
+
+        List<Member> list = memberDao.recommendList(recommendRequest);
 
         // 추천 리스트가 비어있거나 null인 경우 예외 처리
         if (list == null) {
-            throw new CustomException("추천 리스트 불러오기에 실패하였습니다.", 500);
+            throw new SparkException(SparkErrorCode.SPARK_999);
         }
-
+        if (list.isEmpty()) {
+            // 빈 리스트 반환
+            return Collections.emptyList();
+        }
         // 추천 리스트 순서 섞기
         Collections.shuffle(list);
 
@@ -152,36 +127,39 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public int signUp(SignUpRequest m) {
 
-        // Member로 빌드
-        Member member = m.toDomain();
-
+        // 임시 Member 생성
+        Member member = Member.tempMember(m.getMemId(), m.getMemPwd());
         // 비밀번호 암호화
         member.encryptPassword(passwordEncoder);
 
         // 회원 가입 성공 체크
         int result = memberDao.signUp(member);
         if (result == 0) {
-            throw new CustomException("회원 가입에 실패하였습니다", 500);
+            throw new SparkException(SparkErrorCode.SPARK_999);
         }
-
 
         return result;
     }
 
     @Override
-    public LoginResponse insertInfo(InsertMemberInfoRequest insertMemberInfo, MultipartFile uploadFile) {
+    public LoginResponse insertInfo(UpdateMemberInfoRequest insertMemberInfo, MultipartFile uploadFile, Member member) {
 
-        Member member = insertMemberInfo.toDomain();
-
+        member.updateMember(insertMemberInfo);
+        member.statusActive();
+        memberPreprocessor.uploadProfileImg(uploadFile, member);
         int result = memberDao.insertInfo(member);
         if (result == 0) {
-            throw new CustomException("회원 정보 추가에 실패하였습니다.", 500);
+            throw new SparkException(SparkErrorCode.SPARK_999);
         }
 
-        // 회원 정보 조회
-        Member memInfo = memberDao.login(member.getMemId()).orElseThrow(() -> new CustomException("회원 정보 불러오기가 실패하였습니다.", 500));
+        memberPreprocessor.insertMemberAttributes(member.getMemId(),insertMemberInfo.getInterest().stream().map(Interest::name).toList(),"interest");
 
-        return LoginResponse.from(memInfo);
+        memberPreprocessor.insertMemberAttributes(member.getMemId(),insertMemberInfo.getTendencies().stream().map(Tendencies::name).toList(),"tendencies");
+
+        memberPreprocessor.insertMemberAttributes(member.getMemId(),insertMemberInfo.getCharacter().stream().map(Character::name).toList(),"character");
+
+
+        return LoginResponse.from(member);
     }
 
 
@@ -190,7 +168,7 @@ public class MemberServiceImpl implements MemberService {
 
         int result = memberDao.recommendDelete(recommendDelete);
         if (result == 0) {
-            throw new CustomException("추천 목록 삭제에 실패하였습니다.", 500);
+            throw new SparkException(SparkErrorCode.SPARK_999);
         }
         return result;
 
@@ -203,7 +181,7 @@ public class MemberServiceImpl implements MemberService {
         LikeDto result = memberDao.likeMemberCheck(likeSend);
 
         if (result != null) {
-            throw new CustomException("이미 좋아요를 누른상태입니다.", 401);
+            throw new SparkException(SparkErrorCode.SPARK_110);
         } else {
             return memberDao.likeMember(likeSend);
         }
@@ -218,7 +196,7 @@ public class MemberServiceImpl implements MemberService {
             int result = memberDao.duplicateCheck(duplicateCheck);
             return result <= 0;
         } catch (Exception e) {
-            throw new CustomException("닉네임 중복 검사에 실패했습니다.", 500);
+            throw new SparkException(SparkErrorCode.SPARK_999);
         }
 
     }
@@ -229,13 +207,13 @@ public class MemberServiceImpl implements MemberService {
         // 관심 회원 등록 전에 이미 등록된 회원인지 확인
         int check = memberDao.interestMemCheck(interestMemberAdd);
         if (check > 0) {
-            throw new CustomException("이미 관심이 등록된 회원입니다.", 409);
+            throw new SparkException(SparkErrorCode.SPARK_110);
         }
 
         // 관심 회원 등록
         int result = memberDao.interestMem(interestMemberAdd);
         if (result == 0) {
-            throw new CustomException("관심 회원 등록에 실패하였습니다.", 500);
+            throw new SparkException(SparkErrorCode.SPARK_999);
         }
         return result;
     }
@@ -244,7 +222,7 @@ public class MemberServiceImpl implements MemberService {
     public DetailMemberInfoResponse detailInfo(DetailMemberInfoRequest detailMemberInfo) {
 
         // 상태방의 상세정보 조회
-        Member result = memberDao.detailInfo(detailMemberInfo).orElseThrow(() -> new CustomException("해당 회원이 존재하지 않습니다.", 400));
+        Member result = memberDao.detailInfo(detailMemberInfo).orElseThrow(() -> new SparkException(SparkErrorCode.SPARK_100));
 
         // 상세정보 응답 빌드
         return DetailMemberInfoResponse.from(result);
@@ -257,7 +235,11 @@ public class MemberServiceImpl implements MemberService {
         // 로그인한 사용자의 좋아요 목록 조회
         List<Member> result = memberDao.likeList(likeList);
         if (result == null) {
-            throw new CustomException("좋아요 목록 조회에 실패하였습니다.", 500);
+            throw new SparkException(SparkErrorCode.SPARK_999);
+        }
+        if (result.isEmpty()) {
+            // 빈 리스트 반환
+            return Collections.emptyList();
         }
 
         return result.stream()
@@ -271,6 +253,15 @@ public class MemberServiceImpl implements MemberService {
 
 
         List<Member> result = memberDao.interestList(interestList);
+        if (result == null) {
+            throw new SparkException(SparkErrorCode.SPARK_999);
+        }
+        if (result.isEmpty()) {
+            // 빈 리스트 반환
+            return Collections.emptyList();
+        }
+
+
 
         return result.stream()
             .map(InterestListResponse::from)
@@ -286,7 +277,7 @@ public class MemberServiceImpl implements MemberService {
             // 좋아요 수락 후 채팅방 생성 로직 추가
             return result;
         } else {
-            throw new CustomException("좋아요 수락에 실패하였습니다.", 500);
+            throw new SparkException(SparkErrorCode.SPARK_999);
         }
     }
 
@@ -297,7 +288,7 @@ public class MemberServiceImpl implements MemberService {
         if (result > 0) {
             return result;
         } else {
-            throw new CustomException("좋아요 거절에 실패하였습니다.", 500);
+            throw new SparkException(SparkErrorCode.SPARK_999);
         }
     }
 

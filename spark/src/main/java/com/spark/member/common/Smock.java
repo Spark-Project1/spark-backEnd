@@ -3,6 +3,8 @@ package com.spark.member.common;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.spark.base.exception.CustomException;
+import com.spark.base.exception.SparkErrorCode;
+import com.spark.base.exception.SparkException;
 import com.spark.base.web.handler.GlobalExceptionHandler;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,7 +26,7 @@ public enum Smock {
         for (Smock s : values()) {
             if (s.getSmock().equals(str)) return s;
         }
-        throw new CustomException("흡연 정보가 올바르지 않습니다.", 400);
+        throw new SparkException(SparkErrorCode.SPARK_888);
     }
 
     @JsonValue

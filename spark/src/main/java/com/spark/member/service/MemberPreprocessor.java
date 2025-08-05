@@ -1,7 +1,11 @@
 package com.spark.member.service;
 
 import com.spark.base.config.CoolSmsConfig;
+import com.spark.base.exception.SparkErrorCode;
+import com.spark.base.exception.SparkException;
+import com.spark.member.dto.MemberAttributeDto;
 import com.spark.member.model.Member;
+import com.spark.member.repository.MemberDao;
 import org.springframework.stereotype.Component;
 
 import com.spark.base.exception.CustomException;
@@ -15,6 +19,7 @@ import net.nurigo.sdk.message.model.Message;
 import net.nurigo.sdk.message.service.DefaultMessageService;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Map;
 
 @Component
@@ -24,7 +29,7 @@ public class MemberPreprocessor {
 
     private final FileUtil fileUtil;
     private final CoolSmsConfig coolSmsConfig;
-
+    private final MemberDao memberDao;
 
     public void uploadProfileImg(MultipartFile uploadFile, Member member) {
 
@@ -33,7 +38,7 @@ public class MemberPreprocessor {
                 Map<String, String> map = fileUtil.fileupload(uploadFile, "profile");
                 member.updateProFile(map.get("filePath") + "/" + map.get("filesystemName"));
             } catch (Exception e) {
-                throw new CustomException("이미지 등록에 실패하였습니다", 500);
+                throw new SparkException(SparkErrorCode.SPARK_999);
             }
         } else {
             member.updateProFile(null);
@@ -69,13 +74,25 @@ public class MemberPreprocessor {
 
             messageService.send(message);
         } catch (NurigoMessageNotReceivedException exception) {
-            throw new CustomException("문자 발송에 실패하였습니다.", 500);
+            throw new SparkException(SparkErrorCode.SPARK_999);
         } catch (Exception exception) {
-            throw new CustomException("문자 발송 중 예기치 못한 오류가 발생하였습니다.", 500);
+            throw new SparkException(SparkErrorCode.SPARK_999);
         }
 
 
         return code;
+
+    }
+
+    public void insertMemberAttributes(String memId, List<String> attributeCode,String type) {
+
+        for (String code : attributeCode) {
+            MemberAttributeDto dto = new MemberAttributeDto(memId, code,type);
+            int result = memberDao.insertMemberAttribute(dto);
+            if (result == 0) {
+                throw new SparkException(SparkErrorCode.SPARK_999);
+            }
+        }
 
     }
 

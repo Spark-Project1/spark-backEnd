@@ -1,8 +1,11 @@
 package com.spark.member.dto.request;
 
 
+import com.spark.member.common.Character;
+import com.spark.member.common.Interest;
 import com.spark.member.common.Smock;
 import com.spark.member.common.Tall;
+import com.spark.member.common.Tendencies;
 import com.spark.member.model.Member;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -13,13 +16,14 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.time.Year;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @Builder
-public class InsertMemberInfoRequest {
+public class UpdateMemberInfoRequest {
 
     @NotBlank(message = "닉네임값이 없습니다.")
     private String nickName;
@@ -42,48 +46,15 @@ public class InsertMemberInfoRequest {
     @NotNull(message = "흡연값이 없습니다.")
     private Smock smock;
     @NotBlank(message = "흥미값이 없습니다.")
-    private String[] interest;
+    private List<Interest> interest;
     @NotBlank(message = "연애성향값이 없습니다.")
-    private String[] tendencies;
+    private List<Tendencies> tendencies;
     @NotBlank(message = "특징값이 없습니다.")
-    private String[] character;
+    private List<Character> character;
     @NotBlank(message = "멤버소개값이 없습니다.")
     private String memInfo;
 
-    private int age;
 
-    public Member toDomain() {
-
-        String userId = SecurityContextHolder.getContext().getAuthentication().getName();
-        // "20000101" 형식의 생일 문자열을 LocalDate로 변환하여 2000-01-01 형태로 변환
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-        LocalDate localDate = LocalDate.parse(birthDate, formatter);
-
-        // 현재 연도와 생년을 이용하여 나이 계산
-        int currentYear = Year.now().getValue();
-        int birthYear = localDate.getYear();
-        int calAge = currentYear - birthYear;
-
-
-        return Member.builder()
-            .memId(userId)
-            .nickName(nickName)
-            .location(location)
-            .gender(gender)
-            .birthDate(Date.valueOf(localDate))
-            .occupation(occupation)
-            .education(education)
-            .mbti(mbti)
-            .tall(tall)
-            .religion(religion)
-            .smock(smock)
-            .interest(String.join(",", interest))
-            .tendencies(String.join(",", tendencies))
-            .character(String.join(",", character))
-            .memInfo(memInfo)
-            .age(calAge)
-            .build();
-    }
 
 
 }
