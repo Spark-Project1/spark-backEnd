@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+
 import com.spark.chat.dto.ChatListDto;
 import com.spark.chat.dto.MessageDto;
 import com.spark.chat.service.ChatService;
@@ -18,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 @Tag(name = "Chat API",description = "채팅 관련 api")
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/chat")
 public class ChatController {
 
     private final ChatService chatService;
