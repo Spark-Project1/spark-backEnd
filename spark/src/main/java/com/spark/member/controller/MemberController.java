@@ -186,7 +186,7 @@ public class MemberController {
     // 받은 좋아요 목록
     @Operation(summary = "받은 좋아요 목록",
         description = "내가 좋아요를 받은 회원 목록 조회")
-    @DeleteMapping("/me/get/likeList")
+    @PostMapping("/me/get/likeList")
     public ResponseEntity<List<LikeListResponse>> getLikeList(@RequestBody @Valid LikeListRequest likeList){
         return ResponseEntity.ok(memberService.getLikeList(likeList));
     }

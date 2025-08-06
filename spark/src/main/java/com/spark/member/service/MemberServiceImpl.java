@@ -296,7 +296,6 @@ public class MemberServiceImpl implements MemberService {
     public List<LikeListResponse> getLikeList(LikeListRequest likeList) {
 
         List<Member> result = memberDao.getLikeList(likeList);
-
         if (result == null) {
             throw new SparkException(SparkErrorCode.SPARK_999);
         }
