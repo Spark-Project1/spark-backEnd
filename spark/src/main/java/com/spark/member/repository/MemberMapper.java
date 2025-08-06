@@ -65,4 +65,6 @@ public interface MemberMapper {
     int characterAttribute(Character character);
 
     int insertMemberAttribute(MemberAttributeDto dto);
+
+    List<Member> getLikeList(LikeListRequest likeList);
 }
