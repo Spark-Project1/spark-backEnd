@@ -50,5 +50,5 @@ public interface MemberService {
 
     Integer likeNo(LikeRequest likeInfo);
 
-    LikeListResponse getLikeList(@Valid LikeListRequest likeList);
+    List<LikeListResponse> getLikeList(LikeListRequest likeList);
 }

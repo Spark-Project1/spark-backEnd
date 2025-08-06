@@ -293,7 +293,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public LikeListResponse getLikeList(LikeListRequest likeList) {
+    public List<LikeListResponse> getLikeList(LikeListRequest likeList) {
 
         List<Member> result = memberDao.getLikeList(likeList);
 
