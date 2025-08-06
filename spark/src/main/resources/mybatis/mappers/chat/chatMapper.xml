@@ -82,4 +82,20 @@
 
     </insert>
 
+    <!-- 채팅방 생성 -->
+    <insert id="createChatRoom" useGeneratedKeys="true" keyProperty="clNo">
+        insert
+        into chat_list
+            (CL_LASTMSGTIME)
+        values (now())
+    </insert>
+
+    <!-- 채팅방 멤버 등록 -->
+    <insert id="insertChatMember">
+        insert
+        into chat_member
+            (cl_no, cm_id)
+        values (#{clNo}, #{memId})
+    </insert>
+
 </mapper>

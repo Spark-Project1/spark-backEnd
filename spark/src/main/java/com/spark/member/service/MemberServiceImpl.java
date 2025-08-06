@@ -4,6 +4,8 @@ import java.util.*;
 
 import com.spark.base.exception.SparkErrorCode;
 import com.spark.base.exception.SparkException;
+import com.spark.chat.model.ChatList;
+import com.spark.chat.repository.ChatDao;
 import com.spark.member.common.Character;
 import com.spark.member.common.Interest;
 import com.spark.member.common.Tendencies;
@@ -31,6 +33,7 @@ public class MemberServiceImpl implements MemberService {
     private final MemberValidator memberValidtor;
     private final TokenResponse tokenResponse;
     private final MemberPreprocessor memberPreprocessor;
+    private final ChatDao chatDao;
 
     @Override
     public LoginResult login(LoginRequest m) {
@@ -274,7 +277,23 @@ public class MemberServiceImpl implements MemberService {
         int result = memberDao.likeYes(likeInfo); // 좋아요 수락 처리
 
         if (result > 0) {
-            // 좋아요 수락 후 채팅방 생성 로직 추가
+
+            // 채팅방 생성
+            ChatList chatList = chatDao.createChatRoom();
+            // chat_member 테이블 추가
+            try{
+                int result1 = chatDao.insertChatMember(chatList.getClNo(),likeInfo.getRequestId());
+
+                int result2 = chatDao.insertChatMember(chatList.getClNo(),likeInfo.getResponseId());
+
+
+                if (result1 != 1 || result2 != 1) {
+                    throw new SparkException(SparkErrorCode.SPARK_999);
+                }
+
+            }catch(Exception e){
+                throw new SparkException(SparkErrorCode.SPARK_999);
+            }
             return result;
         } else {
             throw new SparkException(SparkErrorCode.SPARK_999);
