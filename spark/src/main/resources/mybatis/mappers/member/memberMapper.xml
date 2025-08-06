@@ -405,8 +405,8 @@
              , m.mem_profile
              , m.mem_age
         from interested_mem i
-                 join member m on m.mem_id = i.im_user
-        where i.im_target = #{memId}
+                 join member m on m.mem_id = i.im_target
+        where i.im_user = #{memId}
     </select>
 
     <!-- 좋아요 수락 -->
@@ -437,6 +437,20 @@
                , #{type})
 
     </insert>
+
+    <!-- 내가 받은 좋아요 리스트 -->
+    <select id="getLikeList" resultMap="memberResultMap">
+        select m.mem_id
+             , m.mem_nickname
+             , m.mem_profile
+             , m.mem_age
+        from `like` l
+                 join member m on m.mem_id = l.response_id
+        where l.request_id = #{memId}
+
+    </select>
+
+
 
 
 </mapper>

@@ -292,5 +292,23 @@ public class MemberServiceImpl implements MemberService {
         }
     }
 
+    @Override
+    public LikeListResponse getLikeList(LikeListRequest likeList) {
+
+        List<Member> result = memberDao.getLikeList(likeList);
+
+        if (result == null) {
+            throw new SparkException(SparkErrorCode.SPARK_999);
+        }
+        if (result.isEmpty()) {
+            // 빈 리스트 반환
+            return Collections.emptyList();
+        }
+
+        return result.stream()
+            .map(LikeListResponse::from)
+            .toList();
+    }
+
 
 }

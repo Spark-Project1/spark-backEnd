@@ -6,6 +6,7 @@ import com.spark.member.dto.*;
 import com.spark.member.dto.request.*;
 import com.spark.member.dto.response.*;
 import com.spark.member.model.Member;
+import jakarta.validation.Valid;
 import org.springframework.web.multipart.MultipartFile;
 
 
@@ -48,4 +49,6 @@ public interface MemberService {
     Integer likeYes(LikeRequest likeInfo);
 
     Integer likeNo(LikeRequest likeInfo);
+
+    LikeListResponse getLikeList(@Valid LikeListRequest likeList);
 }

@@ -151,9 +151,9 @@ public class MemberController {
     }
 
     // 좋아요 목록
-    @Operation(summary = "좋아요 목록",
-        description = "내가 좋아요를 누른 회원 목록 조회")
-    @PostMapping("/me/likeList")
+    @Operation(summary = "보낸 좋아요 목록",
+        description = "내가 좋아요를 보낸 회원 목록 조회")
+    @PostMapping("/me/send/likeList")
     public ResponseEntity<List<LikeListResponse>> likeList(@RequestBody @Valid LikeListRequest likeList) {
         return ResponseEntity.ok(memberService.likeList(likeList));
     }
@@ -161,8 +161,8 @@ public class MemberController {
     // 관심목록 리스트
     @Operation(summary = "관심목록 리스트",
         description = "내가 관심을 두고 있는 회원 목록 조회")
-    @GetMapping("/me/interestList")
-    public ResponseEntity<List<InterestListResponse>> interestList(@Valid @RequestParam InterestListRequest interestList) {
+    @PostMapping("/me/interestList")
+    public ResponseEntity<List<InterestListResponse>> interestList(@Valid @RequestBody InterestListRequest interestList) {
         return ResponseEntity.ok(memberService.interestList(interestList));
     }
 
@@ -181,6 +181,14 @@ public class MemberController {
     @DeleteMapping("/me/likeNo")
     public ResponseEntity<Integer> likeNo(@ModelAttribute @Valid LikeRequest likeInfo) {
         return ResponseEntity.ok(memberService.likeNo(likeInfo));
+    }
+
+    // 받은 좋아요 목록
+    @Operation(summary = "받은 좋아요 목록",
+        description = "내가 좋아요를 받은 회원 목록 조회")
+    @DeleteMapping("/me/get/likeList")
+    public ResponseEntity<LikeListResponse> getLikeList(@RequestBody @Valid LikeListRequest likeList){
+        return ResponseEntity.ok(memberService.getLikeList(likeList));
     }
 
 
