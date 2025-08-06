@@ -112,4 +112,8 @@ public class MemberDao {
     public int insertMemberAttribute(MemberAttributeDto dto) {
         return memberMapper.insertMemberAttribute(dto);
     }
+
+    public List<Member> getLikeList(LikeListRequest likeList) {
+        return memberMapper.getLikeList(likeList);
+    }
 }
