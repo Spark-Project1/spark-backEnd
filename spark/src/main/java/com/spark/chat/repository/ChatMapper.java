@@ -3,7 +3,7 @@ package com.spark.chat.repository;
 import java.util.List;
 import java.util.Map;
 
-import com.spark.chat.model.ChatList;
+import com.spark.chat.model.Chat;
 import com.spark.chat.model.Message;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -15,11 +15,11 @@ public interface ChatMapper {
 	
 	List<ChatListDto> chatList(String memId);
 	
-	List<MessageDto> message(Map<String, Object> map);
+	List<Chat> message(Chat chat);
 
-    int sendMessage(Message message);
+    int sendMessage(Chat message);
 
-    ChatList createChatRoom();
+    Chat createChatRoom();
 
     int insertChatMember(int clNo, String memId);
 }

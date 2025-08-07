@@ -4,7 +4,7 @@ import java.util.*;
 
 import com.spark.base.exception.SparkErrorCode;
 import com.spark.base.exception.SparkException;
-import com.spark.chat.model.ChatList;
+import com.spark.chat.model.Chat;
 import com.spark.chat.repository.ChatDao;
 import com.spark.member.common.Character;
 import com.spark.member.common.Interest;
@@ -237,11 +237,7 @@ public class MemberServiceImpl implements MemberService {
 
         // 로그인한 사용자의 좋아요 목록 조회
         List<Member> result = memberDao.likeList(likeList);
-        if (result == null) {
-            throw new SparkException(SparkErrorCode.SPARK_999);
-        }
-        if (result.isEmpty()) {
-            // 빈 리스트 반환
+        if (result == null || result.isEmpty()) {
             return Collections.emptyList();
         }
 
@@ -256,16 +252,9 @@ public class MemberServiceImpl implements MemberService {
 
 
         List<Member> result = memberDao.interestList(interestList);
-        if (result == null) {
-            throw new SparkException(SparkErrorCode.SPARK_999);
-        }
-        if (result.isEmpty()) {
-            // 빈 리스트 반환
+        if (result == null || result.isEmpty()) {
             return Collections.emptyList();
         }
-
-
-
         return result.stream()
             .map(InterestListResponse::from)
             .toList();
@@ -279,19 +268,18 @@ public class MemberServiceImpl implements MemberService {
         if (result > 0) {
 
             // 채팅방 생성
-            ChatList chatList = chatDao.createChatRoom();
+            Chat chatList = chatDao.createChatRoom();
             // chat_member 테이블 추가
             try{
                 int result1 = chatDao.insertChatMember(chatList.getClNo(),likeInfo.getRequestId());
-
                 int result2 = chatDao.insertChatMember(chatList.getClNo(),likeInfo.getResponseId());
-
 
                 if (result1 != 1 || result2 != 1) {
                     throw new SparkException(SparkErrorCode.SPARK_999);
                 }
 
             }catch(Exception e){
+                //
                 throw new SparkException(SparkErrorCode.SPARK_999);
             }
             return result;
@@ -315,11 +303,7 @@ public class MemberServiceImpl implements MemberService {
     public List<LikeListResponse> getLikeList(LikeListRequest likeList) {
 
         List<Member> result = memberDao.getLikeList(likeList);
-        if (result == null) {
-            throw new SparkException(SparkErrorCode.SPARK_999);
-        }
-        if (result.isEmpty()) {
-            // 빈 리스트 반환
+        if (result == null || result.isEmpty()) {
             return Collections.emptyList();
         }
 

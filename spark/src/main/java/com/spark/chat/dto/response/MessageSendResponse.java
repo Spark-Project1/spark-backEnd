@@ -23,8 +23,8 @@ public class MessageSendResponse {
     public static MessageSendResponse from(int chatNo,MessageSendRequest request){
         return MessageSendResponse.builder()
                 .ChatNo(chatNo)
-                .messageContent(request.getMessage())
-                .messageId(request.getMemId())
+                .messageContent(request.getMessageContent())
+                .messageId(request.getMessageId())
                 .nickName(request.getNickName())
                 .proFile(request.getProFile())
                 .build();

@@ -3,9 +3,7 @@ package com.spark.chat.repository;
 import java.util.List;
 import java.util.Map;
 
-import com.spark.chat.model.ChatList;
-import com.spark.chat.model.Message;
-import jakarta.validation.constraints.NotBlank;
+import com.spark.chat.model.Chat;
 import org.springframework.stereotype.Repository;
 
 import com.spark.chat.dto.ChatListDto;
@@ -23,15 +21,15 @@ public class ChatDao {
 		return chatMapper.chatList(memId);
 	}
 
-	public List<MessageDto> message(Map<String, Object> map) {
-		return chatMapper.message(map);
+	public List<Chat> message(Chat chat) {
+		return chatMapper.message(chat);
 	}
 
-    public int sendMessage(Message message) {
+    public int sendMessage(Chat message) {
         return chatMapper.sendMessage(message);
     }
 
-    public ChatList createChatRoom() {
+    public Chat createChatRoom() {
         return chatMapper.createChatRoom();
     }
 

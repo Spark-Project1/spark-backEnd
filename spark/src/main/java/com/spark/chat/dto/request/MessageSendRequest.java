@@ -10,8 +10,12 @@ import lombok.NoArgsConstructor;
 public class MessageSendRequest {
 
     private String nickName;
-    private String message;
+    private String messageContent;
     private String proFile;
-    private String memId;
+    private String messageId;
+
+
+
+
 
 }
