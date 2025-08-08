@@ -4,6 +4,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.spark.base.exception.SparkErrorCode;
+import com.spark.base.exception.SparkException;
+import com.spark.chat.dto.request.MessageListRequest;
+import com.spark.chat.dto.request.MessageSendRequest;
+import com.spark.chat.model.Chat;
+import com.spark.chat.model.Message;
+import com.spark.member.model.Member;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -19,18 +26,38 @@ public class ChatServiceImpl implements ChatService {
 
     private final ChatDao chatDao;
 
+
     @Override
     public List<ChatListDto> chatList(String memId) {
         return chatDao.chatList(memId);
     }
 
+
     @Override
-    public List<MessageDto> message(int clNo) {
-        String userId = SecurityContextHolder.getContext().getAuthentication().getName(); // 현재 로그인중인 사용자의 아이디값
-        Map<String, Object> map = new HashMap<>();
-        map.put("memId", userId);
-        map.put("clNo", clNo);
-        return chatDao.message(map);
+    public List<Chat> message(MessageListRequest messageListRequest, Member member) {
+        Chat chat = Chat.tempChat(messageListRequest.getClNo());
+        chat.addMemId(member.getMemId());
+        System.out.println(chat);
+        return chatDao.message(chat);
+    }
+
+
+    @Override
+    public int sendMessage(int chatNo, MessageSendRequest messageSendRequest) {
+        Chat chat = Chat.tempChat(chatNo);
+        chat.addMessage(messageSendRequest);
+        System.out.println("서비스 : "+chat);
+        int result = chatDao.sendMessage(chat);
+        // 최근 메시지 업데이트
+        int newMsgUpdate = chatDao.newMsgUpdate(chat);
+        if(newMsgUpdate <= 0) {
+            throw new SparkException(SparkErrorCode.SPARK_999);
+        }
+        if (result > 0) {
+            return result;
+        } else {
+            throw new SparkException(SparkErrorCode.SPARK_999);
+        }
     }
 
 

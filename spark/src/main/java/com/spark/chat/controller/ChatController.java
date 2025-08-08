@@ -2,12 +2,14 @@ package com.spark.chat.controller;
 
 import java.util.List;
 
+import com.spark.chat.dto.request.MessageListRequest;
+import com.spark.chat.model.Chat;
+import com.spark.member.config.InjectMember;
+import com.spark.member.model.Member;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.*;
+
 
 import com.spark.chat.dto.ChatListDto;
 import com.spark.chat.dto.MessageDto;
@@ -15,10 +17,10 @@ import com.spark.chat.service.ChatService;
 
 import lombok.RequiredArgsConstructor;
 
-@Tag(name = "Chat API",description = "채팅 관련 api")
+@Tag(name = "Chat API", description = "채팅 관련 api")
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/chat")
 public class ChatController {
 
     private final ChatService chatService;
@@ -29,9 +31,9 @@ public class ChatController {
         return chatService.chatList(memId);
     }
 
-    @GetMapping("/chatList/{clNo}")
-    public List<MessageDto> message(@PathVariable int clNo) {
-        return chatService.message(clNo);
+    @GetMapping("/messageList")
+    public List<Chat> message(@Valid @ModelAttribute MessageListRequest messageListRequest, @InjectMember Member member) {
+        return chatService.message(messageListRequest, member);
     }
 
 

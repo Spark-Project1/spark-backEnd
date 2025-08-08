@@ -31,8 +31,7 @@ public enum SparkErrorCode {
 
 
     // 3xx : 채팅 관련 에러
-
-
+    SPARK_300("SPARK_300","존재하지 않는 채팅방입니다.", HttpStatus.NOT_FOUND),
     // 888 : 기타 에러
     SPARK_888("SPARK_888","입력받은 정보가 올바르지 않습니다", HttpStatus.BAD_REQUEST),
 

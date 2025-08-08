@@ -23,6 +23,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter { // once를 �
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
         throws ServletException, IOException {
+
+        String uri = request.getRequestURI(); // 예: /spark/chat/info, /spark/chat/{s}/{s}/websocket, /xhr_streaming 등
+        String method = request.getMethod();
+
+        // ✅ SockJS/WebSocket 관련은 모두 통과 (OPTIONS 포함)
+        if (uri.startsWith("/chat")
+            || uri.startsWith("/spark/chat")
+            || "OPTIONS".equalsIgnoreCase(method)) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+
         String token = jwtProvider.resolveToken(request); // 요청 헤더에서 Authorization 값을 꺼냄
         if (token != null && jwtProvider.validateToken(token)) {
             String userId = jwtProvider.getUserId(token);

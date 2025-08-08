@@ -31,7 +31,7 @@ public class SecurityConfig {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션을 사용하지 않겠다는 설정
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/login", "/api/validate", "/api/refresh", "/api/logout", "/api/sms", "/api/signup", "/profile/**"
-                                         , "/swagger-ui/**","/v3/api-docs/**").permitAll() // 로그인/회원가입 허용
+                                         , "/swagger-ui/**","/v3/api-docs/**","/chat/**").permitAll() // 로그인/회원가입 허용
                 .anyRequest().authenticated() // 그 외의 api는 인증이 필요
             )
             .addFilterBefore(
