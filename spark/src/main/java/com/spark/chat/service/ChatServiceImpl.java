@@ -46,10 +46,16 @@ public class ChatServiceImpl implements ChatService {
     public int sendMessage(int chatNo, MessageSendRequest messageSendRequest) {
         Chat chat = Chat.tempChat(chatNo);
         chat.addMessage(messageSendRequest);
+        System.out.println("서비스 : "+chat);
         int result = chatDao.sendMessage(chat);
-        if(result > 0){
+        // 최근 메시지 업데이트
+        int newMsgUpdate = chatDao.newMsgUpdate(chat);
+        if(newMsgUpdate <= 0) {
+            throw new SparkException(SparkErrorCode.SPARK_999);
+        }
+        if (result > 0) {
             return result;
-        }else{
+        } else {
             throw new SparkException(SparkErrorCode.SPARK_999);
         }
     }

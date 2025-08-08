@@ -36,4 +36,8 @@ public class ChatDao {
     public int insertChatMember(int clNo, String memId) {
         return chatMapper.insertChatMember(clNo, memId);
     }
+
+    public int newMsgUpdate(Chat chat) {
+        return chatMapper.newMsgUpdate(chat);
+    }
 }

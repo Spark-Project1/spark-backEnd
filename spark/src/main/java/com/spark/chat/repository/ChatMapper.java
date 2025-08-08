@@ -22,4 +22,6 @@ public interface ChatMapper {
     Chat createChatRoom();
 
     int insertChatMember(int clNo, String memId);
+
+    int newMsgUpdate(Chat chat);
 }

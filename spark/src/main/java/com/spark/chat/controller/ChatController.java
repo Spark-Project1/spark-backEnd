@@ -17,7 +17,7 @@ import com.spark.chat.service.ChatService;
 
 import lombok.RequiredArgsConstructor;
 
-@Tag(name = "Chat API",description = "채팅 관련 api")
+@Tag(name = "Chat API", description = "채팅 관련 api")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/chat")
@@ -31,12 +31,10 @@ public class ChatController {
         return chatService.chatList(memId);
     }
 
-    @GetMapping("/message")
+    @GetMapping("/messageList")
     public List<Chat> message(@Valid @ModelAttribute MessageListRequest messageListRequest, @InjectMember Member member) {
-        return chatService.message(messageListRequest,member);
+        return chatService.message(messageListRequest, member);
     }
-
-
 
 
 }

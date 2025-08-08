@@ -14,7 +14,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/chat")// socket 연결 url
-            .setAllowedOrigins("*") // 모든 출처에서의 연결 허용
+            .setAllowedOriginPatterns("http://localhost:3000","http://127.0.0.1:3000") // 모든 출처에서의 연결 허용
             .withSockJS(); // SockJS를 사용하여 WebSocket 연결을 지원
 
 

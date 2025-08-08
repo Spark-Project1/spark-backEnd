@@ -1,12 +1,12 @@
 package com.spark.chat.dto.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Setter
+@ToString
 public class MessageSendRequest {
 
     private String nickName;

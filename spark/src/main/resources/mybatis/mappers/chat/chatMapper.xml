@@ -67,9 +67,9 @@
         insert
         into message
             (msg_content, msg_id, cl_no)
-        values ( #{messageContent}
-               , #{messageId}
-               , #{chatNo})
+        values ( #{message.messageContent}
+               , #{message.messageId}
+               , #{clNo})
 
     </insert>
 
@@ -88,5 +88,13 @@
             (cl_no, cm_id)
         values (#{clNo}, #{memId})
     </insert>
+
+    <!-- 채팅방 최신 메시지 업데이트 -->
+    <update id="newMsgUpdate">
+        update chat_list
+        set cl_newMsg      = #{message.messageContent}
+          , cl_lastMsgTime = now()
+        where cl_no = #{clNo}
+    </update>
 
 </mapper>

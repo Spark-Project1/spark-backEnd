@@ -19,13 +19,18 @@ public class WebSocketController {
     private final ChatService chatService;
 
     @MessageMapping("/chat/{chatNo}")
-    public void sendMessage(@DestinationVariable int chatNo, MessageSendRequest messageSendRequest){
+    public void sendMessage(@DestinationVariable int chatNo, MessageSendRequest messageSendRequest) {
         // 메시지 DB에 등록
-        int result = chatService.sendMessage(chatNo,messageSendRequest);
+        chatNo = 1;
+        messageSendRequest.setNickName("ㅋㅋㅋㅋ");
+        messageSendRequest.setProFile(" ");
+        System.out.println(messageSendRequest);
+        int result = chatService.sendMessage(chatNo, messageSendRequest);
+
         if (result > 0) {
             // 클라이언트로부터 받은 메시지를 해당 채팅방으로 전송
-            simpMessagingTemplate.convertAndSend("/sub/chat/"+chatNo, MessageSendResponse.from(chatNo,messageSendRequest));
-        }else{
+            simpMessagingTemplate.convertAndSend("/sub/chat/" + chatNo, MessageSendResponse.from(chatNo, messageSendRequest));
+        } else {
             throw new SparkException(SparkErrorCode.SPARK_999);
         }
     }
