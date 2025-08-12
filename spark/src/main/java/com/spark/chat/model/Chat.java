@@ -15,7 +15,7 @@ import java.util.List;
 public class Chat {
 
     private int clNo;
-    private String clNewMsg;
+    private Date clNewMsg;
     private Date lastMsgTime;
 
     private Message message;
@@ -25,6 +25,7 @@ public class Chat {
     private String nickName;
     private String proFile;
     private String memId;
+    private String chatTitle;
 
 
 

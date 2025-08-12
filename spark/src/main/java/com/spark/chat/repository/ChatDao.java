@@ -3,6 +3,7 @@ package com.spark.chat.repository;
 import java.util.List;
 import java.util.Map;
 
+import com.spark.chat.dto.request.ChatListRequest;
 import com.spark.chat.model.Chat;
 import org.springframework.stereotype.Repository;
 
@@ -17,8 +18,8 @@ public class ChatDao {
 	
 	private final ChatMapper chatMapper;
 
-	public List<ChatListDto> chatList(String memId) {
-		return chatMapper.chatList(memId);
+	public List<Chat> chatList(ChatListRequest chatListRequest) {
+		return chatMapper.chatList(chatListRequest);
 	}
 
 	public List<Chat> message(Chat chat) {

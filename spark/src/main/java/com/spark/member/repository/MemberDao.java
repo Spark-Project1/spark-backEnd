@@ -116,4 +116,8 @@ public class MemberDao {
     public List<Member> getLikeList(LikeListRequest likeList) {
         return memberMapper.getLikeList(likeList);
     }
+
+    public int deleteLikeMember(LikeRequest likeInfo) {
+        return memberMapper.deleteLikeMember(likeInfo);
+    }
 }

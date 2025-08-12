@@ -67,4 +67,6 @@ public interface MemberMapper {
     int insertMemberAttribute(MemberAttributeDto dto);
 
     List<Member> getLikeList(LikeListRequest likeList);
+
+    int deleteLikeMember(LikeRequest likeInfo);
 }

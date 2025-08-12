@@ -3,6 +3,7 @@ package com.spark.chat.repository;
 import java.util.List;
 import java.util.Map;
 
+import com.spark.chat.dto.request.ChatListRequest;
 import com.spark.chat.model.Chat;
 import com.spark.chat.model.Message;
 import org.apache.ibatis.annotations.Mapper;
@@ -13,7 +14,7 @@ import com.spark.chat.dto.MessageDto;
 @Mapper
 public interface ChatMapper {
 	
-	List<ChatListDto> chatList(String memId);
+	List<Chat> chatList(ChatListRequest chatListRequest);
 	
 	List<Chat> message(Chat chat);
 

@@ -271,15 +271,15 @@ public class MemberServiceImpl implements MemberService {
             Chat chatList = chatDao.createChatRoom();
             // chat_member 테이블 추가
             try{
-                int result1 = chatDao.insertChatMember(chatList.getClNo(),likeInfo.getRequestId());
-                int result2 = chatDao.insertChatMember(chatList.getClNo(),likeInfo.getResponseId());
+                // 좋아요 테이블에서 삭제
+                int result1 = memberDao.deleteLikeMember(likeInfo);
 
-                if (result1 != 1 || result2 != 1) {
+                int result2 = chatDao.insertChatMember(chatList.getClNo(),likeInfo.getRequestId());
+                int result3 = chatDao.insertChatMember(chatList.getClNo(),likeInfo.getResponseId());
+                if (result1 != 1 || result2 != 1 || result3 != 1) {
                     throw new SparkException(SparkErrorCode.SPARK_999);
                 }
-
             }catch(Exception e){
-                //
                 throw new SparkException(SparkErrorCode.SPARK_999);
             }
             return result;

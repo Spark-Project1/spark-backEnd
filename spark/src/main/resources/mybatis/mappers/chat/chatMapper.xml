@@ -9,6 +9,7 @@
         <result column="mem_nikcname" property="nickName"/>
         <result column="mem_profile" property="proFile"/>
         <result column="mem_id" property="memId"/>
+        <result column="chat_title" property="chatTitle"/>
 
 
         <association property="message" javaType="com.spark.chat.model.Message">
@@ -16,7 +17,6 @@
             <result column="msg_content" property="messageContent"/>
             <result column="msg_regist_date" property="messageRegistDate"/>
             <result column="msg_id" property="msgId"/>
-            <result column="chat_title" property="chatTitle"/>
         </association>
 
     </resultMap>

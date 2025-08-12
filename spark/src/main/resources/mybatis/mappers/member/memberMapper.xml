@@ -451,6 +451,18 @@
     </select>
 
 
+    <!-- 좋아요 목록 삭제 -->
+    <delete id="deleteListMember">
+        delete
+        from `like`
+        where (
+                  (request_id = #{requestId} and response_id = #{responseId})
+                      or
+                  (request_id = #{responseId} and response_id = #{requestId})
+                  )
+
+
+    </delete>
 
 
 </mapper>

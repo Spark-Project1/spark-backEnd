@@ -2,7 +2,10 @@ package com.spark.chat.controller;
 
 import java.util.List;
 
+import com.spark.chat.dto.request.ChatListRequest;
 import com.spark.chat.dto.request.MessageListRequest;
+import com.spark.chat.dto.response.ChatListResponse;
+import com.spark.chat.dto.response.MessageListResponse;
 import com.spark.chat.model.Chat;
 import com.spark.member.config.InjectMember;
 import com.spark.member.model.Member;
@@ -26,13 +29,13 @@ public class ChatController {
     private final ChatService chatService;
 
 
-    @GetMapping("/chatList")
-    public List<ChatListDto> chatList(@RequestParam String memId) {
-        return chatService.chatList(memId);
+    @PostMapping("/chatList")
+    public List<ChatListResponse> chatList(@RequestBody @Valid ChatListRequest chatListRequest  ) {
+        return chatService.chatList(chatListRequest);
     }
 
     @GetMapping("/messageList")
-    public List<Chat> message(@Valid @ModelAttribute MessageListRequest messageListRequest, @InjectMember Member member) {
+    public List<MessageListResponse> message(@Valid @ModelAttribute MessageListRequest messageListRequest, @InjectMember Member member) {
         return chatService.message(messageListRequest, member);
     }
 

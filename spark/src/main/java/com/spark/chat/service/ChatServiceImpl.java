@@ -1,13 +1,17 @@
 package com.spark.chat.service;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.spark.base.exception.SparkErrorCode;
 import com.spark.base.exception.SparkException;
+import com.spark.chat.dto.request.ChatListRequest;
 import com.spark.chat.dto.request.MessageListRequest;
 import com.spark.chat.dto.request.MessageSendRequest;
+import com.spark.chat.dto.response.ChatListResponse;
+import com.spark.chat.dto.response.MessageListResponse;
 import com.spark.chat.model.Chat;
 import com.spark.chat.model.Message;
 import com.spark.member.model.Member;
@@ -28,17 +32,32 @@ public class ChatServiceImpl implements ChatService {
 
 
     @Override
-    public List<ChatListDto> chatList(String memId) {
-        return chatDao.chatList(memId);
+    public List<ChatListResponse> chatList(ChatListRequest chatListRequest) {
+
+        List<Chat> chat = chatDao.chatList(chatListRequest);
+
+        if(chat == null || chat.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        return chat.stream()
+            .map(ChatListResponse::from)
+            .toList();
     }
 
 
     @Override
-    public List<Chat> message(MessageListRequest messageListRequest, Member member) {
+    public List<MessageListResponse> message(MessageListRequest messageListRequest, Member member) {
         Chat chat = Chat.tempChat(messageListRequest.getClNo());
         chat.addMemId(member.getMemId());
-        System.out.println(chat);
-        return chatDao.message(chat);
+
+        List<Chat> message = chatDao.message(chat);
+        if (message == null || message.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return message.stream()
+            .map(MessageListResponse::from)
+            .toList();
     }
 
 
