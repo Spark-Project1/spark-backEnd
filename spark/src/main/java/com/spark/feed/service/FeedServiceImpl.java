@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.spark.feed.dto.response.FeedListResponse;
+import com.spark.feed.model.Feed;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,8 +27,13 @@ public class FeedServiceImpl implements FeedService {
 
 
     @Override
-    public List<FeedDto> feedList() {
-        return feedDao.feedList();
+    public List<FeedListResponse> feedList() {
+
+        List<Feed> feed = feedDao.feedList();
+
+        return feed.stream()
+            .map(FeedListResponse::from)
+            .toList();
     }
 
 

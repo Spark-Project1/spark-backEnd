@@ -3,6 +3,7 @@ package com.spark.feed.repository;
 import java.util.List;
 import java.util.Map;
 
+import com.spark.feed.model.Feed;
 import org.springframework.stereotype.Repository;
 
 import com.spark.chat.dto.CommentDto;
@@ -16,7 +17,7 @@ public class FeedDao {
 
     private final FeedMapper feedMapper;
 
-    public List<FeedDto> feedList() {
+    public List<Feed> feedList() {
         return feedMapper.feedList();
     }
 

@@ -3,6 +3,7 @@ package com.spark.feed.service;
 import java.util.List;
 import java.util.Map;
 
+import com.spark.feed.dto.response.FeedListResponse;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.spark.chat.dto.CommentDto;
@@ -10,7 +11,7 @@ import com.spark.feed.dto.FeedDto;
 
 public interface FeedService {
 
-    List<FeedDto> feedList();
+    List<FeedListResponse> feedList();
 
     Map<String, Object> feedDetail(int feedNo);
 

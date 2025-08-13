@@ -3,6 +3,7 @@ package com.spark.feed.controller;
 import java.util.List;
 import java.util.Map;
 
+import com.spark.feed.dto.response.FeedListResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,7 +32,7 @@ public class FeedController {
 
     // 피드 목록 불러오기
     @GetMapping("/feedList")
-    public List<FeedDto> feedList() {
+    public List<FeedListResponse> feedList() {
         return feedService.feedList();
     }
 

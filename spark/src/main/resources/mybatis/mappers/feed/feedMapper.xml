@@ -2,15 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.spark.feed.repository.FeedMapper">
 
-    <resultMap id="feedResultMap" type="feedDto">
+    <resultMap id="feedResultMap" type="com.spark.feed.model.Feed">
         <result column="feed_no" property="feedNo"/>
         <result column="feed_content" property="feedContent"/>
         <result column="feed_url" property="feedURL"/>
-        <result column="feed_regist_date" property="RegistDate"/>
+        <result column="feed_regist_date" property="registDate"/>
         <result column="feed_modify_date" property="modifyDate"/>
         <result column="feed_id" property="feedId"/>
         <result column="feed_status" property="status"/>
-        <result column="feed_like" property="likeCount"/>
+        <result column="feed_like" property="feedLike"/>
     </resultMap>
 
     <resultMap id="commentResultMap" type="CommentDto">

@@ -3,6 +3,7 @@ package com.spark.feed.repository;
 import java.util.List;
 import java.util.Map;
 
+import com.spark.feed.model.Feed;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.spark.chat.dto.CommentDto;
@@ -11,7 +12,7 @@ import com.spark.feed.dto.FeedDto;
 @Mapper
 public interface FeedMapper {
 
-    List<FeedDto> feedList();
+    List<Feed> feedList();
 
     FeedDto feedDetail(int feedNo);
 
