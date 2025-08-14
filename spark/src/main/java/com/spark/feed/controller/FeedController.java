@@ -3,8 +3,13 @@ package com.spark.feed.controller;
 import java.util.List;
 import java.util.Map;
 
+import com.spark.feed.dto.request.CommentRequest;
+import com.spark.feed.dto.request.CreateFeedRequest;
+import com.spark.feed.dto.request.ReplyCommentRequest;
+import com.spark.feed.dto.response.FeedDetailResponse;
 import com.spark.feed.dto.response.FeedListResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -38,14 +43,14 @@ public class FeedController {
 
     // 피드 상세보기
     @GetMapping("/feedList/{feedNo}")
-    public Map<String, Object> feedDetail(@PathVariable int feedNo) {
+    public FeedDetailResponse feedDetail(@PathVariable int feedNo) {
         return feedService.feedDetail(feedNo);
     }
 
     // 피드 작성
     @PostMapping("/createFeed")
-    public int createFeed(FeedDto feed, MultipartFile uploadFile) {
-        return feedService.createFeed(feed, uploadFile);
+    public int createFeed(@Valid CreateFeedRequest createFeedRequest, MultipartFile uploadFile) {
+        return feedService.createFeed(createFeedRequest, uploadFile);
     }
 
     // 피드 삭제
@@ -54,22 +59,17 @@ public class FeedController {
         return feedService.deleteFeed(feedNo);
     }
 
-    // 피드 수정
-    @PatchMapping("/updateFeed")
-    public int updateFeed(FeedDto feed, MultipartFile uploadFile) {
-        return feedService.updateFeed(feed, uploadFile);
-    }
 
     // 댓글 작성
     @PostMapping("/comment")
-    public int comment(@RequestBody CommentDto comment) {
-        return feedService.comment(comment);
+    public int comment(@RequestBody @Valid CommentRequest commentRequest) {
+        return feedService.comment(commentRequest);
     }
 
     // 대댓글 작성
     @PostMapping("replyComment")
-    public int replyComment(@RequestBody CommentDto comment) {
-        return feedService.replyComment(comment);
+    public int replyComment(@RequestBody @Valid ReplyCommentRequest replyCommentRequest) {
+        return feedService.replyComment(replyCommentRequest);
     }
 
 

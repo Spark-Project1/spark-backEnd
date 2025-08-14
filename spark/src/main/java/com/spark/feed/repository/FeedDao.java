@@ -3,6 +3,7 @@ package com.spark.feed.repository;
 import java.util.List;
 import java.util.Map;
 
+import com.spark.feed.model.Comment;
 import com.spark.feed.model.Feed;
 import org.springframework.stereotype.Repository;
 
@@ -21,15 +22,15 @@ public class FeedDao {
         return feedMapper.feedList();
     }
 
-    public FeedDto feedDetail(int feedNo) {
+    public Feed feedDetail(int feedNo) {
         return feedMapper.feedDetail(feedNo);
     }
 
-    public List<String> feedComment(int feedNo) {
+    public List<Comment> feedComment(int feedNo) {
         return feedMapper.feedComment(feedNo);
     }
 
-    public int createFeed(FeedDto feed) {
+    public int createFeed(Feed feed) {
         return feedMapper.createFeed(feed);
     }
 
@@ -41,19 +42,15 @@ public class FeedDao {
         return feedMapper.deleteFeed(feedNo);
     }
 
-    public int updateFeed(FeedDto feed) {
-        return feedMapper.updateFeed(feed);
-    }
-
     public String feedUrlCheck(FeedDto feed) {
         return feedMapper.feedUrlCheck(feed);
     }
 
-    public int comment(CommentDto comment) {
+    public int comment(Comment comment) {
         return feedMapper.comment(comment);
     }
 
-    public int replyComment(CommentDto comment) {
+    public int replyComment(Comment comment) {
         return feedMapper.replyComment(comment);
     }
 

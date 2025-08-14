@@ -8,86 +8,94 @@
         <result column="feed_url" property="feedURL"/>
         <result column="feed_regist_date" property="registDate"/>
         <result column="feed_modify_date" property="modifyDate"/>
-        <result column="feed_id" property="feedId"/>
+        <result column="feed_id" property="memId"/>
         <result column="feed_status" property="status"/>
         <result column="feed_like" property="feedLike"/>
+        <result column="MEM_PROFILE" property="proFile"/>
+        <result column="MEM_AGE" property="age"/>
+        <result column="MEM_NICKNAME" property="nickName"/>
     </resultMap>
 
-    <resultMap id="commentResultMap" type="CommentDto">
+    <resultMap id="commentResultMap" type="com.spark.feed.model.Comment">
         <result column="com_no" property="comNo"/>
         <result column="feed_no" property="feedNo"/>
-        <result column="com_comtent" property="comContent"/>
+        <result column="com_content" property="comContent"/>
         <result column="com_type" property="comType"/>
         <result column="com_ref" property="comRef"/>
         <result column="com_regist_date" property="registDate"/>
-        <result column="mem_Id" property="memId"/>
+        <result column="com_id" property="memId"/>
         <result column="MEM_PROFILE" property="proFile"/>
+        <result column="MEM_AGE" property="age"/>
+        <result column="MEM_NICKNAME" property="nickName"/>
     </resultMap>
 
 
     <!-- 피드 목록 불러오기 -->
 
     <select id="feedList" resultMap="feedResultMap">
-        select
-        *
-        from
-        feed
+        select feed_no
+             , feed_content
+             , feed_url
+             , feed_regist_date
+             , feed_id
+             , feed_status
+             , feed_like
+        from feed
     </select>
 
     <!-- 피드 상세보기 -->
     <select id="feedDetail" resultMap="feedResultMap">
-        select
-        *
-        from
-        feed
-        where
-        feed_no = #{feedNo}
+        select feed_no
+             , feed_content
+             , feed_url
+             , feed_regist_date
+             , feed_id
+             , feed_status
+             , feed_like
+             , mem_profile
+             , mem_age
+             , mem_nickname
+        from feed f
+                 join member m on m.mem_Id = f.feed_id
+        where feed_no = #{feedNo}
     </select>
 
     <!-- 피드 댓글 불러오기 -->
     <select id="feedComment" resultMap="commentResultMap">
-        select
-        com_no
-        , feed_no
-        , com_content
-        , com_type
-        , com_ref
-        , com_regist_date
-        , com_id
-        , mem_profile
-        from
-        comment c
-        join member m on m.mem_Id = c.com_id
+        select com_no
+             , feed_no
+             , com_content
+             , com_type
+             , com_ref
+             , com_regist_date
+             , com_id
+             , mem_profile
+             , mem_age
+             , mem_nickname
+        from comment c
+                 join member m on m.mem_Id = c.com_id
         where feed_no = #{feedNo}
     </select>
 
     <!-- 피드 생성 -->
     <insert id="createFeed">
         insert
-        into
-        feed
-        (
-        feed_content
+        into feed
+        ( feed_content
         , feed_url
         , feed_id
-        )
-        values
-        (
-        #{feedContent}
-        , #{feedURL}
-        , #{feedId}
-        )
-
+        , feed_status)
+        values ( #{feedContent}
+               , #{feedURL}
+               , #{feedId}
+               , #{status})
     </insert>
 
     <!-- 피드 첨부파일 확인 -->
     <select id="searchURL" resultType="string">
-        select
-        feed_url
-        from
-        feed
-        where
-        feed_no = #{feedNo}
+        select feed_url
+        from feed
+        where feed_no = #{feedNo}
 
     </select>
 
@@ -101,65 +109,39 @@
 
     <!-- 피드 url 체크 -->
     <select id="feedUrlCheck" resultType="string">
-        select
-        feed_url
-        from
-        feed
-        where
-        feed_no = #{feedNo}
+        select feed_url
+        from feed
+        where feed_no = #{feedNo}
     </select>
-
-    <!-- 피드 수정 -->
-    <update id="updateFeed">
-        update
-        feed
-        set
-        feed_content = #{feedContent}
-        , feed_modify_date = CURRENT_TIMESTAMP
-        , feed_url = #{feedURL}
-        where
-        feed_no = #{feedNo}
-
-    </update>
 
     <!-- 댓글 등록 -->
     <insert id="comment">
         insert
-        into
-        comment
-        (
-        feed_no
+        into comment
+        ( feed_no
         , com_content
-        , com_id
-        )
-        values
-        (
-        #{feedNo}
-        , #{com_content}
-        , #{memId}
-        )
+        , com_type
+        , com_id)
+        values ( #{feedNo}
+               , #{com_content}
+               , #{comType}
+               , #{memId})
     </insert>
 
     <!-- 대댓글 작성 -->
     <insert id="replycomment">
         insert
-        into
-        comment
-        (
-        feed_no
+        into comment
+        ( feed_no
         , com_content
         , com_type
         , com_ref
-        , com_id
-        )
-        values
-        (
-        #{feedNo}
-        , #{comContent}
-        , 1
-        , #{comNo}
-        , #{memId}
-        )
+        , com_id)
+        values ( #{feedNo}
+               , #{comContent}
+               , #{comType}
+               , #{comNo}
+               , #{memId})
 
     </insert>
 

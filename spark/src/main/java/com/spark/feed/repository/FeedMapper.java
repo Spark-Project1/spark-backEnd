@@ -3,6 +3,7 @@ package com.spark.feed.repository;
 import java.util.List;
 import java.util.Map;
 
+import com.spark.feed.model.Comment;
 import com.spark.feed.model.Feed;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -14,23 +15,21 @@ public interface FeedMapper {
 
     List<Feed> feedList();
 
-    FeedDto feedDetail(int feedNo);
+    Feed feedDetail(int feedNo);
 
-    List<String> feedComment(int feedNo);
+    List<Comment> feedComment(int feedNo);
 
-    int createFeed(FeedDto feed);
+    int createFeed(Feed feed);
 
     String searchURL(int feedNo);
 
     int deleteFeed(int feedNo);
 
-    int updateFeed(FeedDto feed);
-
-    int comment(CommentDto comment);
+    int comment(Comment comment);
 
     String feedUrlCheck(FeedDto feed);
 
-    int replyComment(CommentDto comment);
+    int replyComment(Comment comment);
 
 
 }

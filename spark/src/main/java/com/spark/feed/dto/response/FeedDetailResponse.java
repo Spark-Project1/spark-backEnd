@@ -1,5 +1,6 @@
 package com.spark.feed.dto.response;
 
+import com.spark.feed.model.Comment;
 import com.spark.feed.model.Feed;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,33 +8,36 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.sql.Date;
+import java.util.List;
 
 @Getter
+@NoArgsConstructor
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
-public class FeedListResponse {
+public class FeedDetailResponse {
 
     private int feedNo;
     private String feedContent;
     private String feedURL;
-    private String feedId;
+    private String memId;
     private Date registDate;
-    private Date modifyDate;
     private String status;
     private int feedLike;
 
+    private List<Comment> comment;
 
-    public static FeedListResponse from(Feed feed){
-        return FeedListResponse.builder()
+
+
+    public static FeedDetailResponse from(List<Comment> comment, Feed feed){
+        return FeedDetailResponse.builder()
             .feedNo(feed.getFeedNo())
             .feedContent(feed.getFeedContent())
             .feedURL(feed.getFeedURL())
-            .feedId(feed.getMemId())
+            .memId(feed.getMemId())
             .registDate(feed.getRegistDate())
-            .modifyDate(feed.getModifyDate())
             .status(feed.getStatus())
             .feedLike(feed.getFeedLike())
+            .comment(comment)
             .build();
     }
 
