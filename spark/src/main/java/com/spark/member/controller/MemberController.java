@@ -9,6 +9,7 @@ import com.spark.member.dto.response.*;
 import com.spark.member.model.Member;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import okhttp3.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -189,6 +190,24 @@ public class MemberController {
     @PostMapping("/me/get/likeList")
     public ResponseEntity<List<LikeListResponse>> getLikeList(@RequestBody @Valid LikeListRequest likeList){
         return ResponseEntity.ok(memberService.getLikeList(likeList));
+    }
+
+    // 관심목록에서 좋아요 신청
+    @PostMapping("/me/interestLikeSend")
+    public ResponseEntity<Integer> interestLikeSend(@RequestBody @Valid InterestLikeSendRequest interestLikeSendRequest){
+        return ResponseEntity.ok(memberService.interestLikeSend(interestLikeSendRequest));
+    }
+
+    // 관심목록에서 삭제
+    @PostMapping("/me/interestDelete")
+    public ResponseEntity<Integer> interestDelete(@RequestBody @Valid InterestDelete interestDelete){
+        return ResponseEntity.ok(memberService.interestDelete(interestDelete));
+    }
+
+    // 보낸 좋아요 목록 삭제
+    @PostMapping("/me/likeList/delete")
+    public ResponseEntity<Integer> deleteLikeMember(@RequestBody @Valid LikeRequest likeInfo){
+        return ResponseEntity.ok(memberService.likeNo(likeInfo));
     }
 
 

@@ -74,7 +74,7 @@
     </insert>
 
     <!-- 채팅방 생성 -->
-    <insert id="createChatRoom" useGeneratedKeys="true" keyProperty="clNo">
+    <insert id="createChatRoom" useGeneratedKeys="true" keyProperty="clNo" keyColumn="cl_no" parameterType="com.spark.chat.model.Chat">
         insert
         into chat_list
             (CL_LASTMSGTIME)

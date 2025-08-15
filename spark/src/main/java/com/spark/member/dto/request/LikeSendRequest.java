@@ -16,4 +16,9 @@ public class LikeSendRequest {
     @NotBlank(message = "좋아요를 수신할 대상의 정보가 비었습니다.")
     private String responseId;
 
+    public void toDto(InterestLikeSendRequest request) {
+        this.requestId = request.getImUser();
+        this.responseId = request.getImTarget();
+    }
+
 }

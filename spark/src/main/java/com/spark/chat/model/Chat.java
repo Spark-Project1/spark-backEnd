@@ -3,6 +3,7 @@ package com.spark.chat.model;
 import com.spark.chat.dto.request.MessageSendRequest;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 import java.sql.Date;
@@ -12,7 +13,9 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @ToString
+@Setter
 public class Chat {
+
 
     private int clNo;
     private Date clNewMsg;
@@ -32,6 +35,8 @@ public class Chat {
     private Chat(int clNo) {
         this.clNo = clNo;
     }
+
+
     public static Chat tempChat(int clNo){
         return new Chat(clNo);
     }

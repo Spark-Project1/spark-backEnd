@@ -30,8 +30,9 @@ public class ChatDao {
         return chatMapper.sendMessage(message);
     }
 
-    public Chat createChatRoom() {
-        return chatMapper.createChatRoom();
+    public Chat createChatRoom(Chat chat) {
+        chatMapper.createChatRoom(chat);
+        return chat;
     }
 
     public int insertChatMember(int clNo, String memId) {

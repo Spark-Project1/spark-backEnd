@@ -69,4 +69,8 @@ public interface MemberMapper {
     List<Member> getLikeList(LikeListRequest likeList);
 
     int deleteLikeMember(LikeRequest likeInfo);
+
+    int interestLikeSend(InterestLikeSendRequest interestLikeSendRequest);
+
+    Integer interestDelete(InterestDelete interestDelete);
 }

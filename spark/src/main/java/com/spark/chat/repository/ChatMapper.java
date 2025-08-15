@@ -20,7 +20,7 @@ public interface ChatMapper {
 
     int sendMessage(Chat message);
 
-    Chat createChatRoom();
+    int createChatRoom(Chat chat);
 
     int insertChatMember(int clNo, String memId);
 

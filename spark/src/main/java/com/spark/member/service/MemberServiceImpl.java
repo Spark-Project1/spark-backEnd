@@ -13,6 +13,7 @@ import com.spark.member.dto.*;
 import com.spark.member.dto.request.*;
 import com.spark.member.dto.response.*;
 import com.spark.member.model.Member;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class MemberServiceImpl implements MemberService {
 
     private final MemberDao memberDao;
@@ -268,14 +270,18 @@ public class MemberServiceImpl implements MemberService {
         if (result > 0) {
 
             // 채팅방 생성
-            Chat chatList = chatDao.createChatRoom();
+            Chat chat = new Chat();
+            Chat chatNo = chatDao.createChatRoom(chat);
             // chat_member 테이블 추가
             try{
                 // 좋아요 테이블에서 삭제
+
                 int result1 = memberDao.deleteLikeMember(likeInfo);
 
-                int result2 = chatDao.insertChatMember(chatList.getClNo(),likeInfo.getRequestId());
-                int result3 = chatDao.insertChatMember(chatList.getClNo(),likeInfo.getResponseId());
+                int result2 = chatDao.insertChatMember(chatNo.getClNo(),likeInfo.getRequestId());
+
+                int result3 = chatDao.insertChatMember(chatNo.getClNo(),likeInfo.getResponseId());
+
                 if (result1 != 1 || result2 != 1 || result3 != 1) {
                     throw new SparkException(SparkErrorCode.SPARK_999);
                 }
@@ -310,6 +316,28 @@ public class MemberServiceImpl implements MemberService {
         return result.stream()
             .map(LikeListResponse::from)
             .toList();
+    }
+
+    @Override
+    public Integer interestLikeSend(InterestLikeSendRequest interestLikeSendRequest) {
+
+        // 흥미 목록에서 삭제
+        int interestRemoveResult = memberDao.interestLikeSend(interestLikeSendRequest);
+
+        // 좋아요 테이블에 추가
+        if(interestRemoveResult > 0) {
+            LikeSendRequest likeSendRequest = new LikeSendRequest();
+            likeSendRequest.toDto(interestLikeSendRequest);
+            return memberDao.likeMember(likeSendRequest);
+        }
+        else {
+            throw new SparkException(SparkErrorCode.SPARK_999);
+        }
+    }
+
+    @Override
+    public Integer interestDelete(InterestDelete interestDelete) {
+        return memberDao.interestDelete(interestDelete);
     }
 
 
