@@ -19,7 +19,7 @@ public class ChatListResponse {
     private String memId;
     private String nickName;
     private String proFile;
-    private Date clNewMsg;
+    private String clNewMsg;
     private Date lastMsgTime;
 
 

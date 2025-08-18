@@ -18,7 +18,7 @@ public class Chat {
 
 
     private int clNo;
-    private Date clNewMsg;
+    private String clNewMsg;
     private Date lastMsgTime;
 
     private Message message;
