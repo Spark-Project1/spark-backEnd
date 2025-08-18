@@ -6,7 +6,7 @@
         <result column="cl_no" property="clNo"/>
         <result column="cl_newmsg" property="clNewMsg"/>
         <result column="cl_lastmsgtime" property="lastMsgTime"/>
-        <result column="mem_nikcname" property="nickName"/>
+        <result column="mem_nickname" property="nickName"/>
         <result column="mem_profile" property="proFile"/>
         <result column="mem_id" property="memId"/>
         <result column="chat_title" property="chatTitle"/>
@@ -31,7 +31,7 @@
              , cl.cl_newmsg
              , cl_lastmsgtime
         from chat_member cm
-                 join member m on cm.cm_ID = m.mem_id
+                 join MEMBER m on cm.cm_ID = m.mem_id
                  join chat_list cl on cl.cl_no = cm.cl_no
         where cm.cl_no in (SELECT cm.CL_NO
                            FROM CHAT_MEMBER cm
@@ -49,14 +49,14 @@
              , msg_id
              , cl_no
              , (select DISTINCT mem_nickname
-                from member m
+                from MEMBER m
                          join chat_member cm on m.mem_id = cm.cm_id
                 where mem_id != #{memId}
                   and cl_no = #{clNo}) as chat_title
              , mem_nickname
              , mem_profile
         from message msg
-                 join member m on m.mem_id = msg.msg_id
+                 join MEMBER m on m.mem_id = msg.msg_id
         where cl_no = #{clNo}
 
     </select>
