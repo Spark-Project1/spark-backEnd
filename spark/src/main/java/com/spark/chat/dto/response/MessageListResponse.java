@@ -31,7 +31,7 @@ public class MessageListResponse {
             .msgNo(chat.getMessage().getMsgNo())
             .msgContent(chat.getMessage().getMessageContent())
             .msgRegistDate(chat.getMessage().getMessageRegistDate())
-            .memId(chat.getMemId())
+            .memId(chat.getMessage().getMsgId())
             .clNo(chat.getClNo())
             .chatTitle(chat.getChatTitle())
             .nickName(chat.getNickName())

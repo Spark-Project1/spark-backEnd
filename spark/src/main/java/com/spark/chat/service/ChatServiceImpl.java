@@ -36,6 +36,7 @@ public class ChatServiceImpl implements ChatService {
 
         List<Chat> chat = chatDao.chatList(chatListRequest);
 
+
         if(chat == null || chat.isEmpty()) {
             return Collections.emptyList();
         }
