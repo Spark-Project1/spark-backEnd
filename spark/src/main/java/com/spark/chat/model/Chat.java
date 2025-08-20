@@ -1,5 +1,6 @@
 package com.spark.chat.model;
 
+import com.spark.chat.dto.ChatMemberDto;
 import com.spark.chat.dto.request.MessageSendRequest;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,6 +24,7 @@ public class Chat {
 
     private Message message;
 
+    private int rowNo;
 
     // 조회용 필드
     private String nickName;
@@ -45,11 +47,14 @@ public class Chat {
         Message message = new Message();
         message.setMessage(messageRequest);
         this.message = message;
+
+        //this.message.add(message);
     }
 
-    public void addMemId(String memId){
+    public void addMemId(String memId) {
         this.memId = memId;
     }
+
 
 
 

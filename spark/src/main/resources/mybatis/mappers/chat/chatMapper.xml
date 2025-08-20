@@ -10,10 +10,29 @@
         <result column="mem_profile" property="proFile"/>
         <result column="mem_id" property="memId"/>
         <result column="chat_title" property="chatTitle"/>
+        <association property="message" javaType="com.spark.chat.model.Message">
+            <result column="msg_no" property="msgNo"/>
+            <result column="msg_content" property="messageContent"/>
+            <result column="msg_regist_date" property="messageRegistDate"/>
+            <result column="msg_id" property="msgId"/>
+        </association>
+
+    </resultMap>
+
+
+    <resultMap id="chatMessageResultMap" type="com.spark.chat.model.Chat">
+        <id column="msg_no" property="rowNo"/>
+        <result column="cl_no" property="clNo"/>
+        <result column="cl_newmsg" property="clNewMsg"/>
+        <result column="cl_lastmsgtime" property="lastMsgTime"/>
+        <result column="mem_nickname" property="nickName"/>
+        <result column="mem_profile" property="proFile"/>
+        <result column="mem_id" property="memId"/>
+        <result column="chat_title" property="chatTitle"/>
 
 
         <association property="message" javaType="com.spark.chat.model.Message">
-            <result column="msg_no" property="msgNo"/>
+            <id column="msg_no" property="msgNo"/>
             <result column="msg_content" property="messageContent"/>
             <result column="msg_regist_date" property="messageRegistDate"/>
             <result column="msg_id" property="msgId"/>
@@ -42,7 +61,7 @@
     </select>
 
     <!-- 채팅방 메시지 불러오기 -->
-    <select id="message" resultMap="chatResultMap">
+    <select id="message" resultMap="chatMessageResultMap">
         select msg_no
              , msg_content
              , msg_regist_date
@@ -58,6 +77,7 @@
         from message msg
                  join MEMBER m on m.mem_id = msg.msg_id
         where cl_no = #{clNo}
+        order by msg_no
 
     </select>
 

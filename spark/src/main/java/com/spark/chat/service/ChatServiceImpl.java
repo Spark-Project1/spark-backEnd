@@ -53,6 +53,7 @@ public class ChatServiceImpl implements ChatService {
         chat.addMemId(member.getMemId());
 
         List<Chat> message = chatDao.message(chat);
+
         if (message == null || message.isEmpty()) {
             return Collections.emptyList();
         }
