@@ -1,6 +1,7 @@
 package com.spark.base.config;
 
 import com.spark.member.config.InjectMemberArgument;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -41,6 +42,9 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/profile/**") ///spark/profile/** 경로로 들어오는 요청 처리
             .addResourceLocations("file:///C:/spark/profile/"); // 위 요청을 어디파일에 연결할지 설정
     }
+
+
+
 
 
 }

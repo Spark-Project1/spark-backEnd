@@ -51,4 +51,8 @@ public interface MemberService {
     Integer likeNo(LikeRequest likeInfo);
 
     List<LikeListResponse> getLikeList(LikeListRequest likeList);
+
+    Integer interestLikeSend(InterestLikeSendRequest interestLikeSendRequest);
+
+    Integer interestDelete(InterestDelete interestDelete);
 }

@@ -451,6 +451,33 @@
     </select>
 
 
+    <!-- 좋아요 목록 삭제 -->
+    <delete id="deleteLikeMember">
+        delete
+        from `like`
+        where (
+                  (request_id = #{requestId} and response_id = #{responseId})
+                      or
+                  (request_id = #{responseId} and response_id = #{requestId})
+                  )
+
+
+    </delete>
+
+    <!-- 관심테이블 회원 삭제 -->
+    <delete id="interestLikeSend">
+        delete
+        from interested_mem
+        where im_user = #{imUser}
+          and im_target = #{imTarget}
+    </delete>
+
+    <delete id="interestDelete">
+        delete
+        from interested_mem
+        where im_user = #{imUser}
+          and im_target = #{imTarget}
+    </delete>
 
 
 </mapper>

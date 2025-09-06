@@ -4,6 +4,8 @@ import java.util.*;
 
 import com.spark.base.exception.SparkErrorCode;
 import com.spark.base.exception.SparkException;
+import com.spark.chat.model.Chat;
+import com.spark.chat.repository.ChatDao;
 import com.spark.member.common.Character;
 import com.spark.member.common.Interest;
 import com.spark.member.common.Tendencies;
@@ -11,6 +13,7 @@ import com.spark.member.dto.*;
 import com.spark.member.dto.request.*;
 import com.spark.member.dto.response.*;
 import com.spark.member.model.Member;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class MemberServiceImpl implements MemberService {
 
     private final MemberDao memberDao;
@@ -31,6 +35,7 @@ public class MemberServiceImpl implements MemberService {
     private final MemberValidator memberValidtor;
     private final TokenResponse tokenResponse;
     private final MemberPreprocessor memberPreprocessor;
+    private final ChatDao chatDao;
 
     @Override
     public LoginResult login(LoginRequest m) {
@@ -234,11 +239,7 @@ public class MemberServiceImpl implements MemberService {
 
         // 로그인한 사용자의 좋아요 목록 조회
         List<Member> result = memberDao.likeList(likeList);
-        if (result == null) {
-            throw new SparkException(SparkErrorCode.SPARK_999);
-        }
-        if (result.isEmpty()) {
-            // 빈 리스트 반환
+        if (result == null || result.isEmpty()) {
             return Collections.emptyList();
         }
 
@@ -253,16 +254,9 @@ public class MemberServiceImpl implements MemberService {
 
 
         List<Member> result = memberDao.interestList(interestList);
-        if (result == null) {
-            throw new SparkException(SparkErrorCode.SPARK_999);
-        }
-        if (result.isEmpty()) {
-            // 빈 리스트 반환
+        if (result == null || result.isEmpty()) {
             return Collections.emptyList();
         }
-
-
-
         return result.stream()
             .map(InterestListResponse::from)
             .toList();
@@ -274,7 +268,26 @@ public class MemberServiceImpl implements MemberService {
         int result = memberDao.likeYes(likeInfo); // 좋아요 수락 처리
 
         if (result > 0) {
-            // 좋아요 수락 후 채팅방 생성 로직 추가
+
+            // 채팅방 생성
+            Chat chat = new Chat();
+            Chat chatNo = chatDao.createChatRoom(chat);
+            // chat_member 테이블 추가
+            try{
+                // 좋아요 테이블에서 삭제
+
+                int result1 = memberDao.deleteLikeMember(likeInfo);
+
+                int result2 = chatDao.insertChatMember(chatNo.getClNo(),likeInfo.getRequestId());
+
+                int result3 = chatDao.insertChatMember(chatNo.getClNo(),likeInfo.getResponseId());
+
+                if (result1 != 1 || result2 != 1 || result3 != 1) {
+                    throw new SparkException(SparkErrorCode.SPARK_999);
+                }
+            }catch(Exception e){
+                throw new SparkException(SparkErrorCode.SPARK_999);
+            }
             return result;
         } else {
             throw new SparkException(SparkErrorCode.SPARK_999);
@@ -296,17 +309,35 @@ public class MemberServiceImpl implements MemberService {
     public List<LikeListResponse> getLikeList(LikeListRequest likeList) {
 
         List<Member> result = memberDao.getLikeList(likeList);
-        if (result == null) {
-            throw new SparkException(SparkErrorCode.SPARK_999);
-        }
-        if (result.isEmpty()) {
-            // 빈 리스트 반환
+        if (result == null || result.isEmpty()) {
             return Collections.emptyList();
         }
 
         return result.stream()
             .map(LikeListResponse::from)
             .toList();
+    }
+
+    @Override
+    public Integer interestLikeSend(InterestLikeSendRequest interestLikeSendRequest) {
+
+        // 흥미 목록에서 삭제
+        int interestRemoveResult = memberDao.interestLikeSend(interestLikeSendRequest);
+
+        // 좋아요 테이블에 추가
+        if(interestRemoveResult > 0) {
+            LikeSendRequest likeSendRequest = new LikeSendRequest();
+            likeSendRequest.toDto(interestLikeSendRequest);
+            return memberDao.likeMember(likeSendRequest);
+        }
+        else {
+            throw new SparkException(SparkErrorCode.SPARK_999);
+        }
+    }
+
+    @Override
+    public Integer interestDelete(InterestDelete interestDelete) {
+        return memberDao.interestDelete(interestDelete);
     }
 
 

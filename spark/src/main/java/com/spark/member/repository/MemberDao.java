@@ -40,7 +40,7 @@ public class MemberDao {
         return memberMapper.insertRefreshToken(map);
     }
 
-    public int checkRefreshToken(Map<String,Object> map) {
+    public int checkRefreshToken(Map<String, Object> map) {
         return memberMapper.checkRefreshToken(map);
     }
 
@@ -115,5 +115,17 @@ public class MemberDao {
 
     public List<Member> getLikeList(LikeListRequest likeList) {
         return memberMapper.getLikeList(likeList);
+    }
+
+    public int deleteLikeMember(LikeRequest likeInfo) {
+        return memberMapper.deleteLikeMember(likeInfo);
+    }
+
+    public int interestLikeSend(InterestLikeSendRequest interestLikeSendRequest) {
+        return memberMapper.interestLikeSend(interestLikeSendRequest);
+    }
+
+    public Integer interestDelete(InterestDelete interestDelete) {
+        return memberMapper.interestDelete(interestDelete);
     }
 }
