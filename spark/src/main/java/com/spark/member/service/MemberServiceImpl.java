@@ -1,5 +1,6 @@
 package com.spark.member.service;
 
+import java.io.File;
 import java.util.*;
 
 import com.spark.base.exception.SparkErrorCode;
@@ -154,6 +155,8 @@ public class MemberServiceImpl implements MemberService {
         memberPreprocessor.uploadProfileImg(uploadFile, member);
         int result = memberDao.insertInfo(member);
         if (result == 0) {
+            File file = new File("C:" + member.getProFile());
+            if(file.exists()) file.delete();
             throw new SparkException(SparkErrorCode.SPARK_999);
         }
 
